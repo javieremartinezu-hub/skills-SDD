@@ -1,117 +1,97 @@
 ---
 name: sdd-agents
-description: Genera AGENTS.md en la raíz del repositorio: el manual operativo breve y permanente para agentes de IA que trabajen en el proyecto (leer constitution y spec activa, trabajar una sola tarea, tests como evidencia, no avanzar con errores, reportar qué cambió y detenerse). No contiene requisitos de producto ni decisiones técnicas. Úsala tras aprobar docs/constitution.md, o cuando el usuario pida crear o actualizar las reglas para agentes del repositorio.
+description: >-
+  Genera AGENTS.md en la raíz del repositorio: reglas operativas breves y permanentes para agentes de IA. Obliga a trabajar desde artefactos SDD, limitar alcance, reutilizar antes de crear, evitar sobreingeniería, aplicar TDD cuando aporta valor, verificar cambios, hacer self-review y comunicar de forma concisa. Úsala tras aprobar docs/constitution.md o para actualizar las reglas del repositorio.
 ---
 
 # sdd-agents — Manual operativo para agentes de IA
 
-## Convenciones comunes del framework (léelas primero)
+## Convenciones
 
-- La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
-- Artefactos: `docs/constitution.md` · `AGENTS.md` · `docs/brief.md` · `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
-- Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
+- La fuente de verdad son los artefactos del repositorio, nunca la conversación.
+- Artefactos principales: `docs/constitution.md` · `AGENTS.md` · `docs/brief.md` · `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`.
+- Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`.
 
 ## Propósito
 
-Crear `AGENTS.md` en la raíz del repositorio: el manual operativo permanente que obliga a cualquier agente de IA a trabajar dentro del flujo SDD.
-
-## Alcance
-
-- SOLO redacta reglas de comportamiento para agentes.
-- NO contiene requisitos del producto (eso es `spec.md`), ni decisiones técnicas (eso es `plan.md`), ni duplica íntegramente `docs/constitution.md` (la referencia; no la copies).
-
-## Cuándo usar
-
-- Tras aprobar `docs/constitution.md`, antes de crear la primera spec.
-- Cuando el usuario pida crear o actualizar las reglas para agentes.
+Crear o actualizar `AGENTS.md` como manual breve para cualquier agente que programe en el repositorio.
 
 ## Precondiciones
 
-- `docs/constitution.md` con `Estado: APROBADA`. Si no: `AGENTS.MD BLOQUEADA — Falta constitution aprobada. Siguiente paso: sdd-constitution`.
-
-## Contexto requerido
-
-- `docs/constitution.md`.
-
-## Entradas
-
-- Preferencias del usuario sobre el manual (opcional).
+- `docs/constitution.md` con `Estado: APROBADA`. Si no: `AGENTS.MD BLOQUEADA — Siguiente paso: sdd-constitution`.
 
 ## Procedimiento
 
-1. Lee `docs/constitution.md`.
-2. Si ya existe `AGENTS.md`, léelo: conserva su contenido específico del proyecto que no contradiga el flujo SDD y intégralo; el flujo SDD prevalece ante conflictos. Informa al usuario de cualquier conflicto encontrado.
-3. Redacta `AGENTS.md` con la plantilla. Debe ser **breve** (máx. ~60 líneas) y obligar al agente a:
-   1. Leer `docs/constitution.md` antes de trabajar.
-   2. Identificar y leer la spec activa en `specs/`.
-   3. Leer `plan.md` y `tasks.md` de la spec activa cuando corresponda a la tarea.
-   4. No implementar requisitos que no existan en la spec.
-   5. Trabajar solamente sobre la tarea indicada (una ejecución = una tarea).
-   6. Escribir tests antes o junto con la implementación.
-   7. Ejecutar las verificaciones aplicables del proyecto.
-   8. No avanzar si existen errores.
-   9. No añadir dependencias sin justificación explícita.
-   10. No introducir cambios arquitectónicos silenciosos.
-   11. Mantener sincronizados spec, plan, tasks, código y tests.
-   12. Informar exactamente qué cambió.
-   13. Informar qué tests y verificaciones ejecutó, con resultado.
-   14. Detenerse al completar la tarea solicitada.
-   15. Consultar `sdd-orchestrator` cuando dude de la fase correcta.
-4. Muestra el contenido y pide confirmación para escribirlo en la raíz.
-5. Escribe `AGENTS.md` y recomienda: `Siguiente paso: sdd-spec` (o `sdd-orchestrator` si ya existen specs).
+1. Lee `docs/constitution.md` y el `AGENTS.md` existente si lo hay.
+2. Conserva reglas específicas del proyecto que no contradigan SDD.
+3. Genera un `AGENTS.md` breve (objetivo: ≤70 líneas) usando la plantilla.
+4. Muestra el contenido y pide confirmación antes de escribirlo.
+5. Escribe el archivo y DETENTE.
 
 ### Plantilla de `AGENTS.md`
 
 ```markdown
 # AGENTS.md — Reglas operativas para agentes de IA
 
-Manual permanente de este repositorio. No contiene requisitos de producto:
-los requisitos viven en specs/NNN-slug/spec.md.
+Los requisitos viven en `specs/`. La conversación no sustituye los artefactos.
 
-## Antes de tocar código
-1. Lee docs/constitution.md. Sus principios son innegociables.
-2. Identifica la spec activa en specs/ y léela.
-3. Lee plan.md y tasks.md de esa spec cuando la tarea lo requiera.
+## Antes de modificar
+1. Lee `docs/constitution.md` y la spec activa.
+2. Lee `plan.md` y `tasks.md` cuando correspondan.
+3. Entiende el código afectado antes de editarlo.
+4. Busca implementaciones, helpers, patrones y componentes existentes antes de crear otros nuevos.
+5. Define el scope probable: archivos, módulos, contratos y tests afectados.
 
-## Mientras trabajas
-4. No implementes comportamiento sin requisito en la spec.
-5. Trabaja SOLO la tarea indicada (T-XXX). Una ejecución = una tarea.
-6. Escribe tests antes o junto con la implementación (TDD).
-7. Ejecuta las verificaciones aplicables del proyecto y no avances con errores.
-8. No añadas dependencias sin justificarlas.
-9. No introduzcas decisiones arquitectónicas fuera de plan.md; si crees que
-   se necesita un cambio de spec o de plan, DETENTE y propón sdd-change o
-   sdd-plan.
-10. Mantén sincronizados spec, plan, tasks, código y tests.
+## Durante el trabajo
+6. No implementes comportamiento sin requisito que lo respalde.
+7. Trabaja solo sobre la tarea o problema solicitado.
+8. Prefiere cambios mínimos y localizados.
+9. No modifiques fuera del scope salvo necesidad comprobada; si aparece, reevalúa el impacto antes de seguir.
+10. Usa la solución más simple que cumpla completamente el requisito.
+11. No introduzcas capas, servicios, abstracciones, patrones o dependencias sin necesidad concreta.
+12. No dupliques funcionalidad existente.
+13. Aplica TDD cuando aporte valor; para bugs reproducibles crea test de regresión antes del fix.
+14. No cambies una spec para justificar un bug existente.
+15. No cambies contratos públicos, persistencia, permisos, seguridad o arquitectura silenciosamente.
+16. No añadas dependencias sin justificar necesidad, mantenimiento, seguridad y ausencia de alternativa existente.
+17. Mantén compatibilidad hacia atrás salvo que la spec indique lo contrario.
+18. Actualiza solo la documentación afectada.
 
-## Al terminar
-11. Informa exactamente qué archivos creaste o modificaste.
-12. Informa qué tests y verificaciones ejecutaste y su resultado.
-13. Detente. No comiences otra tarea por tu cuenta.
+## Verificación y self-review
+19. Ejecuta las verificaciones aplicables del proyecto; nunca afirmes que pasó algo que no ejecutaste.
+20. Antes de cerrar, revisa el diff y comprueba:
+   - cumplimiento de spec/tarea;
+   - ausencia de cambios ajenos al scope;
+   - ausencia de duplicación o abstracciones innecesarias;
+   - casos borde evidentes;
+   - contratos preservados;
+   - tests que realmente prueban el comportamiento.
+21. No avances con errores relevantes.
 
-Si dudas de qué fase procede, invoca sdd-orchestrator.
+## Enrutamiento
+22. Bug → `sdd-bug`; diagnóstico incierto → `sdd-debug`.
+23. Cambio funcional → `sdd-change`; migración sensible → `sdd-migration`.
+24. Refactor → `sdd-refactor`.
+25. Auditoría → `sdd-review quality|implementation|security|dependencies`.
+26. Sincronizar documentación → `sdd-doc-sync`; pre-release → `sdd-release`.
+27. Si dudas de la fase, usa `sdd-orchestrator`.
+
+## Comunicación
+28. Sé conciso por defecto: resultado, cambios, evidencia y siguiente paso.
+29. No repitas contexto ni expliques conceptos/proceso salvo petición del usuario.
+30. Al completar una tarea, detente; no empieces otra por tu cuenta.
 ```
-
-## Artefactos de salida
-
-- `AGENTS.md` (raíz del repositorio)
 
 ## Validación
 
-- Contiene las 15 obligaciones (o equivalente completo) sin requisitos de producto.
-- No copia el texto íntegro de `constitution.md`; la referencia.
-- El usuario confirmó el contenido antes de escribirlo.
-
-## Condiciones de parada
-
-- Tras escribir `AGENTS.md`: recomienda el siguiente paso y DETENTE.
+- No contiene requisitos de producto ni duplica la constitution.
+- Incluye scope guard, reuse-first, simplicidad, dependency guard, TDD pragmático, self-review y comunicación concisa.
 
 ## Acciones prohibidas
 
-- Incluir requisitos funcionales, user stories o decisiones técnicas en `AGENTS.md`.
-- Escribir código, tests o specs.
-- Sobrescribir un `AGENTS.md` existente sin preservar su contenido no conflictivo.
+- Escribir código, specs o planes.
+- Sobrescribir reglas válidas específicas del proyecto sin necesidad.
 
 ## Siguiente fase permitida
 
-`sdd-spec` (proyecto nuevo) · `sdd-orchestrator` (si ya hay specs)
+`sdd-spec` o `sdd-orchestrator`.

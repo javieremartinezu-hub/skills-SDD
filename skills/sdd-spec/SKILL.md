@@ -9,7 +9,8 @@ description: Genera la especificación funcional specs/NNN-slug/spec.md (QUÉ y 
 
 - La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
 - Artefactos: `docs/constitution.md` · `AGENTS.md` · `docs/brief.md` · `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
-- Estado de una spec: `BORRADOR` → `CLARIFICADA` → `APROBADA`. Marcador: `[NECESITA ACLARACIÓN: ...]`
+- Estado de una spec: `BORRADOR` → `CLARIFICADA` → `APROBADA`. Marcador: `[NECESITA ACLARACIÓN: ...]`.
+- La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta y actualiza el valor de las filas `Estado`, `Aprobación` y `Versión`; nunca busques ni escribas `Estado: …` como texto libre.
 - Requisitos: `RF-001`, `RF-002`… Requisitos no funcionales: `RNF-001`…
 - Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
 
@@ -109,7 +110,7 @@ Como <actor>, quiero <capacidad>, para <beneficio>.
 
 ## Artefactos de salida
 
-- `specs/NNN-slug/spec.md` con `Estado: BORRADOR`, `Aprobación: PENDIENTE`.
+- `specs/NNN-slug/spec.md` con la fila `Estado` en `BORRADOR` y la fila `Aprobación` en `PENDIENTE`.
 
 ## Validación
 

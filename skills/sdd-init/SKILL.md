@@ -41,7 +41,7 @@ Comprender qué proyecto se quiere construir ANTES de crear cualquier otro artef
 
 ## Procedimiento
 
-1. Comprueba que no existan `docs/constitution.md` ni `specs/`. Si existen, detente: `INICIALIZACIÓN BLOQUEADA — el proyecto ya está inicializado. Siguiente paso: sdd-orchestrator`.
+1. Comprueba que no existan `docs/brief.md`, `docs/constitution.md` ni `specs/`. Si existe cualquiera, detente sin sobrescribir nada: si solo existe `docs/brief.md`, `INICIALIZACIÓN BLOQUEADA — ya existe un brief. Siguiente paso: sdd-constitution`; en cualquier otro caso, `INICIALIZACIÓN BLOQUEADA — el proyecto ya está inicializado. Siguiente paso: sdd-orchestrator`.
 2. **Entrevista con UNA pregunta cada vez.** No hagas listas de preguntas. Cubre, como mínimo:
    - ¿Qué problema se quiere resolver?
    - ¿Quiénes son los usuarios y actores?

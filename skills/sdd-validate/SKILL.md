@@ -1,109 +1,55 @@
 ---
 name: sdd-validate
-description: Validación final de una spec. Recorre TODOS los RF y demuestra la cadena completa RF → PLAN → TASK → CODE → TEST con evidencia real (comandos ejecutados y su salida), comprueba RNF, casos límite, criterios de finalización, constitution y verificaciones del proyecto (suite completa, lint, type check, build, seguridad), y emite SPEC CUMPLIDA: SÍ o NO en specs/NNN-slug/validation.md. Nunca acepta "parece funcionar" como evidencia. Úsala cuando todas las tareas de tasks.md estén completadas con evidencia.
+description: Validación final de una spec mediante evidencia RF → PLAN → TASK → CODE → TEST. Ejecuta checks reales, revisa casos límite, constitution y diff/scope; emite SPEC CUMPLIDA: SÍ o NO. No corrige código.
 ---
 
-# sdd-validate — Validación final de la spec
-
-## Convenciones comunes del framework (léelas primero)
-
-- La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
-- Artefactos: `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
-- Veredictos: `SPEC CLARIFICADA: SÍ|NO` · `TRAZABILIDAD: PASS|FAIL` · `SPEC CUMPLIDA: SÍ|NO`
-- Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
-
-## Propósito
-
-Probar, con evidencia, que la implementación cumple TODOS los requisitos de la spec.
-
-## Alcance
-
-- SOLO audita y emite veredicto.
-- NO implementa, NO repara código. Ante huecos, enruta (`sdd-implement` para tareas; `sdd-change` para requisitos nuevos o mal especificados).
-
-## Cuándo usar
-
-- Cuando `tasks.md` muestra TODAS las tareas `- [x]` con evidencia y el usuario pide validar o cerrar la spec.
+# sdd-validate — Validación final
 
 ## Precondiciones
 
-1. `specs/NNN-slug/spec.md` con `Estado: APROBADA`.
-2. `tasks.md` existe y todas sus tareas están `- [x]` con bloque `Evidencia:`.
-Si falta: `VALIDACIÓN BLOQUEADA — <lo que falta>. Siguiente paso: sdd-implement T-XXX`.
-
-## Contexto requerido
-
-- `spec.md`, `plan.md`, `trace.md`, `tasks.md`, `docs/constitution.md`.
-- El repositorio completo (código, tests, manifiestos para descubrir verificaciones reales).
-
-## Entradas
-
-- Ninguna adicional.
+- Spec aprobada.
+- Plan/trace/tasks vigentes y `TRAZABILIDAD: PASS`.
+- Todas las tasks `- [x]` con evidencia.
 
 ## Procedimiento
 
-1. Verifica precondiciones.
-2. **Cadena de evidencia por requisito.** Para CADA RF y RNF construye la fila de la matriz: en qué sección del plan se diseñó · qué tarea lo implementó · qué archivos lo materializan · qué test lo demuestra (con el comando y su resultado) · resultado. Un requisito sin eslabón completo = sin evidencia.
-3. Ejecuta la suite completa de tests y las verificaciones aplicables del proyecto (descúbrelas inspeccionando el repositorio: tests, lint, formateo, type checking, build, análisis estático, auditoría de dependencias, seguridad). Registra comandos y resultados. No inventes comandos; las categorías inexistentes se marcan "no disponible en el proyecto".
-4. Verifica contra los artefactos: casos límite de la spec cubiertos por tests · criterios de finalización (marcar solo los cumplidos con evidencia) · principios de `docs/constitution.md` respetados.
-5. Escribe `specs/NNN-slug/validation.md` (plantilla).
-6. **Veredicto:**
-   - Todos los requisitos con evidencia completa y verificaciones en verde → `SPEC CUMPLIDA: SÍ`. Informa: `SPEC COMPLETADA. Nuevos requisitos → sdd-change`. DETENTE.
-   - Cualquier requisito sin evidencia o verificación en rojo → `SPEC CUMPLIDA: NO`, con la lista de huecos y para cada uno `Siguiente paso: sdd-implement T-XXX` o `sdd-change`. DETENTE.
-7. Nunca aceptes como evidencia: "parece funcionar", "debería funcionar", "estaba hecho antes", o salidas no producidas en esta ejecución.
+1. Para cada RF/RNF prueba cadena `RF → plan → task → implementación → test`.
+2. Ejecuta checks reales aplicables: tests, lint, format check, typecheck, build, análisis estático, auditoría de dependencias/seguridad. No inventes comandos.
+3. Verifica casos límite, criterios de finalización y constitution.
+4. Revisa el diff/implementación global para detectar cambios fuera de scope, comportamiento sin RF, duplicación evidente, contratos rotos o sobreingeniería que afecte mantenibilidad.
+5. Cuando haya migraciones, exige evidencia de compatibilidad/validación/rollback prevista en plan.
+6. Escribe `validation.md` con evidencia y veredicto.
+7. Si todo cumple: `SPEC CUMPLIDA: SÍ`; si no: `NO` y enruta cada hueco a `sdd-implement`, `sdd-bug`, `sdd-change`, `sdd-migration` o `sdd-refactor`.
 
-### Plantilla de `specs/NNN-slug/validation.md`
+## Plantilla
 
 ```markdown
 # Validación — NNN-slug
-
-> Fecha: YYYY-MM-DD · spec.md v<N>
+> Spec-Version: N · Plan-Version: M
 
 ## Cadena de evidencia
-| RF | Descripción | Plan (sección) | Tarea | Implementación (archivos) | Test (comando → resultado) | Resultado |
-|----|-------------|----------------|-------|---------------------------|----------------------------|-----------|
-| RF-001 | … | §5 | T-003 | src/… | <suite>::test_x → PASS | OK |
+| RF/RNF | Plan | Tarea | Código | Test/comando | Resultado |
 
-## Requisitos no funcionales
-| RNF | Evidencia | Resultado |
-
-## Casos límite
-| Caso | Test que lo demuestra | Resultado |
-
-## Criterios de finalización
-- [x]/[ ] <criterio> — <evidencia o motivo del incumplimiento>
-
-## Verificaciones del proyecto
-| Categoría | Comando | Resultado |
-
-## Conformidad con docs/constitution.md
-| Principio | Cumplimiento y cómo se comprobó |
-
+## Casos límite y criterios
+## Checks del proyecto
+## Scope y compatibilidad
+## Migraciones (si aplica)
+## Constitution
 ## Veredicto
 SPEC CUMPLIDA: SÍ | NO
 ```
 
-## Artefactos de salida
+## Salida
 
-- `specs/NNN-slug/validation.md`
+```text
+VALIDACIÓN: PASS | FAIL
+RF/RNF: <cubiertos>/<total>
+CHECKS: <resumen>
+HUECOS: <ninguno o breve>
+SIGUIENTE: <skill o ninguna>
+```
 
-## Validación
+## Prohibido
 
-- La matriz contiene TODOS los RF y RNF, sin excepciones.
-- Cada celda `Test` cita un comando ejecutado en esta validación y su resultado.
-- El veredicto es coherente con la evidencia.
-
-## Condiciones de parada
-
-- Tras emitir el veredicto: DETENTE, sea SÍ o NO. No "arregles" los huecos tú misma.
-
-## Acciones prohibidas
-
-- Modificar código o tests para hacer pasar la validación.
-- Emitir `SPEC CUMPLIDA: SÍ` con cualquier requisito sin evidencia.
-- Aceptar verificaciones no ejecutadas como pasadas.
-- Dar por válida la palabra de la conversación frente al contenido de los artefactos.
-
-## Siguiente fase permitida
-
-Spec completada: `sdd-change` para nuevos requisitos · `sdd-implement T-XXX` / `sdd-change` si el veredicto fue NO.
+- Modificar código/tests para hacer pasar la validación.
+- Aceptar evidencia no ejecutada.

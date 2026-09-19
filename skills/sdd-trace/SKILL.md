@@ -1,6 +1,7 @@
 ---
 name: sdd-trace
-description: Verifica la trazabilidad RF → plan recorriendo TODOS los requisitos de spec.md y generando la matriz specs/NNN-slug/trace.md con estados COVERED, PARTIAL o MISSING. Detecta componentes sin justificación y contradicciones spec/plan. Emite TRAZABILIDAD: PASS (desbloquea sdd-tasks) o FAIL (bloquea). NO implementa ni corrige el plan. Úsala inmediatamente después de sdd-plan, o tras cualquier modificación de spec.md o plan.md.
+description: >-
+  Verifica la trazabilidad RF → plan recorriendo TODOS los requisitos de spec.md y generando la matriz specs/NNN-slug/trace.md con estados COVERED, PARTIAL o MISSING. Detecta componentes sin justificación y contradicciones spec/plan. Emite TRAZABILIDAD: PASS (desbloquea sdd-tasks) o FAIL (bloquea). NO implementa ni corrige el plan. Úsala inmediatamente después de sdd-plan, o tras cualquier modificación de spec.md o plan.md.
 ---
 
 # sdd-trace — Matriz de trazabilidad RF → plan
@@ -9,7 +10,8 @@ description: Verifica la trazabilidad RF → plan recorriendo TODOS los requisit
 
 - La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
 - Artefactos: `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
-- Veredictos: `SPEC CLARIFICADA: SÍ|NO` · `TRAZABILIDAD: PASS|FAIL` · `SPEC CUMPLIDA: SÍ|NO`
+- Veredictos: `SPEC CLARIFICADA: SÍ|NO` · `TRAZABILIDAD: PASS|FAIL` · `SPEC CUMPLIDA: SÍ|NO`.
+- La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta las filas `Estado`, `Aprobación` y `Versión`; nunca busques `Estado: …` como texto libre.
 - Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
 
 ## Propósito
@@ -28,7 +30,7 @@ Demostrar que CADA requisito de la spec tiene cobertura técnica en el plan, med
 
 ## Precondiciones
 
-- `specs/NNN-slug/spec.md` con `Estado: APROBADA` y `Aprobación: APROBADA`.
+- `specs/NNN-slug/spec.md` con las filas `Estado` y `Aprobación` en `APROBADA`.
 - `specs/NNN-slug/plan.md` existe.
 - Si falta algo: `TRAZABILIDAD BLOQUEADA — <lo que falta>. Siguiente paso: sdd-plan` (o `sdd-orchestrator`).
 
@@ -43,7 +45,7 @@ Demostrar que CADA requisito de la spec tiene cobertura técnica en el plan, med
 
 ## Procedimiento
 
-1. Lee spec.md y extrae la lista completa de RF (y RNF).
+1. Lee spec.md y extrae la lista completa de RF (y RNF). Lee la cabecera de plan.md y confirma que su `Spec-Version` coincide con la fila `Versión` actual de spec.md; si no coincide, la trazabilidad está bloqueada y el siguiente paso es `sdd-plan`.
 2. Por cada requisito, busca en plan.md su cobertura concreta (secciones, componentes, registros de decisión D-NNN, estrategia de tests). Clasifica:
    - `COVERED`: el plan muestra cómo se satisface por completo.
    - `PARTIAL`: hay cobertura pero incompleta o imprecisa (indica qué falta).
@@ -62,7 +64,7 @@ Demostrar que CADA requisito de la spec tiene cobertura técnica en el plan, med
 ```markdown
 # Trazabilidad RF → plan — NNN-slug
 
-> Fecha: YYYY-MM-DD · Basado en spec.md v<N> y plan.md v<N>
+> Fecha: YYYY-MM-DD · Spec-Version: N · Plan-Version: M
 
 | RF | Descripción (resumen) | Cobertura en plan (secciones/D-NNN) | Estado |
 |----|------------------------|--------------------------------------|--------|

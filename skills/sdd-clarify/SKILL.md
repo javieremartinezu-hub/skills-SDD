@@ -1,6 +1,7 @@
 ---
 name: sdd-clarify
-description: Audita specs/NNN-slug/spec.md como QA Senior (ambigüedades, contradicciones, RF no verificables, casos límite ausentes, estados y errores sin definir, suposiciones implícitas, conflictos con la constitución, mezcla spec/implementación), enumera hallazgos sin corregir nada, los resuelve con el usuario UNO POR UNO y repite la auditoría hasta emitir SPEC CLARIFICADA: SÍ. Conduce después el gate de aprobación humana de la spec. Úsala cuando exista una spec en BORRADOR o modificada por sdd-change.
+description: >-
+  Audita specs/NNN-slug/spec.md como QA Senior (ambigüedades, contradicciones, RF no verificables, casos límite ausentes, estados y errores sin definir, suposiciones implícitas, conflictos con la constitución, mezcla spec/implementación), enumera hallazgos sin corregir nada, los resuelve con el usuario UNO POR UNO y repite la auditoría hasta emitir SPEC CLARIFICADA: SÍ. Conduce después el gate de aprobación humana de la spec. Úsala cuando exista una spec en BORRADOR o modificada por sdd-change.
 ---
 
 # sdd-clarify — Auditoría de clarificación y gate de aprobación
@@ -9,7 +10,8 @@ description: Audita specs/NNN-slug/spec.md como QA Senior (ambigüedades, contra
 
 - La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
 - Artefactos: `docs/constitution.md` · `AGENTS.md` · `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
-- Estado de una spec: `BORRADOR` → `CLARIFICADA` → `APROBADA`. Marcador: `[NECESITA ACLARACIÓN: ...]`
+- Estado de una spec: `BORRADOR` → `CLARIFICADA` → `APROBADA`. Marcador: `[NECESITA ACLARACIÓN: ...]`.
+- La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta y actualiza sus filas `Estado`, `Aprobación` y `Versión`; nunca uses texto libre como `Estado: …`.
 - Veredictos: `SPEC CLARIFICADA: SÍ|NO` · `TRAZABILIDAD: PASS|FAIL` · `SPEC CUMPLIDA: SÍ|NO`
 
 ## Propósito
@@ -23,7 +25,7 @@ Garantizar que la spec no contiene ambigüedades, contradicciones ni huecos, y o
 
 ## Cuándo usar
 
-- Existe una spec con `Estado: BORRADOR`.
+- Existe una spec cuya fila `Estado` es `BORRADOR`.
 - `sdd-change` modificó una spec (re-auditar antes de re-aprobar).
 
 ## Precondiciones
@@ -52,12 +54,12 @@ Garantizar que la spec no contiene ambigüedades, contradicciones ni huecos, y o
    - Cero contradicciones.
    - Todos los RF verificables.
    - `Fuera de alcance` explícito y no vacío.
-6. Si se cumple: escribe en `clarify.md` el veredicto `SPEC CLARIFICADA: SÍ`, actualiza `Estado: CLARIFICADA` en spec.md y pasa al paso 7. Si no: escribe `SPEC CLARIFICADA: NO` con los hallazgos pendientes y DETENTE (plan bloqueado).
+6. Si se cumple: escribe en `clarify.md` el veredicto `SPEC CLARIFICADA: SÍ`, actualiza la fila `Estado` a `CLARIFICADA` en spec.md y pasa al paso 7. Si no: escribe `SPEC CLARIFICADA: NO` con los hallazgos pendientes y DETENTE (plan bloqueado).
 7. **Gate de aprobación humana.** Pregunta literalmente: "¿Esta especificación representa realmente la funcionalidad que quieres construir? (sí/no)".
    - CUENTA como aprobación: sí inequívoco referido a esta spec ("sí, apruebo esta spec", "aprobada", "es exactamente lo que quiero").
    - NO CUENTA: "vale", "ok", "sigue", "suena bien", "parece bien", silencio, o aprobar otra cosa. Ante ambigüedad, repite la pregunta exacta.
-   - Si aprueba: registra en la tabla de cabecera de spec.md `Estado: APROBADA` y `Aprobación: APROBADA (YYYY-MM-DD, por el usuario)`. Informa: `Siguiente paso: sdd-plan`. DETENTE.
-   - Si rechaza o no aprueba explícitamente: deja `Aprobación: PENDIENTE`, informa `PLAN BLOQUEADO — Spec sin aprobación humana explícita. Siguiente paso: repetir sdd-clarify o ajustar la spec con sdd-change`. DETENTE.
+   - Si aprueba: actualiza en la tabla de cabecera las filas `Estado` a `APROBADA` y `Aprobación` a `APROBADA (YYYY-MM-DD, por el usuario)`. Informa: `Siguiente paso: sdd-plan`. DETENTE.
+   - Si rechaza o no aprueba explícitamente: deja la fila `Aprobación` en `PENDIENTE`, informa `PLAN BLOQUEADO — Spec sin aprobación humana explícita. Siguiente paso: repetir sdd-clarify o ajustar la spec con sdd-change`. DETENTE.
 
 ### Plantilla de `specs/NNN-slug/clarify.md`
 
@@ -86,7 +88,7 @@ SPEC CLARIFICADA: SÍ | NO
 
 - Cada edición de spec.md corresponde a un hallazgo con decisión explícita del usuario.
 - El veredicto final refleja la condición de éxito completa.
-- `Estado: APROBADA` existe solo tras el gate del paso 7.
+- La fila `Estado` solo toma `APROBADA` tras el gate del paso 7.
 
 ## Condiciones de parada
 

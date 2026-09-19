@@ -29,7 +29,7 @@ Definir las reglas innegociables del proyecto en `docs/constitution.md`. Todo el
 ## Precondiciones
 
 - `docs/brief.md` existe (si no: `CONSTITUCIÓN BLOQUEADA — Falta docs/brief.md. Siguiente paso: sdd-init`).
-- No existe `docs/constitution.md` con `Estado: APROBADA` (si existe, este flujo es de enmienda: propón cambios como adiciones o revisiones numeradas, con la misma aprobación explícita).
+- Si `docs/constitution.md` ya tiene `Estado: APROBADA`, este flujo es una **enmienda**: conserva todos los principios no afectados, numera la revisión, cambia temporalmente el estado a `PROPUESTA` y exige la misma aprobación explícita antes de que la nueva versión entre en vigor. No bloquees ni sobrescribas silenciosamente la constitution existente.
 
 ## Contexto requerido
 
@@ -42,8 +42,8 @@ Definir las reglas innegociables del proyecto en `docs/constitution.md`. Todo el
 
 ## Procedimiento
 
-1. Lee `docs/brief.md`. Si no existe, detente (ver Precondiciones).
-2. Redacta **entre 8 y 12 principios**. Cada principio: enunciado en una frase + "Cómo se verifica" en una frase. Deben poder comprobarse en una revisión de código o de artefactos.
+1. Lee `docs/brief.md` y, si existe, `docs/constitution.md`. Si no existe el brief, detente (ver Precondiciones). Si hay una constitution aprobada, identifica primero sus principios y registro de enmiendas: conserva el contenido no afectado y prepara únicamente la revisión solicitada; no redactes una constitution nueva desde cero.
+2. Para una constitution nueva, redacta **entre 8 y 12 principios**. Para una enmienda, conserva entre 8 y 12 principios tras aplicar solo los cambios solicitados. Cada principio: enunciado en una frase + "Cómo se verifica" en una frase. Deben poder comprobarse en una revisión de código o de artefactos.
 3. Cubre como mínimo estos temas (pueden agruparse): Spec-Driven Development · simplicidad · mantenibilidad · calidad de código · seguridad por diseño · tests · dependencias · separación de responsabilidades · errores · observabilidad · compatibilidad · documentación · cambios controlados.
 4. Incluye, con esta esencia, estas reglas innegociables:
    - La spec manda sobre el código.
@@ -54,8 +54,8 @@ Definir las reglas innegociables del proyecto en `docs/constitution.md`. Todo el
    - Los errores deben ser explícitos y observables, nunca tragados en silencio.
    - Los cambios deben ser pequeños y verificables.
    - Spec, plan, código y tests deben permanecer sincronizados.
-5. Escribe `docs/constitution.md` (plantilla) con `Estado: PROPUESTA`.
-6. Muestra la constitución completa al usuario.
+5. Escribe `docs/constitution.md` con `Estado: PROPUESTA`. Para una enmienda, incrementa una revisión o versión visible y añade al registro una fila marcada `PENDIENTE`; conserva el historial previo.
+6. Muestra la constitución completa y el diff de la enmienda al usuario.
 7. **Gate de aprobación** (ver reglas abajo): pide aprobación explícita. 
    - Si aprueba: actualiza la cabecera a `Estado: APROBADA (YYYY-MM-DD, aprobada por el usuario)` y recomienda `Siguiente paso: sdd-agents`.
    - Si pide cambios: aplica solo los cambios pedidos, vuelve al paso 6.
@@ -101,6 +101,7 @@ Verificación: <cómo se comprueba en la práctica>
 - Todos los temas mínimos del paso 3 están cubiertos.
 - Ningún principio contradice a otro ni impone una tecnología concreta salvo que el usuario la haya impuesto como restricción.
 - `Estado: APROBADA` solo tras aprobación explícita registrada.
+- Una enmienda conserva los principios e historial no afectados, incrementa su revisión y nunca entra en vigor mientras esté `PROPUESTA`.
 
 ## Condiciones de parada
 

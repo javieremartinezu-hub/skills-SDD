@@ -54,6 +54,14 @@ El framework impide que un agente:
 | sdd-validate | Probar cumplimiento |
 | sdd-change | Gestionar cambios desde la spec |
 | sdd-orchestrator | Gobernar el flujo |
+| sdd-bug | Corregir bug confirmado con test de regresión |
+| sdd-debug | Diagnosticar causa raíz incierta |
+| sdd-migration | Revisar migraciones y compatibilidad |
+| sdd-refactor | Mejorar estructura sin cambiar comportamiento |
+| sdd-review | Auditoría de solo lectura (quality / implementation / security / dependencies) |
+| sdd-doc-sync | Sincronizar documentación afectada |
+| sdd-release | Gate pre-merge / pre-deploy (READY / BLOCKED) |
+| tdd | Workflow TDD pragmático para cambios de código |
 
 Cada `SKILL.md` es autocontenido y ejecutable sin conocer esta conversación, y define: propósito, alcance, cuándo usar, precondiciones, contexto requerido, entradas, procedimiento, artefactos, validación, condiciones de parada, acciones prohibidas y siguiente fase permitida.
 

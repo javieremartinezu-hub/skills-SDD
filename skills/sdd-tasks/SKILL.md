@@ -1,6 +1,7 @@
 ---
 name: sdd-tasks
-description: Descompone plan.md en unidades pequeñas y verificables en specs/NNN-slug/tasks.md. Cada tarea define ID (T-001…), objetivo, RF relacionados, dependencias, componentes esperados, tests requeridos, verificaciones y criterio objetivo "Hecho cuando". Ordena por dependencias y comprueba que cada RF aparece en al menos una tarea. NO implementa código. Úsala solo con TRAZABILIDAD: PASS, o tras un cambio aprobado que modifique el plan.
+description: >-
+  Descompone plan.md en unidades pequeñas y verificables en specs/NNN-slug/tasks.md. Cada tarea define ID (T-001…), objetivo, RF relacionados, dependencias, componentes esperados, tests requeridos, verificaciones y criterio objetivo "Hecho cuando". Ordena por dependencias y comprueba que cada RF aparece en al menos una tarea. NO implementa código. Úsala solo con TRAZABILIDAD: PASS, o tras un cambio aprobado que modifique el plan.
 ---
 
 # sdd-tasks — Descomposición en tareas
@@ -10,7 +11,8 @@ description: Descompone plan.md en unidades pequeñas y verificables en specs/NN
 - La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
 - Artefactos: `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
 - Tareas: `T-001`, `T-002`… Estados en tasks.md: `- [ ]` pendiente, `- [x]` completada con evidencia.
-- Veredicto previo obligatorio: `TRAZABILIDAD: PASS`
+- Veredicto previo obligatorio: `TRAZABILIDAD: PASS`.
+- La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta la fila `Estado` y su `Versión`; nunca busques `Estado: …` como texto libre.
 - Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
 
 ## Propósito
@@ -29,9 +31,9 @@ Convertir el plan en una lista ordenada de tareas ejecutables, cada una con test
 
 ## Precondiciones
 
-1. `specs/NNN-slug/spec.md` con `Estado: APROBADA`.
-2. `specs/NNN-slug/plan.md` existe.
-3. `specs/NNN-slug/trace.md` con `TRAZABILIDAD: PASS`.
+1. `specs/NNN-slug/spec.md` con la fila `Estado` en `APROBADA`.
+2. `specs/NNN-slug/plan.md` existe y su `Spec-Version` coincide con la fila `Versión` de spec.md.
+3. `specs/NNN-slug/trace.md` con `TRAZABILIDAD: PASS` y cabecera con el mismo `Spec-Version` y `Plan-Version` que los artefactos actuales.
 Si falta algo: `TAREAS BLOQUEADAS — <lo que falta>. Siguiente paso: sdd-plan` (o `sdd-trace`).
 
 ## Contexto requerido
@@ -44,7 +46,7 @@ Si falta algo: `TAREAS BLOQUEADAS — <lo que falta>. Siguiente paso: sdd-plan` 
 
 ## Procedimiento
 
-1. Verifica precondiciones leyendo los archivos.
+1. Verifica precondiciones leyendo los archivos. Si existe tasks.md, toda re-edición debe reemplazar su cabecera por las versiones actuales y reabrir las tareas afectadas.
 2. Descompón el plan en tareas. **Regla de granularidad: UNA TAREA = UN CAMBIO PEQUEÑO + TESTS + RESULTADO VERIFICABLE.** Si una tarea contiene varios comportamientos, divídela.
 3. Rechaza (dividiendo) tareas del tipo: "Implementar backend", "Crear todo el sistema de autenticación", "Construir el MVP". Cada tarea debe poder implementarse y verificarse en una sola ejecución.
 4. Numera `T-001`, `T-002`… (3 dígitos). Ordena por dependencias: una tarea solo puede depender de tareas con número menor ya definidas.
@@ -58,7 +60,7 @@ Si falta algo: `TAREAS BLOQUEADAS — <lo que falta>. Siguiente paso: sdd-plan` 
 ```markdown
 # Tareas — NNN-slug
 
-> Basado en plan.md v<N> · Trazabilidad: PASS
+> Spec-Version: N · Plan-Version: M · Trazabilidad: PASS
 
 - [ ] T-001
   - Objetivo: <capacidad concreta e indivisible>

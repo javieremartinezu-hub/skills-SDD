@@ -18,8 +18,8 @@ Incorporar un requisito nuevo o modificado **empezando siempre por la spec**: ni
 
 ## Alcance
 
-- SOLO modifica `spec.md` (y prepara el reinicio del ciclo).
-- NO implementa código. NO actualiza plan.md ni tasks.md (les toca tras el ciclo: `sdd-plan`, `sdd-tasks`).
+- SOLO modifica `spec.md`. Los artefactos derivados existentes (`clarify.md`, `plan.md`, `trace.md`, `tasks.md`, `validation.md`) no se editan: pasan a estar caducados al quedar vinculados a una versión anterior.
+- NO implementa código ni registra aprobaciones. El ciclo posterior regenerará los artefactos derivados.
 
 ## Cuándo usar
 
@@ -39,22 +39,23 @@ Incorporar un requisito nuevo o modificado **empezando siempre por la spec**: ni
 
 ## Procedimiento
 
-1. **Identifica la spec afectada** buscando por RF, secciones y tema. Si el cambio no corresponde a ninguna spec existente (funcionalidad genuinamente nueva), créala siguiendo las convenciones de `sdd-spec` (nueva carpeta `NNN-slug/` con el siguiente número libre) y continúa.
-2. **Analiza el impacto**: RF afectados (añadidos/modificados/eliminados), tareas y tests existentes que quedan obsoletos, secciones de la spec colaterales. Preséntalo antes de editar.
+1. **Identifica la spec afectada** buscando por RF, secciones y tema. Si el cambio no corresponde a ninguna spec existente (funcionalidad genuinamente nueva), no la crees ni la entrevistes aquí: `CAMBIO BLOQUEADO — La funcionalidad requiere una spec nueva. Siguiente paso: sdd-spec`.
+2. **Analiza y clasifica el impacto**:
+   - `LOCAL`: cambia comportamiento dentro del diseño existente; no altera contratos/APIs públicas, persistencia, permisos/seguridad, RNF, arquitectura ni otras specs.
+   - `ESTRUCTURAL`: afecta cualquiera de esas áreas o cruza varios componentes/specs.
+   Identifica RF, tareas, tests y secciones afectadas. Presenta solo un resumen breve antes de editar.
 3. **Modifica spec.md PRIMERO**: aplica los cambios de requisitos con IDs estables (los RF modificados conservan su ID; los nuevos continúan la numeración; los eliminados se marcan como `RF-XXX: (eliminado en v<N> — motivo)` para conservar la trazabilidad histórica).
 4. Revisa por coherencia, actualizando lo afectado: errores · estados · permisos · seguridad funcional · casos límite · fuera de alcance · criterios de finalización.
-5. **Versiona e invalida veredictos**: incrementa `Versión`, resetea `Estado: BORRADOR` y `Aprobación: PENDIENTE`, y añade fila a `Registro de cambios` (qué cambió y por qué petición). Además, ANULA los veredictos previos para re-bloquear el ciclo: en `clarify.md` escribe `SPEC CLARIFICADA: NO (caducado por cambio v<N>)` y en `trace.md` escribe `TRAZABILIDAD: FAIL (caducado por cambio v<N>)`. Sin este paso, plan y tasks quedarían desbloqueados con auditorías de una versión antigua de la spec.
+5. **Versiona e invalida derivaciones**: incrementa la fila `Versión`, restablece las filas `Estado` a `BORRADOR` y `Aprobación` a `PENDIENTE`, y añade una fila al `Registro de cambios` incluyendo la clasificación persistente `[LOCAL]` o `[ESTRUCTURAL]`, qué cambió y por qué. No modifiques los artefactos derivados: sus cabeceras conservan la versión anterior y el orquestador los tratará como caducados.
 6. Lo que no se pueda cerrar sin decisión del usuario queda como `[NECESITA ACLARACIÓN: ...]`.
-7. **Muestra los cambios** (diff resumido: qué se añadió, modificó o eliminó, sección por sección).
-8. **Gate de aprobación.** Pregunta literalmente: "¿Apruebas estos cambios en la especificación? (sí/no)".
-   - CUENTA: sí inequívoco referido a estos cambios. NO CUENTA: "vale", "ok", "sigue", silencio, ambigüedad (repite la pregunta).
-   - Si aprueba: registra `Aprobación: APROBADA (YYYY-MM-DD, por el usuario)` solo si además NO queda ningún `[NECESITA ACLARACIÓN`; si quedan marcadores, permanece PENDIENTE.
-9. **DETENTE** e informa el reinicio del ciclo:
+7. **Muestra los cambios** con un diff resumido y la clasificación `LOCAL|ESTRUCTURAL`. No solicites ni registres una aprobación en esta skill: la aprobación de la nueva versión ocurre tras `sdd-clarify`.
+8. **DETENTE** e informa el reinicio del ciclo:
 
 ```
 CAMBIO REGISTRADO EN LA SPEC (v<N>)
 Siguiente paso: sdd-clarify
 Después: aprobación → sdd-plan → sdd-trace → sdd-tasks → sdd-implement → sdd-validate
+Nota: si el cambio es LOCAL, `sdd-plan` debe usar revisión de compatibilidad/delta y `sdd-tasks` reabrir solo tareas afectadas. Si el cambio ESTRUCTURAL afecta DB, API o formatos persistidos con consumidores/datos existentes, tras actualizar el plan usa `sdd-migration` antes de generar/ejecutar las tareas de transición.
 ```
 
 ### Principio innegociable
@@ -63,16 +64,16 @@ NINGÚN CAMBIO FUNCIONAL COMIENZA MODIFICANDO CÓDIGO. Si el usuario insiste en 
 
 ## Artefactos de salida
 
-- `specs/NNN-slug/spec.md` modificada (nueva versión, `Estado: BORRADOR`, `Aprobación: PENDIENTE` o registrada).
-- `specs/NNN-slug/clarify.md` y `specs/NNN-slug/trace.md` con veredictos anulados (`NO (caducado…)` / `FAIL (caducado…)`): `sdd-clarify` y `sdd-trace` los regenerarán.
+- `specs/NNN-slug/spec.md` modificada: nueva versión, fila `Estado` en `BORRADOR` y fila `Aprobación` en `PENDIENTE`.
+- Los artefactos derivados no se modifican; quedan caducados por no estar vinculados a la nueva versión.
 
 ## Validación
 
-- Ningún archivo de código, `plan.md` o `tasks.md` fue modificado en esta skill.
-- El `Registro de cambios` documenta la versión nueva.
+- Ningún archivo distinto de `spec.md` fue modificado en esta skill.
+- El `Registro de cambios` documenta la versión nueva y conserva la clasificación `[LOCAL]` o `[ESTRUCTURAL]` para que las siguientes skills no dependan de la conversación.
 - Los RF modificados conservan IDs; los nuevos continúan la numeración.
 - Se revisaron las 8 secciones del paso 4 (aunque sea para concluir "sin cambios").
-- Los veredictos de `clarify.md` y `trace.md` quedaron anulados; nadie puede avanzar a plan o tasks con auditorías de una versión anterior de la spec.
+- La nueva versión deja sin vigencia plan, trazabilidad, tareas y validación anteriores; el orquestador no permite usarlos hasta regenerarlos.
 
 ## Condiciones de parada
 
@@ -81,7 +82,7 @@ NINGÚN CAMBIO FUNCIONAL COMIENZA MODIFICANDO CÓDIGO. Si el usuario insiste en 
 ## Acciones prohibidas
 
 - Modificar, crear o eliminar código, tests, plan.md o tasks.md.
-- Aprobar tus propios cambios.
+- Registrar o inferir aprobación: el gate pertenece exclusivamente a `sdd-clarify`.
 - Saltarte la re-auditoría (`sdd-clarify`) o la re-trazabilidad (`sdd-trace`) posteriores.
 - Resolver ambigüedades del cambio sin el usuario.
 

@@ -14,7 +14,7 @@ description: Validación final de una spec mediante evidencia RF → PLAN → TA
 ## Procedimiento
 
 1. Para cada RF/RNF prueba cadena `RF → plan → task → implementación → test`.
-2. Ejecuta checks reales aplicables: tests, lint, format check, typecheck, build, análisis estático, auditoría de dependencias/seguridad. No inventes comandos.
+2. Ejecuta checks reales aplicables: tests, lint, format check, typecheck, build, análisis estático, auditoría de dependencias/seguridad. No inventes comandos. Si los RF afectan UI, interfaz o flujo web, exige además la prueba funcional E2E en navegador real con evidencia visual (captura o DOM) y consola sin errores JavaScript; sin esa evidencia, `SPEC CUMPLIDA: NO`.
 3. Verifica casos límite, criterios de finalización y constitution.
 4. Revisa el diff/implementación global para detectar cambios fuera de scope, comportamiento sin RF, duplicación evidente, contratos rotos o sobreingeniería que afecte mantenibilidad.
 5. Cuando haya migraciones, exige evidencia de compatibilidad/validación/rollback prevista en plan.

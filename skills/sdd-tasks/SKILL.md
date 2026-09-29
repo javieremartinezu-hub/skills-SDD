@@ -51,7 +51,7 @@ Si falta algo: `TAREAS BLOQUEADAS — <lo que falta>. Siguiente paso: sdd-plan` 
 3. Rechaza (dividiendo) tareas del tipo: "Implementar backend", "Crear todo el sistema de autenticación", "Construir el MVP". Cada tarea debe poder implementarse y verificarse en una sola ejecución.
 4. Numera `T-001`, `T-002`… (3 dígitos). Ordena por dependencias: una tarea solo puede depender de tareas con número menor ya definidas.
 5. Comprueba **cobertura de tareas**: cada RF y RNF aparece en `RF relacionados` de al menos una tarea. Si no, corrige la descomposición (no el plan; si el hueco es del plan, detente y enruta a `sdd-plan`).
-6. Escribe `specs/NNN-slug/tasks.md` con la plantilla. En `Verificaciones` lista QUÉ debe comprobarse (suite de tests del módulo, lint, type checking, build…), no comandos concretos: `sdd-implement` descubrirá los comandos reales inspeccionando el repositorio.
+6. Escribe `specs/NNN-slug/tasks.md` con la plantilla. En `Verificaciones` lista QUÉ debe comprobarse (suite de tests del módulo, lint, type checking, build…), no comandos concretos: `sdd-implement` descubrirá los comandos reales inspeccionando el repositorio. Para tareas que afecten un componente visual, interfaz o flujo web, incluye explícitamente la verificación en navegador (render correcto, consola sin errores JavaScript, interacción E2E y evidencia visual) entre las `Verificaciones` y, si aplica, en `Hecho cuando`.
 7. Si es una re-edición tras `sdd-change`: reabre (`- [ ]`, borrando evidencia obsoleta) las tareas cuyo comportamiento cambió, añade las nuevas al final manteniendo numeración estable, y no renumeres las existentes.
 8. Muestra la lista y recomienda: `Siguiente paso: sdd-implement T-001` (la primera tarea sin dependencias pendientes).
 
@@ -84,6 +84,7 @@ Si falta algo: `TAREAS BLOQUEADAS — <lo que falta>. Siguiente paso: sdd-plan` 
 - Cada tarea tiene los 8 campos completos (Evidencia queda para `sdd-implement`).
 - Ninguna tarea agrupa varios comportamientos.
 - Cobertura: todo RF/RNF aparece en ≥1 tarea.
+- Las tareas que afectan UI/interfaz web incluyen la verificación en navegador entre sus verificaciones.
 - Sin dependencias circulares ni referencias a tareas inexistentes.
 - `Hecho cuando` es objetivo (comprobable por un tercero), nunca "queda bien" o "funciona".
 

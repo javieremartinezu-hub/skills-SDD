@@ -19,7 +19,7 @@ description: Corrige un defecto confirmado contra comportamiento esperado. Limit
 4. **RED:** crea test de regresión que falle por el defecto, cuando sea razonablemente posible.
 5. Determina la causa raíz con evidencia; evita parchear síntomas.
 6. **GREEN:** aplica el fix mínimo. No agregues funcionalidades ni refactors ajenos.
-7. Ejecuta tests afectados y regresión proporcional al riesgo.
+7. Ejecuta tests afectados y regresión proporcional al riesgo. Si el fix afecta un componente visual, interfaz o flujo web: valida en navegador real — sin errores de renderizado ni de consola (JavaScript), interacción correcta —, registra evidencia visual (captura o DOM) y repite hasta pasar.
 8. **Self-review:** confirma scope, ausencia de extras, compatibilidad, test útil y ausencia de duplicación/abstracciones innecesarias.
 9. Registra `specs/NNN-slug/bugs/BUG-NNN.md` y cierra solo con evidencia.
 
@@ -54,3 +54,4 @@ SIGUIENTE: <skill o ninguna>
 - Cambiar spec para adaptarla al código defectuoso.
 - Añadir comportamiento nuevo.
 - Refactorizar fuera del scope.
+- Cerrar un bug de UI sin la validación en navegador con evidencia.

@@ -19,6 +19,7 @@
 - **Simplicidad:** solución mínima; sin capas/abstracciones “por si acaso”.
 - **Dependency guard:** justificar necesidad, alternativa, mantenimiento y seguridad.
 - **Self-review:** revisar diff, scope, contratos, duplicación, casos borde y calidad de tests antes de cerrar.
+- **Verificación en navegador (UI):** todo componente visual, interfaz o flujo web creado, modificado o corregido se valida en navegador real antes de cerrar: inspección con herramienta de automatización, prueba funcional E2E sin errores de renderizado/consola (JavaScript), evidencia visual (captura o DOM) e iteración hasta pasar.
 - **Compatibilidad:** preservar contratos y datos salvo cambio explícito.
 - **Docs sync:** actualizar solo documentación afectada.
 - **Concisión:** respuestas de estado breves; los artefactos pueden contener el detalle técnico.

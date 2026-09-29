@@ -12,7 +12,7 @@ description: Mejora estructura interna sin cambiar comportamiento observable. De
 3. Ejecuta baseline de tests; si falta cobertura, añade characterization tests mínimos.
 4. Refactoriza en pasos pequeños. No cambies comportamiento ni contratos.
 5. Evita capas, patrones y dependencias nuevas salvo necesidad demostrable.
-6. Ejecuta tests/checks después de cambios relevantes.
+6. Ejecuta tests/checks después de cambios relevantes. Si el refactor afecta un componente visual, interfaz o flujo web, revalida en navegador real (comportamiento observable intacto, consola sin errores) con evidencia visual antes de cerrar.
 7. Self-review del diff: scope, compatibilidad, simplicidad, duplicación, contratos y tests.
 
 ## Desvíos

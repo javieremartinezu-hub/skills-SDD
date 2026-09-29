@@ -1,7 +1,7 @@
 ---
 name: sdd-agents
 description: >-
-  Genera AGENTS.md en la raíz del repositorio: reglas operativas breves y permanentes para agentes de IA. Obliga a trabajar desde artefactos SDD, limitar alcance, reutilizar antes de crear, evitar sobreingeniería, aplicar TDD cuando aporta valor, verificar cambios, hacer self-review y comunicar de forma concisa. Úsala tras aprobar docs/constitution.md o para actualizar las reglas del repositorio.
+  Genera AGENTS.md en la raíz del repositorio: reglas operativas breves y permanentes para agentes de IA. Obliga a trabajar desde artefactos SDD, limitar alcance, reutilizar antes de crear, evitar sobreingeniería, aplicar TDD cuando aporta valor, verificar cambios (incluida la UI en navegador real), hacer self-review y comunicar de forma concisa. Úsala tras aprobar docs/constitution.md o para actualizar las reglas del repositorio.
 ---
 
 # sdd-agents — Manual operativo para agentes de IA
@@ -59,33 +59,34 @@ Los requisitos viven en `specs/`. La conversación no sustituye los artefactos.
 
 ## Verificación y self-review
 19. Ejecuta las verificaciones aplicables del proyecto; nunca afirmes que pasó algo que no ejecutaste.
-20. Antes de cerrar, revisa el diff y comprueba:
+20. Si el cambio afecta un componente visual, interfaz o flujo web: verifica en navegador real antes de cerrar — abre la aplicación con la herramienta de automatización disponible, ejecuta la prueba funcional E2E (sin errores de renderizado ni de consola JavaScript) y registra evidencia visual (captura o DOM); corrige y repite hasta pasar.
+21. Antes de cerrar, revisa el diff y comprueba:
    - cumplimiento de spec/tarea;
    - ausencia de cambios ajenos al scope;
    - ausencia de duplicación o abstracciones innecesarias;
    - casos borde evidentes;
    - contratos preservados;
    - tests que realmente prueban el comportamiento.
-21. No avances con errores relevantes.
+22. No avances con errores relevantes.
 
 ## Enrutamiento
-22. Bug → `sdd-bug`; diagnóstico incierto → `sdd-debug`.
-23. Cambio funcional → `sdd-change`; migración sensible → `sdd-migration`.
-24. Refactor → `sdd-refactor`.
-25. Auditoría → `sdd-review quality|implementation|security|dependencies`.
-26. Sincronizar documentación → `sdd-doc-sync`; pre-release → `sdd-release`.
-27. Si dudas de la fase, usa `sdd-orchestrator`.
+23. Bug → `sdd-bug`; diagnóstico incierto → `sdd-debug`.
+24. Cambio funcional → `sdd-change`; migración sensible → `sdd-migration`.
+25. Refactor → `sdd-refactor`.
+26. Auditoría → `sdd-review quality|implementation|security|dependencies`.
+27. Sincronizar documentación → `sdd-doc-sync`; pre-release → `sdd-release`.
+28. Si dudas de la fase, usa `sdd-orchestrator`.
 
 ## Comunicación
-28. Sé conciso por defecto: resultado, cambios, evidencia y siguiente paso.
-29. No repitas contexto ni expliques conceptos/proceso salvo petición del usuario.
-30. Al completar una tarea, detente; no empieces otra por tu cuenta.
+29. Sé conciso por defecto: resultado, cambios, evidencia y siguiente paso.
+30. No repitas contexto ni expliques conceptos/proceso salvo petición del usuario.
+31. Al completar una tarea, detente; no empieces otra por tu cuenta.
 ```
 
 ## Validación
 
 - No contiene requisitos de producto ni duplica la constitution.
-- Incluye scope guard, reuse-first, simplicidad, dependency guard, TDD pragmático, self-review y comunicación concisa.
+- Incluye scope guard, reuse-first, simplicidad, dependency guard, TDD pragmático, verificación en navegador para cambios de UI, self-review y comunicación concisa.
 
 ## Acciones prohibidas
 

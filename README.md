@@ -34,6 +34,7 @@ El framework impide que un agente:
 - introduzca decisiones arquitectónicas en silencio;
 - implemente varias tareas de una vez;
 - declare "terminado" sin evidencia;
+- dé por terminado un componente visual, interfaz o flujo web sin verificarlo en navegador real (inspección, E2E, evidencia visual e iteración);
 - atienda un requisito nuevo tocando código directamente.
 
 ---
@@ -116,8 +117,8 @@ Nunca existen `IDEA → CÓDIGO` ni `CHANGE → CÓDIGO`.
 | G3 · Aprobación humana | `Aprobación: APROBADA (fecha, por el usuario)` con sí inequívoco | sdd-clarify, sdd-plan, sdd-implement |
 | G4 · Trazabilidad | `TRAZABILIDAD: PASS` (todo RF `COVERED`) | sdd-tasks, sdd-implement |
 | G5 · Dependencias de tarea | Tarea existe y todas sus dependencias `- [x]` con evidencia | sdd-implement |
-| G6 · Cierre de tarea | Todas las verificaciones del proyecto pasan; si no, la tarea sigue `- [ ]` | sdd-implement |
-| G7 · Validación final | Evidencia completa RF→TEST para todos los requisitos; si no, `SPEC CUMPLIDA: NO` | sdd-validate |
+| G6 · Cierre de tarea | Todas las verificaciones del proyecto pasan; para cambios de UI, verificación en navegador real con evidencia; si no, la tarea sigue `- [ ]` | sdd-implement |
+| G7 · Validación final | Evidencia completa RF→TEST para todos los requisitos (para RF de UI, E2E en navegador real con evidencia visual); si no, `SPEC CUMPLIDA: NO` | sdd-validate |
 
 Además: `sdd-orchestrator` bloquea cualquier acción cuya fase previa no esté completa y devuelve siempre la skill correcta.
 

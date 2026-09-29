@@ -20,7 +20,8 @@ Definir QUÉ debe hacer el sistema y POR QUÉ, en `specs/NNN-slug/spec.md`, de f
 
 ## Alcance
 
-- SOLO especifica comportamiento.
+- Define comportamiento funcional y detecta si existe impacto UI.
+- La definición visual detallada vive en `ui-spec.md` y se genera con `sdd-ui`.
 - NO diseña arquitectura ni elige tecnologías. NO escribe código ni tests.
 
 ## Cuándo usar
@@ -107,6 +108,13 @@ Como <actor>, quiero <capacidad>, para <beneficio>.
 | Versión | Fecha | Cambio |
 | 1 | YYYY-MM-DD | Creación inicial |
 ```
+
+## Gate de UI
+
+Antes de cerrar la spec, determina si el requisito afecta una interfaz de usuario.
+- Si NO: no crear UI Spec.
+- Si SÍ: registrar `UI impact: DIRECT|INDIRECT` en la spec y enrutar a `sdd-ui`.
+- No inventar detalles visuales faltantes: preguntar o marcar `[NECESITA ACLARACIÓN]`.
 
 ## Artefactos de salida
 

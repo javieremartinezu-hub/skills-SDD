@@ -1,43 +1,42 @@
 ---
 name: tdd
-description: Workflow TDD pragmático para features, bugs y cambios donde los tests aportan confianza. Usa UNDERSTAND → RED → GREEN → REFACTOR → VERIFY, con scope mínimo, reuse-first y self-review; evita proceso innecesario para cambios sin comportamiento.
+description: Rigorous, pragmatic TDD workflow for software development. Use for new features by default, bug investigation/fixes when regression tests add value, and other code changes when TDD materially improves correctness, confidence, design, or regression prevention. Not needed for docs-only, generated/static assets, trivial config, mechanical no-behavior refactors, or tiny changes already well covered.
 ---
 
-# TDD — Test-Driven Development pragmático
+# TDD
 
-## Cuándo usar
+Use TDD where it creates engineering value, not mere process. Optimize for maximum confidence per token and tool call.
 
-- Features: por defecto cuando existe comportamiento verificable.
-- Bugs reproducibles: test de regresión antes del fix cuando sea viable.
-- Refactors: tests baseline/caracterización para proteger comportamiento.
-- Puede ser ligero u omitirse en docs, assets estáticos, config trivial o cambios mecánicos ya cubiertos.
+## When Active
+
+- Feature work: default to `UNDERSTAND → RED → GREEN → REFACTOR → VERIFY`.
+- Bugs: prefer `UNDERSTAND → REPRODUCE → RED → ROOT CAUSE → GREEN → REFACTOR → VERIFY`.
+- Skip or keep lightweight when added workflow cost exceeds likely confidence/design benefit.
 
 ## Workflow
 
 ### UNDERSTAND
-Entiende comportamiento observable, código relacionado, tests y límites. Define scope inicial y busca implementaciones existentes antes de crear otras.
+Identify the observable behavior, relevant implementation, existing tests, dependencies, affected boundaries, and project test conventions. Use minimal context. Use Graphify for non-trivial structure, dependency, impact, call-flow, or test-location discovery. Avoid broad exploration.
 
 ### RED
-Crea el test mínimo significativo. Debe fallar por la razón esperada, no por ruido de setup.
+Write the smallest meaningful failing test for the required behavior or regression. Prefer observable behavior over implementation details. Confirm it fails for the expected reason before production changes.
+
+### REPRODUCE / ROOT CAUSE
+For bugs, reproduce the failure whenever practical before editing production code. After reproduction, identify and fix the underlying cause; do not patch symptoms when the cause can reasonably be corrected.
 
 ### GREEN
-Haz el cambio mínimo correcto. No agregues comportamiento futuro, dependencias, capas o abstracciones innecesarias.
+Make the smallest correct production change to pass the test. Avoid unrelated refactors, speculative abstractions, new dependencies, architecture changes, or future requirements. Run the narrowest relevant tests needed to establish green.
 
 ### REFACTOR
-Solo después de verde y solo si mejora claramente simplicidad, cohesión, nombres o duplicación. Mantén el scope.
+Refactor only after green and only when it materially improves the code: meaningful deduplication, clearer names, simpler control flow, or better cohesion. Keep tests green.
 
 ### VERIFY
-Ejecuta checks proporcionales al riesgo: tests, typecheck, lint, build/compile y otros realmente disponibles. No inventes comandos ni afirmes checks no ejecutados.
+Run checks proportional to risk: relevant tests, typecheck, lint, build/compile when applicable. Inspect the final diff and detect unrelated changes. Prefer targeted verification; widen only when impact or project conventions justify it. Never claim unrun checks passed.
 
-### SELF-REVIEW
-Inspecciona el diff: scope, cumplimiento, duplicación, abstracciones innecesarias, contratos, casos borde y calidad real del test.
+## Test Quality
 
-## Calidad de tests
+Tests should be deterministic, behavior-focused, understandable, appropriately isolated, and resistant to irrelevant implementation changes. Use the lowest-cost test level that provides sufficient confidence. Avoid excessive mocking, implementation-detail assertions, duplicated production logic, and unnecessary integration scope.
 
-- Deterministas y centrados en comportamiento.
-- Nivel de test más barato que dé confianza suficiente.
-- Evita mocks excesivos, assertions sobre detalles internos y duplicar lógica de producción dentro del test.
+## Coordination
 
-## Regla de eficiencia
-
-Maximiza confianza por token y tool call. No conviertas TDD en burocracia si no aporta evidencia adicional.
+This skill owns the TDD workflow. Do not duplicate Graphify's codebase-discovery role or Impeccable's UI/UX role; invoke them only when their specialization is relevant.

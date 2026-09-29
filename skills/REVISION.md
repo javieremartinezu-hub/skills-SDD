@@ -1,25 +1,20 @@
-# SDD + TDD — Integración para programación con IA
+# Revisión v2 — SDD + TDD
 
-## Flujos
+## Cambios incorporados
 
-- Nuevo desarrollo: `spec → clarify → plan → trace → tasks → implement → validate`
-- Bug confirmado: `sdd-bug → reproduce → RED → root cause → fix → regression → self-review`
-- Diagnóstico incierto: `sdd-debug → evidence → hypotheses → root cause → route`
-- Cambio funcional: `sdd-change → spec delta → plan delta/completo → trace → tasks → implement → validate`
-- Migración: `sdd-migration → compatibility/rollback → plan/tasks → implement → validate`
-- Refactor: `baseline → small refactor → regression → self-review`
-- Auditoría: `sdd-review quality|implementation|security|dependencies`
-- Documentación: `sdd-doc-sync`
-- Pre-release: `sdd-release`
+- UI/UX convertido en artefacto de primera clase mediante `sdd-ui`.
+- Design System persistente mediante `sdd-design-system`.
+- Auditoría estática mediante `sdd-ui-review`.
+- Verificación de la aplicación real mediante navegador con `sdd-browser-review`.
+- Browser verification integrada en implement, orchestrator, validate, bug, change y refactor.
+- Evidencia por URL, viewport, pasos, esperado, observado y screenshots.
+- Responsive, accessibility, estados y motion incluidos en el contrato UI.
+- OpenJEV decision gate mantiene clasificación estructurada sin reemplazar SDD ni el modelo principal.
 
-## Guardrails añadidos
+## Flujo actualizado
 
-- **Scope guard:** limitar archivos/componentes afectados y justificar expansión.
-- **Reuse-first:** buscar helpers/patrones/componentes existentes antes de crear nuevos.
-- **Simplicidad:** solución mínima; sin capas/abstracciones “por si acaso”.
-- **Dependency guard:** justificar necesidad, alternativa, mantenimiento y seguridad.
-- **Self-review:** revisar diff, scope, contratos, duplicación, casos borde y calidad de tests antes de cerrar.
-- **Verificación en navegador (UI):** todo componente visual, interfaz o flujo web creado, modificado o corregido se valida en navegador real antes de cerrar: inspección con herramienta de automatización, prueba funcional E2E sin errores de renderizado/consola (JavaScript), evidencia visual (captura o DOM) e iteración hasta pasar.
-- **Compatibilidad:** preservar contratos y datos salvo cambio explícito.
-- **Docs sync:** actualizar solo documentación afectada.
-- **Concisión:** respuestas de estado breves; los artefactos pueden contener el detalle técnico.
+`spec → clarify → ui-spec(if UI) → design-system(if needed) → plan → trace → tasks → implement/TDD → browser-review(if UI) → self-review → validate`
+
+## Principio clave
+
+La implementación debe cumplir tanto el comportamiento especificado como la experiencia visible especificada. El código no es evidencia suficiente para declarar una UI terminada.

@@ -1,33 +1,41 @@
 ---
 name: sdd-refactor
-description: Mejora estructura interna sin cambiar comportamiento observable. Define scope mínimo, protege baseline con tests, reutiliza patrones existentes, evita nuevas abstracciones innecesarias, aplica cambios pequeños y valida regresión con self-review.
+description: Mejora calidad interna sin cambiar comportamiento observable: simplificación, duplicación, nombres, cohesión, separación de responsabilidades o deuda técnica. Protege el comportamiento con tests existentes o characterization tests, aplica cambios pequeños y ejecuta regresión. Si requiere cambiar comportamiento o arquitectura contractual, detiene y enruta a sdd-change.
 ---
 
 # sdd-refactor — Mejora interna sin cambio funcional
 
-## Procedimiento
+## Regla clave
+Un refactor cambia **cómo** está construido el código, no **qué** hace el sistema.
 
-1. Define objetivo y scope mínimo.
-2. Busca patrones/helpers existentes antes de crear nuevas abstracciones.
-3. Ejecuta baseline de tests; si falta cobertura, añade characterization tests mínimos.
-4. Refactoriza en pasos pequeños. No cambies comportamiento ni contratos.
-5. Evita capas, patrones y dependencias nuevas salvo necesidad demostrable.
-6. Ejecuta tests/checks después de cambios relevantes. Si el refactor afecta un componente visual, interfaz o flujo web, revalida en navegador real (comportamiento observable intacto, consola sin errores) con evidencia visual antes de cerrar.
-7. Self-review del diff: scope, compatibilidad, simplicidad, duplicación, contratos y tests.
+## Precondiciones
+- El comportamiento esperado está definido.
+- Existe cobertura suficiente para proteger el área; si no, añade primero characterization tests mínimos.
+
+## Procedimiento
+1. Define el objetivo concreto del refactor y el alcance mínimo.
+2. Ejecuta tests actuales y confirma baseline verde.
+3. Añade tests de caracterización solo si falta protección relevante.
+4. Aplica cambios pequeños, sin nuevas capacidades.
+5. Ejecuta tests después de cada cambio relevante.
+6. Ejecuta verificaciones proporcionales: lint/typecheck/build/tests según proyecto.
+7. Inspecciona el diff para confirmar ausencia de cambios funcionales accidentales.
 
 ## Desvíos
+- Cambia comportamiento esperado → `sdd-change`.
+- Descubre un defecto funcional → `sdd-bug`.
+- Requiere decisión arquitectónica importante o contrato/API nuevo → `sdd-change` o `sdd-plan` según corresponda.
 
-- Cambio funcional → `sdd-change`.
-- Defecto funcional → `sdd-bug`.
-- Diagnóstico incierto → `sdd-debug`.
-- Cambio estructural contractual/migración → `sdd-migration` o `sdd-plan`.
-
-## Salida
-
+## Salida en conversación
 ```text
-REFACTOR: COMPLETADO | BLOQUEADO
-CAMBIOS: <breve>
-TESTS/CHECKS: <resultado>
-SELF-REVIEW: PASS | hallazgo
-SIGUIENTE: <skill o ninguna>
+REFACTOR: <objetivo>
+ARCHIVOS: <resumen>
+TESTS: <comando> → PASS/FAIL
+VERIFICACIONES: <resumen>
+RESULTADO: COMPLETADO | BLOQUEADO — <siguiente paso>
 ```
+Mantén la respuesta breve; no expliques decisiones obvias salvo que se solicite.
+
+## Refactor UI
+
+Si afecta UI, tomar baseline browser antes del refactor y repetir el flujo después para demostrar ausencia de cambio funcional/visual no intencionado.

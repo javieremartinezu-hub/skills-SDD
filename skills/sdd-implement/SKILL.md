@@ -1,69 +1,121 @@
 ---
 name: sdd-implement
-description: Implementa EXACTAMENTE UNA tarea T-XXX con scope limitado, reuse-first, solución mínima, TDD pragmático, verificaciones reales y self-review final. Marca la tarea completada solo con evidencia y se detiene.
+description: Implementa EXACTAMENTE UNA tarea (T-XXX) de tasks.md aplicando TDD estricto (RED → GREEN → REFACTOR), tras verificar spec aprobada, cero [NECESITA ACLARACIÓN], trazabilidad PASS y dependencias completadas. Descubre las verificaciones reales del proyecto inspeccionándolo (tests, lint, type check, build, auditoría) sin inventar comandos. Registra evidencia, marca la tarea solo si todo pasa, informa y SE DETIENE. Es la skill para implementar tareas planificadas; `sdd-bug` puede escribir fixes y `sdd-refactor` puede modificar estructura sin cambiar comportamiento.
 ---
 
-# sdd-implement — Implementación de UNA tarea
+# sdd-implement — Implementación de UNA tarea con TDD
 
-## Precondiciones
+## Convenciones comunes del framework (léelas primero)
 
-1. Constitution aprobada y `AGENTS.md` presente.
-2. Spec aprobada, sin `[NECESITA ACLARACIÓN]`.
-3. Plan/trace/tasks vigentes; `TRAZABILIDAD: PASS`.
-4. `T-XXX` existe y sus dependencias están completadas.
-5. El usuario indicó `T-XXX`; nunca elijas otra por tu cuenta.
+- La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
+- Artefactos: `docs/constitution.md` · `AGENTS.md` · `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
+- Estados de tarea: `- [ ]` pendiente · `- [x]` completada (solo con evidencia registrada).
+- La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta las filas `Estado`, `Aprobación` y `Versión`; nunca busques `Estado: …` como texto libre.
+- Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
 
-Si falla algo: bloquea y enruta a la skill correspondiente.
+## Propósito
+
+Convertir UNA tarea en código + tests que la demuestren, con evidencia verificable.
+
+## Alcance
+
+- Implementa código de producto asociado a tareas planificadas.
+- `sdd-bug` queda autorizado exclusivamente para fixes de defectos y `sdd-refactor` para cambios internos sin cambio funcional.
+- Trabaja sobre UNA sola tarea por ejecución. Jamás sobre dos.
+
+## Cuándo usar
+
+- Cuando el usuario lo solicita indicando explícitamente la tarea: `sdd-implement T-XXX`.
+
+## Precondiciones (verifica TODAS leyendo los archivos, antes de tocar código)
+
+1. `docs/constitution.md` con `Estado: APROBADA`.
+2. `AGENTS.md` existe.
+3. `specs/NNN-slug/spec.md` con las filas `Estado` y `Aprobación` en `APROBADA`.
+4. Cero `[NECESITA ACLARACIÓN` en spec.md.
+5. `plan.md` y `trace.md` están vinculados a la `Versión` actual de spec.md; `trace.md` tiene `TRAZABILIDAD: PASS`.
+6. `tasks.md` está vinculado al `Spec-Version` y `Plan-Version` actuales y contiene la tarea `T-XXX`.
+7. Todas las dependencias de la tarea están `- [x]` con evidencia.
+
+Si falta cualquiera: `IMPLEMENTACIÓN BLOQUEADA — <precondición ausente>. Siguiente paso: <skill correcta>`.
+Si no se indica `T-XXX`: pide la tarea. Nunca elijas una por tu cuenta.
+
+## Contexto requerido
+
+Lee antes de modificar código: `docs/constitution.md` · `AGENTS.md` · `spec.md` · `plan.md` · `tasks.md` (y el código existente que toque la tarea).
+
+## Entradas
+
+- `T-XXX` (obligatorio).
 
 ## Procedimiento
 
-1. Lee constitution, AGENTS, spec, plan, tasks y el código relacionado.
-2. **Scope guard:** identifica archivos/módulos/contratos/tests probablemente afectados. Busca primero helpers, patrones o componentes existentes reutilizables.
-3. Descubre comandos reales del proyecto para tests/lint/typecheck/build/seguridad; no inventes comandos.
-4. **RED cuando aporte valor:** escribe el test mínimo del comportamiento requerido y confirma el fallo correcto. Para cambios triviales ya cubiertos puede bastar ampliar/verificar tests existentes.
-5. **GREEN:** implementa el cambio mínimo correcto. No agregues capacidades futuras, capas, abstracciones ni dependencias innecesarias.
-6. **REFACTOR opcional:** solo mejoras claras y dentro del scope, manteniendo verde.
-7. Ejecuta verificaciones proporcionales al riesgo; amplía a suite completa cuando el impacto lo justifique.
-8. **Verificación en navegador (obligatoria para UI):** si la tarea crea, modifica o corrige un componente visual, interfaz o flujo web, antes de darla por terminada: (1) abre la aplicación en ejecución con la herramienta de automatización de navegador del proyecto (p. ej. `playwright-cli`); (2) valida el flujo funcional E2E en navegador real: sin errores de renderizado ni de consola (JavaScript) y con la interacción operativa; (3) registra evidencia visual (captura de pantalla o DOM) que confirme el resultado requerido; (4) si falla, corrige el código y repite la validación web hasta que pase.
-9. **Self-review obligatorio del diff:**
-   - ¿cumple RF/tarea sin extras?;
-   - ¿tocó algo fuera de scope?;
-   - ¿duplicó funcionalidad existente?;
-   - ¿introdujo abstracción/dependencia innecesaria?;
-   - ¿preservó contratos y compatibilidad?;
-   - ¿cubrió casos borde obvios?;
-   - ¿los tests prueban comportamiento y no detalles accidentales?;
-   - ¿los cambios de UI se validaron en navegador con evidencia?
-10. Si todo pasa, marca `T-XXX` como `- [x]` y registra evidencia. Si no, déjala pendiente.
-11. DETENTE.
+1. Verifica las precondiciones.
+2. **Inspecciona el proyecto** para descubrir stack, gestor de paquetes, runner de tests, linter, formateador, type checker, build y auditorías (manifiestos: `package.json`, `pyproject.toml`/`requirements*.txt`, `Cargo.toml`, `go.mod`, `pom.xml`/`build.gradle*`, `*.csproj`, `Makefile`, `justfile`, configuración de CI…). Usa SOLO comandos que existan en el proyecto. Si una categoría no existe, regístralo; no inventes comandos.
+3. **RED.** Escribe los tests que demuestren los RF de esta tarea según `Tests requeridos`. Ejecútalos y confirma que fallan por la razón correcta (no por errores de compilación/importación evitables).
+4. **GREEN.** Implementa el mínimo código necesario para que los tests pasen. Sin comportamiento extra: cualquier capacidad no pedida por los RF de esta tarea no se escribe.
+5. **REFACTOR.** Mejora estructura y claridad SIN cambiar comportamiento. Re-ejecuta los tests tras cada cambio.
+6. **Verificación.** Ejecuta todas las categorías aplicables descubiertas en el paso 2: suite de tests completa · lint · formateo · type checking · build · análisis estático · auditoría de dependencias · verificaciones de seguridad. Todo debe pasar.
+7. **Cierre.** Solo si TODO pasa: marca `- [x]` la tarea en tasks.md y añade bajo `Evidencia:` los comandos ejecutados con su resultado y los archivos creados/modificados. Si algo falla y no puedes resolverlo dentro del alcance de la tarea: deja `- [ ]`, informa el fallo y DETENTE.
+8. **Informe final** (formato obligatorio):
 
-## Dependency guard
-
-Antes de añadir una dependencia demuestra: necesidad concreta, alternativa existente insuficiente, mantenimiento razonable, impacto de seguridad/licencia y reflejo en `plan.md` cuando corresponda. Si no puede justificarse, no se añade.
-
-## Desvíos
-
-- Requisito faltante/cambio funcional → `sdd-change`.
-- Migración/compatibilidad relevante → `sdd-migration`.
-- Decisión técnica no prevista → `sdd-plan`.
-- Tarea mal descompuesta → `sdd-tasks`.
-- Bug ajeno detectado → no lo arregles silenciosamente; `sdd-bug`.
-
-## Salida
-
-```text
-TAREA: T-XXX — COMPLETADA | INCOMPLETA
-CAMBIOS: <resumen breve>
-TESTS: <resumen → resultado>
-CHECKS: <lint/typecheck/build/browser-UI (si aplica)/...>
-SELF-REVIEW: PASS | hallazgo
-SIGUIENTE: <skill o ninguna>
+```
+TAREA: T-XXX — <objetivo>
+RF IMPLEMENTADOS: RF-00X, RF-00Y
+ARCHIVOS CREADOS: …
+ARCHIVOS MODIFICADOS: …
+TESTS CREADOS: …
+TESTS EJECUTADOS: <suite> → resultado
+VERIFICACIONES: lint → …, typecheck → …, build → … (las no aplicables: motivo)
+RESULTADO: COMPLETADA | INCOMPLETA (motivo)
 ```
 
-## Prohibido
+9. **DETENTE.**
 
-- Trabajar más de una tarea.
-- Cambiar spec/plan/trace.
-- Reescribir módulos completos si un cambio localizado resuelve la tarea.
-- Afirmar verificaciones no ejecutadas.
-- Marcar completada una tarea de UI sin la verificación en navegador con evidencia.
+### Desvíos obligatorios durante la ejecución
+
+- Detectas que falta un requisito o la spec está mal → DETENTE, no "lo remiendas": `Siguiente paso: sdd-change`.
+- Necesitas una decisión técnica no prevista en plan.md → DETENTE: `Siguiente paso: sdd-plan` (y re-trazar).
+- La tarea está mal descompuesta o su "Hecho cuando" es inalcanzable → DETENTE: `Siguiente paso: sdd-tasks`.
+- Necesitas una dependencia nueva → detente y justifícala al usuario antes de instalarla; si el plan no la contempla → `sdd-plan`.
+
+## Artefactos de salida
+
+- Código y tests de la tarea.
+- `tasks.md` actualizado: `- [x]` + bloque `Evidencia:` (solo si todo pasó).
+
+## Validación
+
+- Los tests nuevos demostraban los RF y fallaban antes de la implementación.
+- Todas las verificaciones del paso 6 pasaron en esta ejecución (no "las pasaron la vez anterior").
+- tasks.md refleja el estado real; nunca `- [x]` sin evidencia.
+- No modificaste tareas distintas de T-XXX.
+
+## Condiciones de parada
+
+- Tras el informe final, en éxito o en fallo: DETENTE.
+- Está EXPLÍCITAMENTE PROHIBIDO comenzar automáticamente la siguiente tarea.
+
+## Acciones prohibidas
+
+- Implementar más de una tarea por ejecución.
+- Implementar comportamiento sin RF que lo respalde.
+- Marcar una tarea completada con verificaciones fallando o sin ejecutar.
+- Inventar comandos de verificación inexistentes.
+- Modificar spec.md, plan.md o trace.md directamente.
+- Introducir cambios arquitectónicos silenciosos.
+- Añadir dependencias sin justificación explícita y sin reflejo en plan.md.
+
+## Siguiente fase permitida
+
+`sdd-implement T-YYY` (siguiente tarea, SOLO si el usuario la solicita) · `sdd-validate` (cuando todas las tareas estén completadas y el usuario lo pida).
+
+## Gate de UI
+
+Si la tarea afecta UI:
+1. Lee `ui-spec.md`.
+2. Respeta `design/` y tokens existentes.
+3. Implementa estados y responsive definidos.
+4. Ejecuta `sdd-browser-review` antes de completar la tarea.
+
+El browser review no se sustituye por tests unitarios.

@@ -63,6 +63,11 @@ El framework impide que un agente:
 | sdd-doc-sync | Sincronizar documentación afectada |
 | sdd-release | Gate pre-merge / pre-deploy (READY / BLOCKED) |
 | tdd | Workflow TDD pragmático para cambios de código |
+| sdd-ui | Definir la UI/UX como contrato SDD persistente (si hay UI) |
+| sdd-design-system | Definir/mantener el lenguaje visual y tokens compartidos |
+| sdd-ui-review | Revisión estática de la implementación UI contra UI Spec y Design System |
+| sdd-browser-review | Verificación en navegador real contra la UI Spec y flujos de aceptación |
+| openjev-decision-gate | Capa de decisión estructurada para seleccionar flujo y gates SDD/TDD |
 
 Cada `SKILL.md` es autocontenido y ejecutable sin conocer esta conversación, y define: propósito, alcance, cuándo usar, precondiciones, contexto requerido, entradas, procedimiento, artefactos, validación, condiciones de parada, acciones prohibidas y siguiente fase permitida.
 
@@ -79,12 +84,15 @@ IDEA
  → sdd-agents          (reglas: AGENTS.md)
  → sdd-spec            (QUÉ+POR QUÉ: specs/NNN-slug/spec.md)
  → sdd-clarify         (auditoría QA + GATE de aprobación humana)
+ → sdd-ui              (si UI: specs/NNN-slug/ui-spec.md)
+ → sdd-design-system   (si aplica: lenguaje visual y tokens)
  → sdd-plan            (CÓMO: plan.md)
  → sdd-trace           (RF → plan: trace.md · PASS obligatorio)
  → sdd-tasks           (descomposición: tasks.md)
  → sdd-implement T-001 → verificación
  → sdd-implement T-002 → verificación
  → …
+ → sdd-browser-review  (si UI: verificación en navegador real contra ui-spec)
  → sdd-validate        (evidencia RF→TEST: validation.md)
  → SPEC COMPLETADA
 ```
@@ -95,10 +103,12 @@ IDEA
 NUEVO REQUISITO
  → sdd-change          (modifica y versiona spec.md + aprobación)
  → sdd-clarify         (re-auditoría + aprobación)
+ → sdd-ui              (si aplica: actualiza ui-spec.md)
  → sdd-plan            (actualiza diseño)
  → sdd-trace           (re-verifica cobertura)
  → sdd-tasks           (reabre/añade tareas)
  → sdd-implement T-XXX (una tarea por ejecución)
+ → sdd-browser-review  (si UI: verificación en navegador real)
  → sdd-validate
 ```
 
@@ -184,7 +194,7 @@ Cada carpeta bajo `skills/` contiene un `SKILL.md` con frontmatter `name` + `des
 - **Por proyecto:** copia las carpetas a `<repo>/.pi/skills/` (o `<repo>/.agents/skills/`).
 - **Otros harness compatibles con Agent Skills:** copia `skills/*` a su directorio de skills y, si procede, decláralo en su configuración.
 
-Recomendación: copia **las 12**. El framework asume que `sdd-orchestrator` está presente para gobernar los gates.
+Recomendación: copia **las 25**. El framework asume que `sdd-orchestrator` está presente para gobernar los gates; las funcionalidades con interfaz web añaden `sdd-ui`, `sdd-design-system`, `sdd-ui-review` y `sdd-browser-review`, y `openjev-decision-gate` complementa la selección de flujo. Las plantillas de `specs-template/` documentan el formato de `ui-spec.md` y `browser-review.md`.
 
 ## Cómo empezar en un proyecto
 

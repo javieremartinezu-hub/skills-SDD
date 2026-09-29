@@ -1,67 +1,70 @@
 ---
 name: sdd-review
-description: Auditoría de solo lectura con modos quality, implementation, security y dependencies. Entrega hallazgos priorizados con evidencia y enruta a bug/change/refactor/migration/implement según corresponda. No modifica código.
+description: Auditoría de solo lectura con dos modos: quality revisa calidad, mantenibilidad, seguridad, tests y deuda técnica; implementation compara spec/plan/tareas contra código y tests para detectar desviaciones, faltantes y drift. No modifica código. Entrega hallazgos priorizados y breves con evidencia.
 ---
 
-# sdd-review — Auditorías de código e implementación
+# sdd-review — Revisión de código o implementación
 
 ## Modos
-
-- `sdd-review quality`: correctitud, mantenibilidad, complejidad, duplicación, tests, deuda.
-- `sdd-review implementation`: spec/plan/tasks frente a código/tests.
-- `sdd-review security`: auth, permisos, inputs, secretos, exposición de datos, inyecciones, configuraciones y superficies relevantes.
-- `sdd-review dependencies`: necesidad, duplicación funcional, mantenimiento, versión, vulnerabilidades conocidas por herramientas disponibles, licencia/configuración y riesgo de actualización.
+- `sdd-review quality`: calidad interna del código.
+- `sdd-review implementation`: cumplimiento de spec/plan por la implementación.
 
 ## Principios
-
 - SOLO audita; no corrige.
-- Cada hallazgo requiere evidencia concreta.
-- Prioriza defectos reales sobre preferencias estilísticas.
-- Máximo 10 hallazgos; por defecto muestra `CRÍTICO`, `ALTO`, `MEDIO`.
-- Usa checks reales existentes; nunca inventes comandos ni vulnerabilidades.
+- Cada hallazgo debe citar evidencia concreta: archivo, símbolo, test o comando.
+- Reporta primero problemas reales; no llenes la salida con preferencias estilísticas.
+- Por defecto muestra solo hallazgos `CRÍTICO`, `ALTO` y `MEDIO`. `BAJO` solo si el usuario pide revisión exhaustiva.
 
-## Quality
+## Quality — revisar
+1. Correctitud evidente y manejo de errores.
+2. Complejidad, duplicación y responsabilidades.
+3. Legibilidad y mantenibilidad.
+4. Acoplamiento y arquitectura accidental.
+5. Seguridad relevante al código inspeccionado.
+6. Tests: cobertura útil, fragilidad, exceso de mocks, casos límite.
+7. Dependencias y código muerto.
+8. Rendimiento solo donde exista riesgo concreto.
 
-Revisa correctitud, errores, complejidad, duplicación, cohesión, acoplamiento, código muerto, tests, rendimiento con riesgo concreto y sobreingeniería.
+## Implementation — revisar
+1. RF/RNF implementados vs spec.
+2. Código incompatible con requisitos.
+3. Plan/arquitectura vs implementación real.
+4. Tareas marcadas completas sin evidencia suficiente.
+5. RF sin tests o tests que no prueban comportamiento observable.
+6. Comportamiento implementado sin RF asociado.
+7. Drift entre spec, plan, tasks, código y tests.
 
-## Implementation
+## Verificaciones
+Ejecuta checks existentes cuando aporten evidencia: tests, lint, typecheck, build, análisis estático o auditorías. No inventes comandos.
 
-Verifica RF/RNF, arquitectura/plan, tasks/evidencia, cobertura de tests, comportamiento sin RF y drift entre artefactos/código.
-
-## Security
-
-Revisa solo superficies aplicables: autenticación/autorización, validación de entrada, inyección, secretos, exposición de datos, manejo de sesiones/tokens, dependencias, configuración insegura, logging sensible y privilegios. Distingue evidencia de hipótesis.
-
-## Dependencies
-
-Por dependencia agregada/actualizada revisa:
-1. necesidad concreta;
-2. si el proyecto ya tiene alternativa equivalente;
-3. mantenimiento/compatibilidad;
-4. auditorías de vulnerabilidades disponibles en el proyecto;
-5. impacto de bundle/runtime/operación cuando aplique;
-6. licencia solo si existen datos/herramientas confiables disponibles;
-7. versión/pinning y estrategia de actualización.
-
-## Clasificación de salida
-
+## Resultado
+Clasifica cada hallazgo:
 - `BUG` → `sdd-bug`
 - `CAMBIO FUNCIONAL` → `sdd-change`
-- `MIGRACIÓN` → `sdd-migration`
 - `DEUDA/REFACTOR` → `sdd-refactor`
 - `TAREA INCOMPLETA` → `sdd-implement T-XXX`
 
-## Salida
-
+## Salida en conversación
+Sé conciso. Máximo 10 hallazgos por defecto.
 ```text
-REVISIÓN: QUALITY | IMPLEMENTATION | SECURITY | DEPENDENCIES
+REVISIÓN: QUALITY | IMPLEMENTATION
 RESULTADO: PASS | WARN | FAIL
-- [ALTO] evidencia — problema — impacto — siguiente paso
+- [ALTO] archivo:línea — problema — impacto — siguiente paso
 - [MEDIO] ...
 CHECKS: <resumen>
-SIGUIENTE: <skill o ninguno>
+SIGUIENTE PASO: <skill o ninguno>
 ```
 
 ## Artefacto opcional
+Solo si el usuario pide persistir la auditoría: `reviews/YYYY-MM-DD-<modo>.md`.
 
-Solo si el usuario lo pide: `reviews/YYYY-MM-DD-<modo>.md`.
+## Acciones prohibidas
+- Modificar código, spec, plan, tasks o tests.
+- Crear hallazgos sin evidencia.
+- Convertir preferencias personales en defectos.
+
+## Revisión UI y browser
+
+- `ui`: revisión estática contra UI Spec/Design System.
+- `browser`: revisión de la aplicación renderizada mediante navegador.
+- Si ambos aplican, ejecutar ambos; uno no sustituye al otro.

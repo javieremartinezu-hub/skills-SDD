@@ -55,7 +55,7 @@ Incorporar un requisito nuevo o modificado **empezando siempre por la spec**: ni
 CAMBIO REGISTRADO EN LA SPEC (v<N>)
 Siguiente paso: sdd-clarify
 Después: aprobación → sdd-plan → sdd-trace → sdd-tasks → sdd-implement → sdd-validate
-Nota: si el cambio es LOCAL, `sdd-plan` debe usar revisión de compatibilidad/delta y `sdd-tasks` reabrir solo tareas afectadas. Si el cambio ESTRUCTURAL afecta DB, API o formatos persistidos con consumidores/datos existentes, tras actualizar el plan usa `sdd-migration` antes de generar/ejecutar las tareas de transición.
+Nota: si el cambio es LOCAL, `sdd-plan` debe usar revisión de compatibilidad/delta y `sdd-tasks` reabrir solo tareas afectadas.
 ```
 
 ### Principio innegociable
@@ -89,3 +89,16 @@ NINGÚN CAMBIO FUNCIONAL COMIENZA MODIFICANDO CÓDIGO. Si el usuario insiste en 
 ## Siguiente fase permitida
 
 `sdd-clarify` (reinicio del ciclo)
+
+## UI delta
+
+Si el cambio es visible, actualizar la UI Spec antes de implementar:
+- pantalla/flujo;
+- layout;
+- componentes;
+- estados;
+- tokens;
+- responsive;
+- accessibility;
+- motion;
+- browser acceptance criteria.

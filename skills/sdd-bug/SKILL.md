@@ -1,57 +1,66 @@
 ---
 name: sdd-bug
-description: Corrige un defecto confirmado contra comportamiento esperado. Limita el scope, reproduce, crea test de regresión, encuentra causa raíz, aplica fix mínimo, ejecuta regresión y self-review. No cambia la spec para justificar el bug.
+description: Corrige defectos donde la implementación no cumple una spec aprobada. Reproduce el fallo, crea un test de regresión que falle, identifica causa raíz, aplica el fix mínimo y verifica regresión. NO cambia la spec salvo que descubra que el comportamiento esperado es ambiguo o realmente debe cambiar; en ese caso detiene y enruta a sdd-change.
 ---
 
 # sdd-bug — Corrección de defectos
 
-## Regla
+## Propósito
+Corregir un bug sin reiniciar innecesariamente el ciclo SDD cuando la intención ya está definida por una spec aprobada.
 
-- `código != spec` → BUG.
-- Si debe cambiar el comportamiento esperado → `sdd-change`.
-- Si aún no sabes si es bug, causa o alcance → `sdd-debug`.
+## Regla clave
+- Si **código != spec** → es BUG: corrige código/tests.
+- Si el usuario quiere **cambiar lo que dice la spec** → no es bug: `sdd-change`.
+- Si la spec es ambigua o insuficiente → DETENTE: `sdd-change`.
+
+## Precondiciones
+- Existe una spec aprobada relacionada con el comportamiento.
+- Hay implementación existente que pueda inspeccionarse.
+- Si no se puede identificar la intención esperada desde la spec, no inventes: `BUG BLOQUEADO — Siguiente paso: sdd-change`.
 
 ## Procedimiento
+1. Identifica spec y RF afectados.
+2. Reproduce el fallo con el caso mínimo posible.
+3. **RED:** crea un test de regresión que falle por el bug.
+4. Localiza la causa raíz; evita parches de síntomas si la causa puede corregirse razonablemente.
+5. **GREEN:** aplica el cambio mínimo para pasar el test.
+6. **REFACTOR:** solo si mejora claramente el código sin cambiar comportamiento.
+7. Ejecuta tests afectados y verificaciones proporcionales al riesgo; amplía regresión si el cambio toca límites compartidos.
+8. Registra el bug en `specs/NNN-slug/bugs/BUG-NNN.md` y ciérralo solo con evidencia.
 
-1. Identifica spec/RF y comportamiento esperado.
-2. Define scope inicial y revisa implementaciones existentes relacionadas.
-3. Reproduce el fallo con el caso mínimo.
-4. **RED:** crea test de regresión que falle por el defecto, cuando sea razonablemente posible.
-5. Determina la causa raíz con evidencia; evita parchear síntomas.
-6. **GREEN:** aplica el fix mínimo. No agregues funcionalidades ni refactors ajenos.
-7. Ejecuta tests afectados y regresión proporcional al riesgo. Si el fix afecta un componente visual, interfaz o flujo web: valida en navegador real — sin errores de renderizado ni de consola (JavaScript), interacción correcta —, registra evidencia visual (captura o DOM) y repite hasta pasar.
-8. **Self-review:** confirma scope, ausencia de extras, compatibilidad, test útil y ausencia de duplicación/abstracciones innecesarias.
-9. Registra `specs/NNN-slug/bugs/BUG-NNN.md` y cierra solo con evidencia.
-
-## Plantilla
-
+## Plantilla de bug
 ```markdown
 # BUG-NNN — <título>
 - Spec/RF: RF-XXX
 - Síntoma: <observable>
 - Reproducción: <mínima>
-- Causa raíz: <evidencia>
-- Scope: <áreas afectadas>
+- Causa raíz: <concreta>
 - Test de regresión: <archivo/comando>
-- Fix: <archivos>
+- Fix: <archivos modificados>
 - Verificación: <comandos → resultado>
 - Estado: ABIERTO | CERRADO
 ```
 
-## Salida
-
+## Salida en conversación
+Máximo 6 líneas salvo bloqueo complejo:
 ```text
-BUG: BUG-NNN — CORREGIDO | BLOQUEADO
-CAUSA: <breve>
-FIX: <breve>
-TESTS: <resultado>
-SELF-REVIEW: PASS | hallazgo
-SIGUIENTE: <skill o ninguna>
+BUG: BUG-NNN — <título>
+RF: RF-XXX
+CAUSA: <resumen>
+FIX: <resumen>
+TESTS: <comando> → PASS/FAIL
+RESULTADO: CORREGIDO | BLOQUEADO — siguiente paso: <skill>
 ```
 
-## Prohibido
+## Acciones prohibidas
+- Cambiar spec para hacerla coincidir con código defectuoso.
+- Añadir comportamiento nuevo durante el fix.
+- Refactorizar áreas no relacionadas.
+- Cerrar sin test de regresión cuando sea razonablemente posible.
 
-- Cambiar spec para adaptarla al código defectuoso.
-- Añadir comportamiento nuevo.
-- Refactorizar fuera del scope.
-- Cerrar un bug de UI sin la validación en navegador con evidencia.
+## Siguiente fase permitida
+Bug corregido: fin del flujo · intención funcional distinta/ambigua: `sdd-change` · problema puramente estructural sin cambio funcional: `sdd-refactor`.
+
+## Bugs UI
+
+Reproducir primero en navegador cuando el bug sea visible. Registrar URL, viewport, pasos, esperado, observado y evidencia. Añadir regression test y, cuando sea UI, regression browser check.

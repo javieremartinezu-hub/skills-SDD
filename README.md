@@ -1,205 +1,258 @@
-# SDD Framework — Skills reutilizables de Spec-Driven Development
+# SDD Framework — v5 Final · Spec-Driven Development + TDD + UI/UX
 
-Framework genérico, portable y agnóstico de stack que convierte **Spec-Driven Development (SDD)** en el sistema operativo de agentes de IA para cualquier proyecto de software: frontend, backend, full-stack, CLI, APIs, móvil, sistemas distribuidos, librerías, herramientas internas o infraestructura.
+Framework genérico, portable y agnóstico de stack para agentes de IA. Convierte SDD en el flujo principal de trabajo y usa TDD como mecanismo de evidencia para el código. Cuando existe interfaz, incorpora discovery UX, diseño frontend, UI Spec, Design System, UI Review y Browser Review.
 
-**Enfoque metodológico: SPEC-ANCHORED + TDD**
+## Modelo
 
-```
-SPEC   = QUÉ + POR QUÉ
-PLAN   = CÓMO
-TASKS  = EJECUCIÓN
-TESTS  = EVIDENCIA
-```
-
-Cadena de trazabilidad obligatoria:
-
-```
-REQUISITO → PLAN → TAREA → CÓDIGO → TEST
+```text
+SPEC      = QUÉ + POR QUÉ
+UI SPEC   = EXPERIENCIA OBSERVABLE (si hay UI)
+PLAN      = CÓMO
+TRACE     = COBERTURA
+TASKS     = EJECUCIÓN
+TESTS     = EVIDENCIA
+REVIEWS   = CONTROLES
+RELEASE   = GATE FINAL
 ```
 
----
+Cadena funcional:
 
-## Qué es Spec-Driven Development y qué significa "Spec-Anchored"
+```text
+REQUISITO → PLAN → TAREA → CÓDIGO → TEST → VALIDACIÓN
+```
 
-**Spec-Driven Development** significa que ninguna línea de código de producto nace de una idea: nace de una especificación funcional aprobada. La conversación con el agente NO es fuente de verdad; los artefactos persistentes sí.
+Cadena UI:
 
-**Spec-Anchored** significa que la spec es el ancla de todo el ciclo de vida: cada cambio funcional empieza modificando la spec; cada tarea referencia requisitos; cada test demuestra un requisito; la validación final recorre requisito por requisito. Si la spec y el código divergen, gana la spec y se corrige el código.
+```text
+UI-REQ → UI-SPEC → PLAN → TASK → COMPONENTE → BROWSER EVIDENCE
+```
 
-El framework impide que un agente:
+## Fuente de verdad
 
-- programe antes de tener una spec;
-- invente requisitos;
-- mezcle requisitos con implementación;
-- salte de la idea al código;
-- introduzca decisiones arquitectónicas en silencio;
-- implemente varias tareas de una vez;
-- declare "terminado" sin evidencia;
-- dé por terminado un componente visual, interfaz o flujo web sin verificarlo en navegador real (inspección, E2E, evidencia visual e iteración);
-- atienda un requisito nuevo tocando código directamente.
+La conversación no es fuente permanente de verdad. Los artefactos versionados del repositorio lo son.
 
----
+- La `spec.md` define comportamiento y requisitos.
+- La `ui-spec.md` define experiencia visible e interacción cuando existe UI.
+- El `plan.md` define decisiones técnicas.
+- `trace.md` demuestra cobertura.
+- `tasks.md` define ejecución.
+- Tests, reviews y validation aportan evidencia ejecutada.
+- `release.md` conserva el último gate de pre-merge/pre-deploy.
+
+Los artefactos derivados quedan **CADUCADOS** cuando `Spec-Version` o `Plan-Version` no coinciden con los valores actuales.
 
 ## Skills
 
 | Skill | Responsabilidad |
-|-------|-----------------|
-| sdd-init | Comprender el proyecto |
-| sdd-constitution | Crear principios |
-| sdd-agents | Crear reglas para agentes |
-| sdd-spec | Definir QUÉ + POR QUÉ |
-| sdd-clarify | Eliminar ambigüedad |
-| sdd-plan | Definir CÓMO |
-| sdd-trace | Verificar RF → plan |
-| sdd-tasks | Descomponer trabajo |
-| sdd-implement | Implementar una tarea con TDD |
-| sdd-validate | Probar cumplimiento |
-| sdd-change | Gestionar cambios desde la spec |
-| sdd-orchestrator | Gobernar el flujo |
-| sdd-bug | Corregir bug confirmado con test de regresión |
-| sdd-debug | Diagnosticar causa raíz incierta |
-| sdd-migration | Revisar migraciones y compatibilidad |
-| sdd-refactor | Mejorar estructura sin cambiar comportamiento |
-| sdd-review | Auditoría de solo lectura (quality / implementation / security / dependencies) |
-| sdd-doc-sync | Sincronizar documentación afectada |
-| sdd-release | Gate pre-merge / pre-deploy (READY / BLOCKED) |
-| tdd | Workflow TDD pragmático para cambios de código |
-| sdd-ui | Definir la UI/UX como contrato SDD persistente (si hay UI) |
-| sdd-design-system | Definir/mantener el lenguaje visual y tokens compartidos |
-| sdd-ui-review | Revisión estática de la implementación UI contra UI Spec y Design System |
-| sdd-browser-review | Verificación en navegador real contra la UI Spec y flujos de aceptación |
-| openjev-decision-gate | Capa de decisión estructurada para seleccionar flujo y gates SDD/TDD |
+|---|---|
+| `sdd-init` | Comprender proyecto y restricciones |
+| `sdd-constitution` | Principios innegociables |
+| `sdd-agents` | Reglas operativas para agentes |
+| `sdd-spec` | QUÉ + POR QUÉ |
+| `sdd-clarify` | Auditoría de ambigüedad + aprobación humana |
+| `sdd-ui-discovery` | Discovery UX/UI progresivo |
+| `frontend-design` | Diseño frontend y patrones UI |
+| `sdd-ui` | Contrato UI persistente |
+| `sdd-design-system` | Lenguaje visual y tokens |
+| `sdd-plan` | Diseño técnico |
+| `sdd-migration` | Compatibilidad y transición |
+| `sdd-trace` | Trazabilidad |
+| `sdd-tasks` | Descomposición |
+| `tdd` | RED → GREEN → REFACTOR → VERIFY |
+| `sdd-implement` | Implementa UNA tarea |
+| `sdd-ui-review` | Auditoría UI estática |
+| `sdd-browser-review` | Verificación UI en navegador |
+| `sdd-validate` | Validación final de spec |
+| `sdd-doc-sync` | Sincronización documental |
+| `sdd-release` | READY / BLOCKED |
+| `sdd-debug` | Diagnóstico por evidencia |
+| `sdd-bug` | Fix con regresión |
+| `sdd-change` | Cambios funcionales desde spec |
+| `sdd-refactor` | Cambio interno sin comportamiento nuevo |
+| `sdd-review` | Auditoría quality / implementation |
+| `openjev-decision-gate` | Decisión estructurada opcional; nunca reemplaza routing determinista |
 
-Cada `SKILL.md` es autocontenido y ejecutable sin conocer esta conversación, y define: propósito, alcance, cuándo usar, precondiciones, contexto requerido, entradas, procedimiento, artefactos, validación, condiciones de parada, acciones prohibidas y siguiente fase permitida.
+## Flujo completo de una feature nueva
 
----
-
-## Flujo completo
-
-### Proyecto nuevo
-
-```
+```text
 IDEA
- → sdd-init            (comprender: docs/brief.md)
- → sdd-constitution    (principios: docs/constitution.md)
- → sdd-agents          (reglas: AGENTS.md)
- → sdd-spec            (QUÉ+POR QUÉ: specs/NNN-slug/spec.md)
- → sdd-clarify         (auditoría QA + GATE de aprobación humana)
- → sdd-ui              (si UI: specs/NNN-slug/ui-spec.md)
- → sdd-design-system   (si aplica: lenguaje visual y tokens)
- → sdd-plan            (CÓMO: plan.md)
- → sdd-trace           (RF → plan: trace.md · PASS obligatorio)
- → sdd-tasks           (descomposición: tasks.md)
- → sdd-implement T-001 → verificación
- → sdd-implement T-002 → verificación
- → …
- → sdd-browser-review  (si UI: verificación en navegador real contra ui-spec)
- → sdd-validate        (evidencia RF→TEST: validation.md)
- → SPEC COMPLETADA
+ ↓
+sdd-init
+ ↓
+sdd-constitution → aprobación
+ ↓
+sdd-agents
+ ↓
+sdd-spec
+ ↓
+sdd-clarify → aprobación de spec
+ ↓
+¿UI impact?
+ ├─ NO ───────────────────────────────┐
+ │                                    │
+ └─ SÍ                                │
+    ↓                                 │
+  sdd-ui-discovery                    │
+    ↓                                 │
+  frontend-design                     │
+    ↓                                 │
+  sdd-ui → ui-spec → aprobación UI   │
+    ↓                                 │
+  sdd-design-system (si aplica)       │
+    └─────────────────────────────────┘
+                  ↓
+              sdd-plan
+                  ↓
+        ¿Migración/compatibilidad?
+          ├─ SÍ → sdd-migration
+          └─ NO
+                  ↓
+              sdd-trace
+                  ↓
+              sdd-tasks
+                  ↓
+       sdd-implement T-001
+                  ↓
+       ... una tarea por ejecución
+                  ↓
+       Todas las tareas completas
+                  ↓
+        sdd-ui-review (si UI)
+                  ↓
+     sdd-browser-review FINAL (si UI)
+                  ↓
+             sdd-validate
+                  ↓
+        sdd-doc-sync (si afecta docs)
+                  ↓
+             sdd-release
+                  ↓
+                FIN
 ```
 
-### Cambio funcional posterior
+### Regla de UI durante implementación
 
+`sdd-implement` puede invocar una **verificación browser de tarea** para comprobar únicamente el alcance visible de la tarea actual. Esa verificación no sustituye la `sdd-browser-review` final, que valida la feature completa.
+
+## Flujos de mantenimiento
+
+### Bug
+
+```text
+sdd-debug (si causa incierta)
+ → sdd-bug
+ → regression test
+ → fix
+ → UI/browser checks si aplica
+ → fin o sdd-validate si impacta la spec vigente
 ```
-NUEVO REQUISITO
- → sdd-change          (modifica y versiona spec.md + aprobación)
- → sdd-clarify         (re-auditoría + aprobación)
- → sdd-ui              (si aplica: actualiza ui-spec.md)
- → sdd-plan            (actualiza diseño)
- → sdd-trace           (re-verifica cobertura)
- → sdd-tasks           (reabre/añade tareas)
- → sdd-implement T-XXX (una tarea por ejecución)
- → sdd-browser-review  (si UI: verificación en navegador real)
- → sdd-validate
+
+### Cambio funcional
+
+```text
+sdd-change
+ → sdd-clarify
+ → aprobación
+ → UI discovery/design si aplica
+ → ui-spec si aplica
+ → sdd-plan
+ → sdd-migration si aplica
+ → sdd-trace
+ → sdd-tasks
+ → sdd-implement
+ → reviews
+ → validate
+ → doc-sync
+ → release
 ```
 
-Nunca existen `IDEA → CÓDIGO` ni `CHANGE → CÓDIGO`.
+### Refactor
 
-**Caducidad de veredictos:** `sdd-change` anula los veredictos previos (`SPEC CLARIFICADA: NO (caducado…)` y `TRAZABILIDAD: FAIL (caducado…)`), de modo que el cambio re-bloquea plan y tasks hasta pasar de nuevo por `sdd-clarify` y `sdd-trace`.
+```text
+sdd-refactor
+ → tests de protección
+ → cambios internos
+ → verify
+ → UI/browser baseline si afecta UI
+```
 
----
+### Debug
 
-## Gates que bloquean el avance
+```text
+sdd-debug
+ → causa confirmada
+   ├─ bug → sdd-bug
+   ├─ cambio de requisito → sdd-change
+   ├─ migración → sdd-migration
+   └─ problema externo/config → acción operativa correspondiente
+```
 
-| Gate | Condición para pasar | Quién lo aplica |
-|------|----------------------|-----------------|
-| G1 · Constitution | `docs/constitution.md` con `Estado: APROBADA` | sdd-spec, sdd-plan, sdd-implement |
-| G2 · Clarificación | `SPEC CLARIFICADA: SÍ` y cero `[NECESITA ACLARACIÓN]` | sdd-plan |
-| G3 · Aprobación humana | `Aprobación: APROBADA (fecha, por el usuario)` con sí inequívoco | sdd-clarify, sdd-plan, sdd-implement |
-| G4 · Trazabilidad | `TRAZABILIDAD: PASS` (todo RF `COVERED`) | sdd-tasks, sdd-implement |
-| G5 · Dependencias de tarea | Tarea existe y todas sus dependencias `- [x]` con evidencia | sdd-implement |
-| G6 · Cierre de tarea | Todas las verificaciones del proyecto pasan; para cambios de UI, verificación en navegador real con evidencia; si no, la tarea sigue `- [ ]` | sdd-implement |
-| G7 · Validación final | Evidencia completa RF→TEST para todos los requisitos (para RF de UI, E2E en navegador real con evidencia visual); si no, `SPEC CUMPLIDA: NO` | sdd-validate |
+## Gates
 
-Además: `sdd-orchestrator` bloquea cualquier acción cuya fase previa no esté completa y devuelve siempre la skill correcta.
+| Gate | Condición |
+|---|---|
+| G1 Constitution | `docs/constitution.md` aprobada |
+| G2 Spec Clarified | `clarify.md` = `SPEC CLARIFICADA: SÍ` y cero `[NECESITA ACLARACIÓN]` |
+| G3 Spec Approval | `spec.md` = `APROBADA` con aprobación humana inequívoca |
+| G4 UI Contract | Si `UI impact != NONE`: `ui-spec.md` vigente y, cuando corresponda, aprobada |
+| G5 Plan | `plan.md` vigente respecto de `Spec-Version` |
+| G6 Migration | Si aplica: `migration-review.md` = suficiente/OK |
+| G7 Trace | `trace.md` = `TRAZABILIDAD: PASS` y versiones vigentes |
+| G8 Tasks | `tasks.md` vigente; dependencias satisfechas |
+| G9 Task Closure | Una tarea completa solo con evidencia de tests/verificaciones y browser task check si aplica |
+| G10 UI Review | `ui-review.md` = PASS cuando la UI lo requiere |
+| G11 Browser Review | `browser-review.md` = PASS cuando la UI lo requiere |
+| G12 Validation | `validation.md` = `SPEC CUMPLIDA: SÍ` |
+| G13 Docs | Documentación afectada sincronizada o explícitamente N/A |
+| G14 Release | `release.md` = `RELEASE: READY` |
 
-Una aprobación solo cuenta si es inequívoca y referida al artefacto mostrado ("sí, apruebo esta spec"). "Vale", "ok", "sigue", "suena bien", el silencio o cambiar de tema NO son aprobación: se vuelve a preguntar.
+## Artefactos canónicos
 
----
+```text
+docs/brief.md
+docs/constitution.md
+AGENTS.md
+specs/NNN-slug/
+├── spec.md
+├── clarify.md
+├── ui-design-brief.md            # si UI
+├── ui-spec.md                   # si UI
+├── plan.md
+├── migration-review.md          # si migración/compatibilidad
+├── trace.md
+├── tasks.md
+├── ui-review.md                 # si UI
+├── browser-review.md            # si UI
+├── validation.md
+├── doc-sync.md                  # si docs afectadas
+└── release.md
+```
 
-## Acciones prohibidas (resumen global)
+Cada artefacto derivado incorpora `Spec-Version` y, cuando corresponde, `Plan-Version` y/o su propia versión. `specs-template/` contiene las plantillas de estos artefactos; no es una skill ejecutable.
 
-1. Implementar código fuera de `sdd-implement`.
-2. Implementar sin spec aprobada, sin clarificar o sin trazabilidad PASS.
-3. Implementar más de una tarea por ejecución o encadenar tareas automáticamente.
-4. Inventar o resolver en silencio requisitos; usar `[NECESITA ACLARACIÓN: ...]` ante la duda.
-5. Modificar código ante un cambio funcional (`sdd-change` primero, siempre).
-6. Introducir decisiones arquitectónicas o dependencias sin justificación explícita.
-7. Marcar tareas o specs como completadas sin evidencia real ("parece funcionar" no es evidencia).
-8. Saltarse gates o reinterpretarlos (`sdd-orchestrator` lo impide).
-9. Inventar comandos de verificación inexistentes: se descubren inspeccionando cada repositorio.
+## Reglas críticas
 
----
-
-## Artefactos y estado persistente
-
-La conversación del agente no es fuente permanente de verdad. Los artefactos lo son, y **el estado del workflow se deriva de ellos** (no existe un archivo de estado paralelo que pueda desincronizarse):
-
-| Artefacto | Contiene | Estado que aporta |
-|-----------|----------|-------------------|
-| `docs/brief.md` | Contexto del proyecto | Proyecto comprendido |
-| `docs/constitution.md` | 8-12 principios innegociables | `Estado: PROPUESTA/APROBADA` |
-| `AGENTS.md` | Manual operativo para agentes | SDD activo en el repo |
-| `specs/NNN-slug/spec.md` | QUÉ + POR QUÉ, con RF-xxx | `Estado: BORRADOR/CLARIFICADA/APROBADA` · `Aprobación` · `Versión` · `Registro de cambios` |
-| `specs/NNN-slug/clarify.md` | Auditoría QA + veredicto | `SPEC CLARIFICADA: SÍ/NO` |
-| `specs/NNN-slug/plan.md` | CÓMO, decisiones D-NNN | Diseño técnico |
-| `specs/NNN-slug/trace.md` | Matriz RF→plan | `TRAZABILIDAD: PASS/FAIL` |
-| `specs/NNN-slug/tasks.md` | Tareas T-xxx con checklist | `- [ ]`/`- [x]` + `Evidencia:` |
-| `specs/NNN-slug/validation.md` | Evidencia RF→TEST | `SPEC CUMPLIDA: SÍ/NO` |
-
-Cada skill **vuelve a leer** los documentos relevantes antes de actuar; nunca confía en información recordada de conversaciones anteriores.
-
-### Nota de diseño: no se creó `.sdd/state.yaml`
-
-Se evaluó un mecanismo de estado persistente (`.sdd/state.yaml` con `active_spec`, `current_phase`, etc.) y se descartó: todos esos campos son derivables de los artefactos (`spec.md` cabeceras, veredictos en `clarify.md`/`trace.md`/`validation.md`, checkboxes de `tasks.md`). Un archivo de estado paralelo sería una segunda fuente de verdad que puede desincronizarse — justo lo que el prohíbe el principio 19. Si en el futuro se necesita, debe seguir siendo derivable y nunca contener requisitos.
-
----
+1. No implementar funcionalidad nueva sin spec aprobada.
+2. No resolver ambigüedades en silencio.
+3. Una ejecución de `sdd-implement` = una tarea.
+4. No introducir arquitectura o dependencias sin plan/justificación.
+5. Tests son evidencia: no se aceptan afirmaciones no ejecutadas.
+6. Cuando hay UI, el navegador real es evidencia final; código/DOM/snapshots no lo sustituyen.
+7. Browser Review por tarea verifica solo el alcance de esa tarea; Browser Review FINAL verifica la feature completa.
+8. `sdd-orchestrator` es el router determinista; OpenJEV solo complementa la clasificación.
+9. Cambios funcionales pasan por `sdd-change`; bugs pasan por `sdd-bug`; refactors por `sdd-refactor`.
+10. Un artefacto con versión incompatible queda CADUCADO.
 
 ## Portabilidad
 
-El framework no asume ningún lenguaje, framework, base de datos, ORM, runtime, cloud ni herramienta:
+No se asume stack. `sdd-implement`, `sdd-validate` y las reviews descubren comandos reales inspeccionando el repositorio y nunca inventan comandos.
 
-- `sdd-spec` solo habla de comportamiento observable (EARS, RF-xxx), jamás de tecnología.
-- `sdd-plan` es el único punto donde se elige stack, siempre justificado con registros de decisión y contra las restricciones de producto.
-- `sdd-implement` y `sdd-validate` **descubren** las verificaciones reales inspeccionando el repositorio anfitrión (manifiestos, scripts, CI) y nunca inventan comandos.
+## Instalación
 
-Instrucciones compartidas: cada skill es autocontenida; las reglas transversales viven en `docs/constitution.md` y `AGENTS.md`, que todas las skills obligan a leer.
+Copia `skills/*` a `~/.pi/agent/skills/`, `~/.agents/skills/` o al directorio de skills del harness compatible con Agent Skills.
 
----
+Para un repo concreto también puede instalarse bajo `.pi/skills/` o `.agents/skills/`.
 
-## Instalación (formato Agent Skills / pi)
+## Inicio recomendado
 
-Cada carpeta bajo `skills/` contiene un `SKILL.md` con frontmatter `name` + `description` (especificación Agent Skills).
-
-- **Global (pi):** copia las carpetas a `~/.pi/agent/skills/` (o `~/.agents/skills/`).
-- **Por proyecto:** copia las carpetas a `<repo>/.pi/skills/` (o `<repo>/.agents/skills/`).
-- **Otros harness compatibles con Agent Skills:** copia `skills/*` a su directorio de skills y, si procede, decláralo en su configuración.
-
-Recomendación: copia **las 25**. El framework asume que `sdd-orchestrator` está presente para gobernar los gates; las funcionalidades con interfaz web añaden `sdd-ui`, `sdd-design-system`, `sdd-ui-review` y `sdd-browser-review`, y `openjev-decision-gate` complementa la selección de flujo. Las plantillas de `specs-template/` documentan el formato de `ui-spec.md` y `browser-review.md`.
-
-## Cómo empezar en un proyecto
-
-1. `sdd-init` → entrevista y `docs/brief.md`.
-2. `sdd-constitution` → aprueba los principios.
-3. `sdd-agents` → genera `AGENTS.md`.
-4. `sdd-spec` → primera funcionalidad.
-5. Sigue los veredictos; ante cualquier duda: `sdd-orchestrator` te dice el único paso válido.
+Ejecuta `sdd-orchestrator` ante cualquier duda sobre el estado o el próximo paso.

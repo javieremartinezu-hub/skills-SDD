@@ -8,7 +8,8 @@ description: Implementa EXACTAMENTE UNA tarea (T-XXX) de tasks.md aplicando TDD 
 ## Convenciones comunes del framework (léelas primero)
 
 - La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
-- Artefactos: `docs/constitution.md` · `AGENTS.md` · `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
+- Artefactos: `docs/constitution.md` · `AGENTS.md` · `specs/NNN-slug/{spec,clarify,ui-design-brief,ui-spec,plan,migration-review,trace,tasks,ui-review,browser-review,validation,doc-sync,release}.md` según corresponda.
+- Si `ui-spec.md` aplica, lee `Spec-Version` y `UI-Spec-Version`; una versión incompatible está CADUCADA.
 - Estados de tarea: `- [ ]` pendiente · `- [x]` completada (solo con evidencia registrada).
 - La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta las filas `Estado`, `Aprobación` y `Versión`; nunca busques `Estado: …` como texto libre.
 - Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
@@ -113,9 +114,10 @@ RESULTADO: COMPLETADA | INCOMPLETA (motivo)
 ## Gate de UI
 
 Si la tarea afecta UI:
-1. Lee `ui-spec.md`.
+1. Lee `ui-spec.md` vigente.
 2. Respeta `design/` y tokens existentes.
-3. Implementa estados y responsive definidos.
-4. Ejecuta `sdd-browser-review` antes de completar la tarea.
+3. Implementa estados, responsive, accessibility y motion definidos.
+4. Ejecuta una **verificación browser de tarea** antes de marcar T-XXX completa; esa verificación debe limitarse al alcance implementado por T-XXX y registrarse en `browser-review.md` con `Scope: TASK`.
+5. Si el flujo completo todavía no puede probarse porque depende de tareas posteriores, no lo uses como motivo para bloquear T-XXX; el `browser-review` FINAL se ejecutará cuando todas las tareas estén completas.
 
-El browser review no se sustituye por tests unitarios.
+El browser check no se sustituye por tests unitarios.

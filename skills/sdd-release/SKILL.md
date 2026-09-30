@@ -1,38 +1,35 @@
 ---
 name: sdd-release
-description: Gate final de pre-merge/pre-deploy. Verifica estado SDD, diff, tests, lint, typecheck, build, migraciones, dependencias, documentación y riesgos de release usando solo comandos existentes. No corrige problemas: emite READY o BLOCKED con evidencia.
+description: Gate final pre-merge/pre-deploy. Revisa validación SDD, diff, checks del proyecto, migraciones, documentación, seguridad y evidencia UI/browser cuando aplique; persiste release.md y emite READY o BLOCKED sin corregir ni desplegar.
 ---
 
-# sdd-release — Check previo a merge/deploy
+# sdd-release — Release Gate
 
-## Propósito
+## Precondiciones
 
-Evitar que una implementación técnicamente “terminada” llegue a release con checks, migraciones, docs o riesgos pendientes.
+- `spec.md` vigente; registrar su `Spec-Version`.
+- `validation.md` vigente con `SPEC CUMPLIDA: SÍ`.
+- UI gates, migration gate y doc-sync resueltos cuando apliquen.
 
 ## Procedimiento
 
-1. Confirma que las specs afectadas están validadas o identifica explícitamente por qué no aplica.
+1. Revisa estado SDD y versiones (`Spec-Version`, `Plan-Version` cuando aplique).
 2. Revisa diff final y cambios fuera de scope.
-3. Ejecuta checks reales aplicables: tests, lint, format check, typecheck, build/compile, análisis estático, auditoría de dependencias/seguridad.
-4. Revisa migraciones pendientes y estrategia de rollback cuando existan.
-5. Revisa variables/configuración/feature flags y secretos accidentales.
-6. Confirma documentación afectada sincronizada (`sdd-doc-sync` si falta).
-7. Revisa breaking changes/dependencias y notas operativas relevantes.
-8. Emite veredicto; no arregla hallazgos dentro de esta skill.
+3. Ejecuta checks existentes: tests, lint, typecheck, build, análisis estático, seguridad/dependencias.
+4. Revisa migraciones, compatibilidad y rollback.
+5. Revisa variables/configuración/flags y secretos accidentales.
+6. Confirma documentación sincronizada o N/A.
+7. Si hay UI, confirma `ui-review` y `browser-review FINAL` vigentes.
+8. Escribe `specs/NNN-slug/release.md` con evidencia.
+9. Emite `RELEASE: READY | BLOCKED`.
+10. DETENTE. No hace merge/deploy.
 
-## Salida
+## READY solo si
 
-```text
-RELEASE: READY | BLOCKED
-CHECKS: <resumen>
-MIGRACIONES: OK | N/A | BLOQUEO
-DOCS: OK | N/A | BLOQUEO
-RIESGOS: <ninguno o breve>
-SIGUIENTE: <skill o release>
-```
+Todos los checks relevantes tienen evidencia en esta ejecución o una evidencia persistente vigente definida explícitamente por el proyecto; no existen gates SDD pendientes; no hay cambios fuera de scope no justificados; rollback y migraciones están resueltos cuando aplican.
 
 ## Prohibido
 
-- Hacer merge, deploy o release por iniciativa propia.
+- Hacer merge, deploy o release.
 - Corregir código durante el gate.
-- Marcar READY con checks relevantes fallando o sin evidencia.
+- Marcar READY con fallos relevantes.

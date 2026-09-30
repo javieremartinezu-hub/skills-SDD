@@ -39,4 +39,4 @@ Tests should be deterministic, behavior-focused, understandable, appropriately i
 
 ## Coordination
 
-This skill owns the TDD workflow. Do not duplicate Graphify's codebase-discovery role or Impeccable's UI/UX role; invoke them only when their specialization is relevant.
+This skill owns the TDD workflow. Do not duplicate codebase-discovery or frontend-design roles; invoke `frontend-design` only when UI design decisions are required. For UI implementation, use the current `ui-spec.md` as the behavioral/visual contract and rely on `sdd-browser-review` for rendered UI evidence.

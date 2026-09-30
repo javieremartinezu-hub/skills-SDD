@@ -91,10 +91,25 @@ Si falta cualquiera: `PLAN BLOQUEADO — <lo que falta>. Siguiente paso: sdd-cla
 ## 10. Logging y observabilidad
 ## 11. Configuración
 ## 12. Estrategia de tests (tipos y qué demostrará cada uno, por RF)
-## 13. Migraciones
+## 13. Migraciones (detalle; el estado canónico también aparece en §16)
 ## 14. Despliegue, rollback y backups
 ## 15. Rendimiento y escalabilidad
-## 16. Cobertura prevista de RF
+## 16. Migraciones y compatibilidad
+- `Migration Required: YES | NO`
+- Clasificación prevista: `COMPATIBLE | POR FASES | BREAKING | N/A`
+- Estrategia: …
+- Rollback: …
+
+## 17. UI / Browser Planning (si aplica)
+- `UI Verification Required: YES | NO`
+- `UI Review Required: YES | NO`
+- `Browser Review Required: YES | NO`
+- Viewports: …
+- Flujos críticos: …
+- Estados a verificar: …
+- Evidencia esperada: …
+
+## 18. Cobertura prevista de RF
 | RF | Secciones del plan que lo cubren |
 ## Registro de decisiones
 ```
@@ -139,4 +154,4 @@ Si la feature tiene UI, el plan debe incluir:
 - flujos críticos;
 - evidencia esperada.
 
-La trazabilidad UI debe ser `UI-REQ → plan → task → componente → browser evidence`.
+La trazabilidad UI debe ser `UI-XXX → plan → task → componente → browser evidence`. El plan debe declarar explícitamente si Browser Review es requerido y qué evidencia espera.

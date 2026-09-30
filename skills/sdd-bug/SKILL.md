@@ -63,4 +63,4 @@ Bug corregido: fin del flujo · intención funcional distinta/ambigua: `sdd-chan
 
 ## Bugs UI
 
-Reproducir primero en navegador cuando el bug sea visible. Registrar URL, viewport, pasos, esperado, observado y evidencia. Añadir regression test y, cuando sea UI, regression browser check.
+Reproducir primero en navegador cuando el bug sea visible. Registrar URL, viewport, pasos, esperado, observado y evidencia en `specs/NNN-slug/browser-review.md` con `Scope: TASK` cuando el bug sea visible. Añadir regression test y, si la feature queda afectada, actualizar/revalidar `ui-review` y `browser-review FINAL`.

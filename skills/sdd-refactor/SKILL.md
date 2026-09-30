@@ -38,4 +38,4 @@ Mantén la respuesta breve; no expliques decisiones obvias salvo que se solicite
 
 ## Refactor UI
 
-Si afecta UI, tomar baseline browser antes del refactor y repetir el flujo después para demostrar ausencia de cambio funcional/visual no intencionado.
+Si afecta UI, tomar baseline browser y repetir el flujo después. Registrar la evidencia en `browser-review.md` con un alcance explícito y no mezclar esta verificación con el gate FINAL de una feature que aún esté en desarrollo.

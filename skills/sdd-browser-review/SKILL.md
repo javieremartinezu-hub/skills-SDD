@@ -1,55 +1,59 @@
 ---
 name: sdd-browser-review
-description: Verifica mediante navegador la interfaz web realmente renderizada contra la UI Spec y los flujos de aceptación.
+description: Verifica la aplicación web renderizada en un navegador real contra la UI Spec y los flujos de aceptación. Soporta revisiones TASK y FINAL, persiste browser-review.md y nunca se sustituye por inspección de código.
 ---
+
 # sdd-browser-review — Browser Verification
 
-## Propósito
-Demostrar que la aplicación real, no solo su código, cumple la UI Spec y los criterios funcionales visibles.
+## Dos alcances
 
-## Obligatorio cuando
-- cambia una pantalla;
-- cambia layout/CSS;
-- cambia un componente visible;
-- cambia navegación;
-- cambia formularios o interacción;
-- cambia estados visibles;
-- cambia comportamiento que pueda afectar UI.
+- `Scope: TASK`: comprueba solo el alcance visible de una tarea T-XXX. Puede ejecutarse antes de completar una tarea UI.
+- `Scope: FINAL`: comprueba la feature completa después de que todas las tareas estén completas. Es el gate obligatorio para declarar terminada una feature UI, salvo que el plan/UI Spec haya justificado explícitamente que no aplica.
+
+## Precondiciones
+
+- Para FINAL: todas las tareas de la feature completadas.
+- `ui-spec.md` vigente, con `Spec-Version` igual a `spec.md` y `UI-Spec-Version` registrada.
+- URL/entrypoint disponible y entorno levantable.
+- Para TASK: tarea T-XXX indicada y su alcance visible identificable.
 
 ## Procedimiento
-1. Obtener URL/entrypoint y entorno.
-2. Abrir la aplicación con el navegador disponible para ZCode.
-3. Ejecutar los flujos definidos por la spec.
-4. Verificar contenido, layout, componentes y estados.
-5. Verificar interacciones reales.
-6. Verificar consola/network cuando aporte evidencia.
-7. Probar viewports definidos por UI Spec.
-8. Comprobar accessibility aplicable.
-9. Capturar screenshots/evidencia.
-10. Comparar cada criterio UI-XXX y RF visible con lo observado.
-11. Registrar PASS/FAIL y severidad.
 
-## No confiar únicamente en
-- inspección del código;
-- snapshots unitarios;
-- DOM esperado;
-- afirmaciones del agente.
+1. Determina scope TASK o FINAL.
+2. Obtén URL/entrypoint, commit/version y browser.
+3. Ejecuta los flujos definidos por `ui-spec.md` y, en TASK, únicamente los pasos que pertenezcan al alcance de T-XXX.
+4. Verifica contenido, layout, componentes, interacciones y estados.
+5. Verifica viewports definidos; si faltan y el producto es responsive, documenta los elegidos.
+6. Comprueba accessibility aplicable: keyboard, focus, names/labels, roles, errores, contraste cuando sea posible y reduced motion.
+7. Inspecciona console/network cuando aporten evidencia útil.
+8. Captura screenshots/evidencia.
+9. Compara cada `UI-XXX` y RF visible aplicable con observado.
+10. Escribe/actualiza `specs/NNN-slug/browser-review.md`, conservando la evidencia anterior y agregando una entrada por versión/revisión cuando sea necesario.
+11. Emite veredicto.
 
-## Matriz mínima de evidencia
-| ID | URL | Viewport | Pasos | Esperado | Observado | Resultado | Evidencia |
-|---|---|---|---|---|---|---|---|
+## Regla contra deadlock
 
-## Responsive
-Si UI Spec define viewports, deben probarse. Si no los define y el producto es responsive, documentar los viewports elegidos.
+Una revisión TASK **no** verifica funcionalidades todavía pertenecientes a tareas posteriores. La revisión FINAL sí ejecuta el flujo end-to-end completo.
+
+## Matriz mínima
+
+| ID | RF/UI | URL | Viewport | Pasos | Esperado | Observado | Resultado | Evidencia |
+|---|---|---|---|---|---|---|---|---|
 
 ## Estados
-Probar o provocar los estados definidos: loading, empty, success, error, permission denied, validation, offline/stale, disabled, etc.
 
-## Accessibility
-Comprobar cuando aplique keyboard, focus, labels/names, roles, contraste, errores y reduced motion. No afirmar conformidad formal con WCAG sin una evaluación suficiente.
+Probar estados definidos: loading, empty, success, error, permission denied, validation, offline/stale, disabled y otros aplicables.
 
 ## Criterio
-Una discrepancia contra un requisito aprobado es FAIL aunque el código sea técnicamente válido.
+
+Una discrepancia contra un requisito aprobado = FAIL aunque el código sea técnicamente válido.
 
 ## Salida
-`BROWSER REVIEW: PASS|FAIL` + matriz de evidencia + screenshots/referencias + hallazgos.
+
+```text
+BROWSER REVIEW: PASS | FAIL
+SCOPE: TASK | FINAL
+ARTEFACTO: specs/NNN-slug/browser-review.md
+HALLAZGOS: <resumen>
+SIGUIENTE: sdd-implement T-XXX | sdd-ui-review | sdd-validate | sdd-change
+```

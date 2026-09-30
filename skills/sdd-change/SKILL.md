@@ -54,7 +54,7 @@ Incorporar un requisito nuevo o modificado **empezando siempre por la spec**: ni
 ```
 CAMBIO REGISTRADO EN LA SPEC (v<N>)
 Siguiente paso: sdd-clarify
-Después: aprobación → sdd-plan → sdd-trace → sdd-tasks → sdd-implement → sdd-validate
+Después: aprobación → [UI discovery/design/spec si aplica] → sdd-plan → [sdd-migration] → sdd-trace → sdd-tasks → sdd-implement → [UI/browser reviews] → sdd-validate → [sdd-doc-sync] → sdd-release
 Nota: si el cambio es LOCAL, `sdd-plan` debe usar revisión de compatibilidad/delta y `sdd-tasks` reabrir solo tareas afectadas.
 ```
 
@@ -65,7 +65,7 @@ NINGÚN CAMBIO FUNCIONAL COMIENZA MODIFICANDO CÓDIGO. Si el usuario insiste en 
 ## Artefactos de salida
 
 - `specs/NNN-slug/spec.md` modificada: nueva versión, fila `Estado` en `BORRADOR` y fila `Aprobación` en `PENDIENTE`.
-- Los artefactos derivados no se modifican; quedan caducados por no estar vinculados a la nueva versión.
+- Los artefactos derivados no se modifican; quedan CADUCADOS al cambiar `Spec-Version`, incluidos `ui-design-brief.md`, `ui-spec.md`, `plan.md`, `migration-review.md`, `trace.md`, `tasks.md`, `ui-review.md`, `browser-review.md`, `validation.md`, `doc-sync.md` y `release.md` cuando existan.
 
 ## Validación
 

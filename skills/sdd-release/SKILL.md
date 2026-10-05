@@ -1,6 +1,6 @@
 ---
 name: sdd-release
-description: Gate final pre-merge/pre-deploy. Reutiliza la evidencia de sdd-validate si el commit no cambió, revisa diff y alcance, secretos, configuración, migración y rollback, sincroniza solo la documentación afectada y emite RELEASE: READY o BLOCKED en release.md. No hace merge ni deploy ni toca código. Úsala tras SPEC CUMPLIDA: SÍ o cuando el usuario pida un gate pre-merge.
+description: "Gate final pre-merge/pre-deploy. Reutiliza la evidencia de sdd-validate si el commit no cambió, revisa diff y alcance, secretos, configuración, migración y rollback, sincroniza solo la documentación afectada y emite RELEASE: READY o BLOCKED en release.md. No hace merge ni deploy ni toca código. Úsala tras SPEC CUMPLIDA: SÍ o cuando el usuario pida un gate pre-merge."
 ---
 
 # sdd-release — Gate de release

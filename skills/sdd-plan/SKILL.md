@@ -1,6 +1,6 @@
 ---
 name: sdd-plan
-description: Transforma una spec APROBADA en el diseño técnico specs/NNN-slug/plan.md (arquitectura, stack, componentes, datos, contratos, seguridad, errores, observabilidad, tests, migración, despliegue) con decisiones justificadas y una tabla de cobertura RF/UI que sdd-tasks verificará. Soporta modo breve (specs S) y modo delta (cambios LOCAL). No escribe código. Úsala cuando la spec esté APROBADA con SPEC CLARIFICADA: SÍ, o cuando el plan esté caducado.
+description: "Transforma una spec APROBADA en el diseño técnico specs/NNN-slug/plan.md (arquitectura, stack, componentes, datos, contratos, seguridad, errores, observabilidad, tests, migración, despliegue) con decisiones justificadas y una tabla de cobertura RF/UI que sdd-tasks verificará. Soporta modo breve (specs S) y modo delta (cambios LOCAL). No escribe código. Úsala cuando la spec esté APROBADA con SPEC CLARIFICADA: SÍ, o cuando el plan esté caducado."
 ---
 
 # sdd-plan — Diseño técnico (CÓMO)

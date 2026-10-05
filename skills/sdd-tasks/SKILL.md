@@ -1,6 +1,6 @@
 ---
 name: sdd-tasks
-description: Verifica la trazabilidad spec → plan (cada RF/RNF/UI cubierto, sin contradicciones ni componentes injustificados) y, si pasa, descompone el plan en tareas pequeñas y verificables en specs/NNN-slug/tasks.md (T-NNN con requisitos cubiertos, dependencias, tests y criterio "Hecho cuando"). Emite TRAZABILIDAD: PASS o FAIL. No implementa. Úsala tras sdd-plan (o sdd-migration), o cuando tasks.md esté caducado.
+description: "Verifica la trazabilidad spec → plan (cada RF/RNF/UI cubierto, sin contradicciones ni componentes injustificados) y, si pasa, descompone el plan en tareas pequeñas y verificables en specs/NNN-slug/tasks.md (T-NNN con requisitos cubiertos, dependencias, tests y criterio \"Hecho cuando\"). Emite TRAZABILIDAD: PASS o FAIL. No implementa. Úsala tras sdd-plan (o sdd-migration), o cuando tasks.md esté caducado."
 ---
 
 # sdd-tasks — Trazabilidad + descomposición

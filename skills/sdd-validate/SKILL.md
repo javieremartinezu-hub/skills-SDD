@@ -1,6 +1,6 @@
 ---
 name: sdd-validate
-description: Validación final de una spec. Ejecuta una vez la suite completa y las verificaciones del proyecto registrando el commit, demuestra la cadena requisito → tarea → código → test para cada RF/RNF/UI, revisa casos límite, criterios de finalización y constitución, y emite SPEC CUMPLIDA: SÍ o NO en validation.md. Nunca acepta "parece funcionar". Úsala cuando todas las tareas estén completadas con evidencia.
+description: "Validación final de una spec. Ejecuta una vez la suite completa y las verificaciones del proyecto registrando el commit, demuestra la cadena requisito → tarea → código → test para cada RF/RNF/UI, revisa casos límite, criterios de finalización y constitución, y emite SPEC CUMPLIDA: SÍ o NO en validation.md. Nunca acepta \"parece funcionar\". Úsala cuando todas las tareas estén completadas con evidencia."
 ---
 
 # sdd-validate — Validación final

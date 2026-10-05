@@ -1,70 +1,34 @@
 ---
 name: sdd-review
-description: Auditoría de solo lectura con dos modos: quality revisa calidad, mantenibilidad, seguridad, tests y deuda técnica; implementation compara spec/plan/tareas contra código y tests para detectar desviaciones, faltantes y drift. No modifica código. Entrega hallazgos priorizados y breves con evidencia.
+description: Auditoría de solo lectura con dos modos. quality revisa corrección, mantenibilidad, seguridad, tests y deuda técnica; implementation compara spec, plan y tareas contra código y tests para detectar faltantes, comportamiento sin requisito y drift. Entrega hallazgos priorizados con evidencia y la skill que debe resolverlos. Úsala cuando el usuario pida revisar, auditar o evaluar código o una implementación.
 ---
 
-# sdd-review — Revisión de código o implementación
+# sdd-review — Auditoría
+
+Aplica las Convenciones SDD de `AGENTS.md`.
 
 ## Modos
-- `sdd-review quality`: calidad interna del código.
-- `sdd-review implementation`: cumplimiento de spec/plan por la implementación.
 
-## Principios
-- SOLO audita; no corrige.
-- Cada hallazgo debe citar evidencia concreta: archivo, símbolo, test o comando.
-- Reporta primero problemas reales; no llenes la salida con preferencias estilísticas.
-- Por defecto muestra solo hallazgos `CRÍTICO`, `ALTO` y `MEDIO`. `BAJO` solo si el usuario pide revisión exhaustiva.
+- `quality`: corrección y manejo de errores · complejidad y duplicación · acoplamiento y arquitectura accidental · seguridad del código inspeccionado · tests (utilidad, fragilidad, mocks, casos límite) · dependencias y código muerto · rendimiento solo con riesgo concreto.
+- `implementation`: RF/RNF/UI implementados vs spec · interfaz distinta de lo declarado · plan vs implementación real · tareas `- [x]` sin evidencia suficiente · requisitos sin test o con tests que no prueban comportamiento · comportamiento sin requisito · drift entre spec, plan, tasks, código y tests.
 
-## Quality — revisar
-1. Correctitud evidente y manejo de errores.
-2. Complejidad, duplicación y responsabilidades.
-3. Legibilidad y mantenibilidad.
-4. Acoplamiento y arquitectura accidental.
-5. Seguridad relevante al código inspeccionado.
-6. Tests: cobertura útil, fragilidad, exceso de mocks, casos límite.
-7. Dependencias y código muerto.
-8. Rendimiento solo donde exista riesgo concreto.
+## Reglas
 
-## Implementation — revisar
-1. RF/RNF implementados vs spec.
-2. Código incompatible con requisitos.
-3. Plan/arquitectura vs implementación real.
-4. Tareas marcadas completas sin evidencia suficiente.
-5. RF sin tests o tests que no prueban comportamiento observable.
-6. Comportamiento implementado sin RF asociado.
-7. Drift entre spec, plan, tasks, código y tests.
+- Solo audita; no corrige.
+- Cada hallazgo cita evidencia concreta (archivo:línea, símbolo, test o comando). Ejecuta los checks de `AGENTS.md` cuando aporten evidencia.
+- Por defecto, solo `CRÍTICO`, `ALTO` y `MEDIO`, máximo 10. `BAJO` solo si se pide revisión exhaustiva.
+- Preferencias de estilo no son defectos.
 
-## Verificaciones
-Ejecuta checks existentes cuando aporten evidencia: tests, lint, typecheck, build, análisis estático o auditorías. No inventes comandos.
+## Clasificación → siguiente paso
 
-## Resultado
-Clasifica cada hallazgo:
-- `BUG` → `sdd-bug`
-- `CAMBIO FUNCIONAL` → `sdd-change`
-- `DEUDA/REFACTOR` → `sdd-refactor`
-- `TAREA INCOMPLETA` → `sdd-implement T-XXX`
+`BUG` → `sdd-bug` · `CAMBIO FUNCIONAL` → `sdd-change` · `DEUDA` → `sdd-refactor` · `TAREA INCOMPLETA` → `sdd-implement T-XXX`
 
-## Salida en conversación
-Sé conciso. Máximo 10 hallazgos por defecto.
+## Salida
+
 ```text
-REVISIÓN: QUALITY | IMPLEMENTATION
-RESULTADO: PASS | WARN | FAIL
+REVISIÓN: QUALITY | IMPLEMENTATION · RESULTADO: PASS | WARN | FAIL
 - [ALTO] archivo:línea — problema — impacto — siguiente paso
-- [MEDIO] ...
 CHECKS: <resumen>
-SIGUIENTE PASO: <skill o ninguno>
 ```
 
-## Artefacto opcional
-Solo si el usuario pide persistir la auditoría: `reviews/YYYY-MM-DD-<modo>.md`.
-
-## Acciones prohibidas
-- Modificar código, spec, plan, tasks o tests.
-- Crear hallazgos sin evidencia.
-- Convertir preferencias personales en defectos.
-
-## Revisión UI y browser
-
-- `ui`: revisión estática contra UI Spec/Design System.
-- `browser`: revisión de la aplicación renderizada mediante navegador.
-- Si ambos aplican, ejecutar ambos; uno no sustituye al otro.
+Persistir en `reviews/YYYY-MM-DD-<modo>.md` solo si el usuario lo pide.

@@ -1,41 +1,34 @@
 ---
 name: sdd-refactor
-description: Mejora calidad interna sin cambiar comportamiento observable: simplificación, duplicación, nombres, cohesión, separación de responsabilidades o deuda técnica. Protege el comportamiento con tests existentes o characterization tests, aplica cambios pequeños y ejecuta regresión. Si requiere cambiar comportamiento o arquitectura contractual, detiene y enruta a sdd-change.
+description: Mejora la calidad interna sin cambiar el comportamiento observable (simplificación, duplicación, nombres, cohesión, separación de responsabilidades, deuda técnica). Protege el comportamiento con tests existentes o de caracterización, aplica cambios pequeños y verifica regresión. Si requiere cambiar comportamiento o contratos, detiene y enruta. Úsala para refactors y limpieza de código.
 ---
 
 # sdd-refactor — Mejora interna sin cambio funcional
 
-## Regla clave
-Un refactor cambia **cómo** está construido el código, no **qué** hace el sistema.
+Aplica las Convenciones SDD de `AGENTS.md`.
 
-## Precondiciones
-- El comportamiento esperado está definido.
-- Existe cobertura suficiente para proteger el área; si no, añade primero characterization tests mínimos.
+## Regla clave
+
+Un refactor cambia **cómo** está construido el código, no **qué** hace, ni cómo se ve la interfaz.
 
 ## Procedimiento
-1. Define el objetivo concreto del refactor y el alcance mínimo.
-2. Ejecuta tests actuales y confirma baseline verde.
-3. Añade tests de caracterización solo si falta protección relevante.
-4. Aplica cambios pequeños, sin nuevas capacidades.
-5. Ejecuta tests después de cada cambio relevante.
-6. Ejecuta verificaciones proporcionales: lint/typecheck/build/tests según proyecto.
-7. Inspecciona el diff para confirmar ausencia de cambios funcionales accidentales.
+
+1. Define el objetivo y el alcance mínimo.
+2. Ejecuta los tests actuales: baseline en verde.
+3. Si falta protección relevante, añade primero tests de caracterización mínimos.
+4. Aplica cambios pequeños sin capacidades nuevas; ejecuta tests tras cada cambio relevante.
+5. Verifica con los comandos de `AGENTS.md`, proporcional al riesgo.
+6. Revisa el diff para confirmar que no hay cambios funcionales ni visuales accidentales.
+7. Si el proyecto usa git, haz un commit según la sección Commits de `AGENTS.md`.
 
 ## Desvíos
-- Cambia comportamiento esperado → `sdd-change`.
-- Descubre un defecto funcional → `sdd-bug`.
-- Requiere decisión arquitectónica importante o contrato/API nuevo → `sdd-change` o `sdd-plan` según corresponda.
 
-## Salida en conversación
+Cambia comportamiento o interfaz → `sdd-change` · descubre un defecto → `sdd-bug` · requiere decisión arquitectónica o contrato nuevo → `sdd-change`.
+
+## Salida
+
 ```text
-REFACTOR: <objetivo>
-ARCHIVOS: <resumen>
-TESTS: <comando> → PASS/FAIL
-VERIFICACIONES: <resumen>
+REFACTOR: <objetivo> · ARCHIVOS: <resumen>
+TESTS: <comando> → PASS/FAIL · CHECKS: <resumen>
 RESULTADO: COMPLETADO | BLOQUEADO — <siguiente paso>
 ```
-Mantén la respuesta breve; no expliques decisiones obvias salvo que se solicite.
-
-## Refactor UI
-
-Si afecta UI, tomar baseline browser y repetir el flujo después. Registrar la evidencia en `browser-review.md` con un alcance explícito y no mezclar esta verificación con el gate FINAL de una feature que aún esté en desarrollo.

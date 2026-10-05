@@ -1,77 +1,34 @@
 ---
 name: sdd-spec
-description: Genera la especificación funcional specs/NNN-slug/spec.md (QUÉ y POR QUÉ, nunca CÓMO) entrevistando al usuario una pregunta cada vez. Requisitos con identificadores estables RF-001..., formato EARS, marcador [NECESITA ACLARACIÓN] para lo no resuelto, sin decisiones técnicas. Determina el siguiente número libre sin sobrescribir specs. Úsala tras sdd-agents para una funcionalidad nueva, o cuando sdd-orchestrator indique que falta una spec.
+description: Genera la especificación funcional specs/NNN-slug/spec.md (QUÉ y POR QUÉ, nunca CÓMO) entrevistando al usuario por bloques. Requisitos con IDs estables RF/RNF, formato EARS, marcador [NECESITA ACLARACIÓN], tamaño S/M/L y una sección Interfaz donde se registran, sin inventar nada, las decisiones visuales que declara el usuario (UI-NNN). Úsala para una funcionalidad nueva sin spec propia, tras sdd-agents o cuando sdd-orchestrator lo indique.
 ---
 
 # sdd-spec — Especificación funcional
 
-## Convenciones comunes del framework (léelas primero)
-
-- La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
-- Artefactos: `docs/constitution.md` · `AGENTS.md` · `docs/brief.md` · `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
-- Estado de una spec: `BORRADOR` → `CLARIFICADA` → `APROBADA`. Marcador: `[NECESITA ACLARACIÓN: ...]`.
-- La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta y actualiza el valor de las filas `Estado`, `Aprobación` y `Versión`; nunca busques ni escribas `Estado: …` como texto libre.
-- Requisitos: `RF-001`, `RF-002`… Requisitos no funcionales: `RNF-001`…
-- Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
-
-## Propósito
-
-Definir QUÉ debe hacer el sistema y POR QUÉ, en `specs/NNN-slug/spec.md`, de forma observable, verificable e inequívoca.
-
-## Alcance
-
-- Define comportamiento funcional y detecta si existe impacto UI.
-- La definición visual detallada vive en `ui-spec.md` y se genera con `sdd-ui`.
-- NO diseña arquitectura ni elige tecnologías. NO escribe código ni tests.
-
-## Cuándo usar
-
-- Tras `sdd-agents` en un proyecto nuevo.
-- Para una funcionalidad nueva sin spec propia cuando `sdd-orchestrator` lo indique.
+Aplica las Convenciones SDD de `AGENTS.md`.
 
 ## Precondiciones
 
-- `docs/constitution.md` con `Estado: APROBADA`. Si no: `SPEC BLOQUEADA — Falta constitution aprobada. Siguiente paso: sdd-constitution`.
-- `AGENTS.md` existe. Si no: `Siguiente paso: sdd-agents`.
-- No existe otra spec en curso sin completar (si existe, avisa y confirma con el usuario si esta nueva spec es lo que quiere).
-
-## Contexto requerido
-
-Lee ANTES de preguntar nada:
-
-1. `docs/constitution.md`
-2. `AGENTS.md`
-3. `docs/brief.md` (si existe)
-4. Specs existentes relevantes (para coherencia y para no duplicar requisitos).
-
-## Entradas
-
-- La idea o necesidad funcional que motiva la spec.
+- Constitution `APROBADA` y `AGENTS.md` existente; si no, bloquea hacia `sdd-constitution` / `sdd-agents`.
+- Si hay otra spec en curso, avisa y confirma que se quiere una nueva.
 
 ## Procedimiento
 
-1. **Numeración.** Lista `specs/`. El siguiente número = (máximo existente `NNN-`) + 1, a 3 dígitos (`001`, `002`…). Nunca reutilices ni sobrescribas números existentes. Slug: kebab-case corto y descriptivo (ej. `001-autenticacion`).
-2. **Entrevista con UNA pregunta cada vez** sobre: problema y contexto · actores y usuarios · comportamiento esperado · permisos y roles · eventos · estados · datos involucrados (semántica, no modelo físico) · límites y volúmenes · errores esperados · seguridad funcional · casos límite · fuera de alcance · criterios de aceptación.
-   - NO preguntes por tecnología salvo que afecte al comportamiento observable.
-   - Si el usuario no sabe o no decide algo: escribe `[NECESITA ACLARACIÓN: <duda concreta>]` en el punto afectado. Nunca lo resuelvas tú.
-3. Redacta `specs/NNN-slug/spec.md` con la plantilla.
-4. Aplica a cada RF el **test de verificabilidad**: "¿Puedo escribir al menos un test que demuestre este requisito?" Si no, reescríbelo o márcalo `[NECESITA ACLARACIÓN: ...]`.
-5. Muestra la spec completa. Recomienda: `Siguiente paso: sdd-clarify`.
+1. Lee constitution, brief y las specs relacionadas (para no duplicar requisitos). Número = máximo `NNN` existente + 1; slug kebab-case corto. Nunca reutilices números.
+2. **Entrevista por bloques** de 3-5 preguntas sobre: problema · actores · comportamiento · permisos · estados · datos (semántica, no modelo físico) · límites y volúmenes · errores · seguridad funcional · casos límite · fuera de alcance · criterios de aceptación. Puedes proponer un valor sugerido; solo se registra si el usuario lo confirma. Lo no decidido queda como `[NECESITA ACLARACIÓN: …]`.
+3. **Interfaz.** Pregunta si la funcionalidad tiene interfaz. Si sí, pide al usuario sus decisiones (vistas, componentes, estados visibles, textos, responsive, referencias) y regístralas tal cual con IDs `UI-NNN`. No propongas ni completes diseño: lo que falte y sea necesario queda como `[NECESITA ACLARACIÓN]`.
+4. Aplica a cada RF/UI el test de verificabilidad: "¿puedo escribir un test o una comprobación objetiva que lo demuestre?". Si no, reescríbelo o márcalo.
+5. Propón el `Tamaño` (`S`: ≤3 RF, sin migración, sin cambios de permisos/seguridad ni dependencias nuevas; si no, `M`/`L`).
+6. Escribe la spec, muéstrala. `Siguiente paso: sdd-clarify`. DETENTE.
 
-### Formato EARS (úsalo cuando aplique)
+## EARS
 
-```text
-EL SISTEMA <respuesta>.
-CUANDO <evento>, EL SISTEMA <respuesta>.
-MIENTRAS <estado>, EL SISTEMA <respuesta>.
-DONDE <condición>, EL SISTEMA <respuesta>.
-SI <error>, ENTONCES EL SISTEMA <respuesta>.
-```
+`EL SISTEMA <r>.` · `CUANDO <evento>, EL SISTEMA <r>.` · `MIENTRAS <estado>, EL SISTEMA <r>.` · `DONDE <condición>, EL SISTEMA <r>.` · `SI <e>, ENTONCES EL SISTEMA <r>.`
 
-### Plantilla de `specs/NNN-slug/spec.md`
+## Plantilla de `spec.md`
 
 ```markdown
-# <Título de la funcionalidad>
+# <Título>
 
 | Campo | Valor |
 |---|---|
@@ -79,67 +36,43 @@ SI <error>, ENTONCES EL SISTEMA <respuesta>.
 | Versión | 1 |
 | Estado | BORRADOR |
 | Aprobación | PENDIENTE |
+| Tamaño | S / M / L |
+| Interfaz | SÍ / NO |
 
-## Contexto
-## Problema
+## Contexto y problema
 ## Objetivo
 ## Actores
 ## Historias de usuario
-Como <actor>, quiero <capacidad>, para <beneficio>.
 ## Requisitos funcionales
-- RF-001: <enunciado verificable, EARS si aplica>
-- RF-002: …
+- RF-001: …
 ## Requisitos no funcionales
-- RNF-001: <restricción medible de rendimiento, seguridad, usabilidad, etc.>
+- RNF-001: …
 ## Estados
 ## Permisos
 | Rol | Acción | Permitido |
 ## Errores
-| Condición | Comportamiento observable del sistema |
+| Condición | Comportamiento observable |
 ## Casos límite
 ## Seguridad funcional
+## Interfaz (declarada por el usuario; omitir si Interfaz = NO)
+- UI-001: <decisión tal como la declaró el usuario> (RF relacionados)
 ## Fuera de alcance
 ## Criterios de finalización
-- [ ] <condición objetiva y comprobable>
+- [ ] …
 ## Decisiones pendientes
-- [NECESITA ACLARACIÓN: …] (si las hay)
 
 ## Registro de cambios
-| Versión | Fecha | Cambio |
-| 1 | YYYY-MM-DD | Creación inicial |
+| Versión | Fecha | Clasificación | Cambio |
+| 1 | YYYY-MM-DD | — | Creación |
 ```
-
-## Gate de UI
-
-Antes de cerrar la spec, determina si el requisito afecta una interfaz de usuario.
-- Si NO: no crear UI Spec.
-- Si SÍ: registrar `UI impact: DIRECT|INDIRECT` en la spec y enrutar a `sdd-ui`.
-- No inventar detalles visuales faltantes: preguntar o marcar `[NECESITA ACLARACIÓN]`.
-
-## Artefactos de salida
-
-- `specs/NNN-slug/spec.md` con la fila `Estado` en `BORRADOR` y la fila `Aprobación` en `PENDIENTE`.
 
 ## Validación
 
-- Los RF tienen IDs estables y únicos en todo el repositorio.
-- Cada RF es observable y verificable (pasa el test del paso 4) o lleva `[NECESITA ACLARACIÓN]`.
-- No hay framework, ORM, librerías, estructura de clases, patrón interno ni tecnología de persistencia en la spec, salvo restricción de producto explícita del usuario (y entonces consta como restricción, no como diseño).
-- Existen secciones `Fuera de alcance` y `Criterios de finalización`.
-- Ninguna ambigüedad fue resuelta en silencio.
+- IDs únicos; cada RF/UI verificable o marcado.
+- Sin tecnología, arquitectura ni modelo físico salvo restricción explícita del usuario.
+- Sin decisiones de interfaz que no haya declarado el usuario.
+- `Fuera de alcance` y `Criterios de finalización` presentes.
 
-## Condiciones de parada
+## Prohibido
 
-- Tras escribir y mostrar la spec: DETENTE. La aprobación llega más tarde, a través de `sdd-clarify`.
-
-## Acciones prohibidas
-
-- Diseñar arquitectura, componentes o modelos de datos físicos.
-- Elegir tecnologías.
-- Escribir código o tests.
-- Resolver ambigüedades sin decidirlo el usuario.
-- Aprobar la spec (esa gate no es de esta skill).
-
-## Siguiente fase permitida
-
-`sdd-clarify`
+Diseñar arquitectura, elegir tecnologías, escribir código, resolver ambigüedades por tu cuenta, aprobar la spec.

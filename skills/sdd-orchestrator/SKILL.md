@@ -1,108 +1,60 @@
 ---
 name: sdd-orchestrator
-description: Gobierna de forma determinista el flujo SDD/TDD y devuelve el único siguiente paso permitido. Inspecciona artefactos versionados, integra UI/UX, migraciones, reviews, documentación, release y mantenimiento, y bloquea cualquier salto de fase.
+description: Router determinista del flujo SDD. Diagnostica el estado real leyendo solo cabeceras y veredictos de los artefactos y devuelve el único siguiente paso permitido; también clasifica pedidos de mantenimiento (bug, cambio, refactor, auditoría, release). Úsala ante cualquier duda sobre en qué fase está una spec o qué hacer a continuación.
 ---
 
-# sdd-orchestrator — Gobernante determinista
+# sdd-orchestrator — Router determinista
 
-## Convenciones
-
-- La fuente de verdad es el repositorio, no la conversación.
-- Lee antes de decidir: `docs/constitution.md`, `AGENTS.md`, `spec.md`, `clarify.md`, `ui-design-brief.md`, `ui-spec.md`, `plan.md`, `migration-review.md`, `trace.md`, `tasks.md`, `ui-review.md`, `browser-review.md`, `validation.md`, `doc-sync.md`, `release.md` según corresponda.
-- `spec.md` canónica: filas `Estado`, `Aprobación`, `Versión`, `UI impact`.
-- `ui-spec.md`: filas `Spec-Version`, `UI-Spec-Version`, `Estado`, `Aprobación`.
-- Artefactos derivados con versión distinta a la actual = `CADUCADO`.
-- Veredictos canónicos: `SPEC CLARIFICADA`, `TRAZABILIDAD`, `UI REVIEW`, `BROWSER REVIEW`, `SPEC CUMPLIDA`, `RELEASE`.
+Aplica las Convenciones SDD de `AGENTS.md` (si aún no existe, sigue el diagnóstico igualmente).
 
 ## Propósito
 
-Diagnosticar el estado real y devolver el **único** siguiente paso permitido. No implementa ni modifica artefactos de otras fases.
+Devolver el **único** siguiente paso permitido. No implementa ni edita artefactos.
+
+## Lectura mínima
+
+Para diagnosticar, lee de cada artefacto **solo la tabla de cabecera y la línea de veredicto**, nunca el cuerpo. Excepción: `tasks.md`, del que solo necesitas las líneas de estado `- [ ]` / `- [x]` y las dependencias de la primera pendiente.
+
+## Mantenimiento (se clasifica antes que el flujo lineal)
+
+| Pedido | Skill |
+|---|---|
+| Defecto o fallo de causa incierta | `sdd-bug` |
+| Comportamiento nuevo o distinto en una spec existente | `sdd-change` |
+| Mejora interna sin cambio observable | `sdd-refactor` |
+| Auditoría de calidad o de cumplimiento | `sdd-review` |
+| Gate pre-merge/pre-deploy | `sdd-release` |
+
+Funcionalidad nueva sin spec → flujo lineal desde `sdd-spec`.
 
 ## Diagnóstico en orden
 
-1. Si no existe `docs/brief.md` → `sdd-init`.
-2. Si no existe constitution aprobada → `sdd-constitution`.
-3. Si no existe `AGENTS.md` → `sdd-agents`.
-4. Determina la spec activa. Si hay una sola en curso, úsala; si hay varias candidatas, pide seleccionar una.
-5. Lee `spec.md`: `Estado`, `Aprobación`, `Versión`, `UI impact`.
-6. Si `Estado=BORRADOR` o hay aclaraciones abiertas → `sdd-clarify`.
-7. Si `Estado=APROBADA` pero falta aprobación inequívoca → `sdd-clarify`.
-8. Si `UI impact=NONE`, salta el bloque UI.
-9. Si `UI impact!=NONE`:
-   - falta/está caducado `ui-design-brief.md` → `sdd-ui-discovery`;
-   - `ui-design-brief.md` existe pero `Design Status != READY` → `frontend-design`;
-   - brief listo pero falta diseño → `frontend-design`;
-   - falta/está caducado `ui-spec.md` → `sdd-ui`;
-   - `ui-spec` PROPUESTA o PENDIENTE → gate de aprobación mediante `sdd-ui`;
-   - si hay cambio de Design System → `sdd-design-system`.
-10. Si falta/está caducado `plan.md` → `sdd-plan`.
-11. Si el plan marca migración/compatibilidad requerida y `migration-review.md` falta/incompleto → `sdd-migration`.
-12. Si trace falta/caducado/FAIL → `sdd-trace`.
-13. Si tasks falta/caducado → `sdd-tasks`.
-14. Si tasks tiene pendientes → `sdd-implement T-XXX` para la primera tarea satisfacible por dependencias. Nunca elijas una tarea si el usuario pidió routing sin identificar una tarea; el orquestador puede reportar el T-XXX recomendado, pero `sdd-implement` exige que el usuario lo indique.
-15. Cuando todas las tareas estén completas:
-   - si UI → `sdd-ui-review` si falta/caducado/FAIL;
-   - después UI → `sdd-browser-review` FINAL si falta/caducado/FAIL;
-   - después → `sdd-validate` si falta/caducado/NO.
-16. Si validation = `SPEC CUMPLIDA: SÍ`:
-   - si docs afectadas y `doc-sync.md` falta/incompleto → `sdd-doc-sync`;
-   - luego si `release.md` falta/BLOCKED → `sdd-release`;
-   - si `RELEASE: READY` → spec completada.
+1. Falta `docs/brief.md` → `sdd-init`.
+2. Constitution ausente o no `APROBADA` → `sdd-constitution`.
+3. Falta `AGENTS.md` → `sdd-agents`.
+4. Determina la spec activa (la única con release no READY). Si hay varias, pide elegir.
+5. spec `Estado` ≠ `APROBADA`, `Aprobación` pendiente, o `clarify.md` ausente/caducado/`NO` → `sdd-clarify`.
+6. `plan.md` ausente o caducado → `sdd-plan`.
+7. Plan con `Migración requerida: SÍ` y `migration-review.md` ausente/caducado/`INCOMPLETA` → `sdd-migration`.
+8. `tasks.md` ausente o caducado → `sdd-tasks`. Con `TRAZABILIDAD: FAIL` → `sdd-plan`.
+9. Tareas pendientes → `sdd-implement` (modo continuo: encadena todas las pendientes hasta terminar o hasta una condición de parada).
+10. Todas completas y `validation.md` ausente/caducado/`NO` → `sdd-validate`.
+11. `SPEC CUMPLIDA: SÍ` y `release.md` ausente/caducado/`BLOCKED` → `sdd-release`.
+12. `RELEASE: READY` → spec completada.
 
-## Mantenimiento
+## Tamaño de la spec (fila `Tamaño`)
 
-Clasifica antes que el flujo lineal cuando el usuario pide mantenimiento:
+- `S`: ≤3 RF, sin migración, sin cambios de permisos/seguridad ni dependencias nuevas. Plan en modo breve, 1-3 tareas. El resto de gates se mantiene.
+- `M` / `L`: flujo completo.
 
-| Solicitud | Skill |
-|---|---|
-| Causa incierta | `sdd-debug` |
-| Implementación contradice spec | `sdd-bug` |
-| Nuevo/cambio de comportamiento | `sdd-change` |
-| Mejora interna sin cambio observable | `sdd-refactor` |
-| Auditoría | `sdd-review` |
-| Gate pre-merge/pre-deploy | `sdd-release` |
-| Revisión visual | `sdd-ui-review` |
-| Verificación app real | `sdd-browser-review` |
-
-## Branches de transición
+## Salida
 
 ```text
-NEW FEATURE:
-init → constitution → agents → spec → clarify/approval
-→ [ui-discovery → frontend-design → ui-spec/approval → design-system]
-→ plan → [migration] → trace → tasks → implement(one task at a time)
-→ [ui-review] → [browser-review FINAL] → validate → [doc-sync] → release
-
-BUG:
-[debug] → bug → regression → verify → [browser]
-
-CHANGE:
-change → clarify/approval → [UI cycle] → plan → [migration] → trace → tasks → implement → reviews → validate → doc-sync → release
+ESTADO: <spec> v<N> · fase actual
+SIGUIENTE PASO: <skill> [T-XXX]
+MOTIVO: <precondición que lo determina>
 ```
-
-## Formato de bloqueo
-
-```text
-<ACCIÓN> BLOQUEADA
-Motivo: <precondición>
-Falta: <evidencia concreta>
-Siguiente paso: <skill>
-```
-
-## OpenJEV
-
-Puede complementar la clasificación con `flow`, `scope`, `risk`, `ui_impact`, `browser_verification_required`, `responsive_verification_required`, `accessibility_verification_required`, `visual_regression_required`, `security_review_required`.
-
-Si OpenJEV falla/no está disponible, este routing determinista prevalece.
 
 ## Prohibido
 
-- Implementar código.
-- Crear/editar artefactos de otras fases.
-- Saltarse gates.
-- Tratar la conversación como evidencia.
-- Aceptar versiones caducadas.
-
-## Siguiente fase
-
-La que resulte del diagnóstico; el orquestador se detiene después de enrutar.
+Implementar, editar artefactos, saltarse gates, aceptar derivados caducados o la conversación como evidencia.

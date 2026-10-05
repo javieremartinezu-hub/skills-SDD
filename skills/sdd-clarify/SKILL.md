@@ -1,107 +1,44 @@
 ---
 name: sdd-clarify
-description: >-
-  Audita specs/NNN-slug/spec.md como QA Senior (ambigüedades, contradicciones, RF no verificables, casos límite ausentes, estados y errores sin definir, suposiciones implícitas, conflictos con la constitución, mezcla spec/implementación), enumera hallazgos sin corregir nada, los resuelve con el usuario UNO POR UNO y repite la auditoría hasta emitir SPEC CLARIFICADA: SÍ. Conduce después el gate de aprobación humana de la spec. Úsala cuando exista una spec en BORRADOR o modificada por sdd-change.
+description: Audita specs/NNN-slug/spec.md como QA senior (ambigüedades, contradicciones, RF no verificables, casos límite, estados, errores, suposiciones, conflictos con la constitución, tecnología colada en la spec, huecos en la Interfaz declarada), resuelve los hallazgos con el usuario y conduce el gate de aprobación humana de la spec. Úsala con una spec en BORRADOR o recién modificada por sdd-change.
 ---
 
-# sdd-clarify — Auditoría de clarificación y gate de aprobación
+# sdd-clarify — Clarificación y aprobación de la spec
 
-## Convenciones comunes del framework (léelas primero)
-
-- La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
-- Artefactos: `docs/constitution.md` · `AGENTS.md` · `specs/NNN-slug/{spec,clarify,plan,trace,tasks,validation}.md`
-- Estado de una spec: `BORRADOR` → `CLARIFICADA` → `APROBADA`. Marcador: `[NECESITA ACLARACIÓN: ...]`.
-- La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta y actualiza sus filas `Estado`, `Aprobación` y `Versión`; nunca uses texto libre como `Estado: …`.
-- Veredictos: `SPEC CLARIFICADA: SÍ|NO` · `TRAZABILIDAD: PASS|FAIL` · `SPEC CUMPLIDA: SÍ|NO`
-
-## Propósito
-
-Garantizar que la spec no contiene ambigüedades, contradicciones ni huecos, y obtener la **aprobación humana explícita** que desbloquea `sdd-plan`.
-
-## Alcance
-
-- SOLO audita y aclara la spec.
-- NO implementa. NO diseña arquitectura. NO inventa soluciones: las decisiones funcionales las toma el usuario.
-
-## Cuándo usar
-
-- Existe una spec cuya fila `Estado` es `BORRADOR`.
-- `sdd-change` modificó una spec (re-auditar antes de re-aprobar).
+Aplica las Convenciones SDD de `AGENTS.md`.
 
 ## Precondiciones
 
-- `specs/NNN-slug/spec.md` existe. Si no: `CLARIFICACIÓN BLOQUEADA — No existe spec. Siguiente paso: sdd-spec`.
-
-## Contexto requerido
-
-- `specs/NNN-slug/spec.md`
-- `docs/constitution.md` (para detectar conflictos)
-
-## Entradas
-
-- Respuestas del usuario, hallazgo por hallazgo.
+`spec.md` existe; si no, bloquea hacia `sdd-spec`.
 
 ## Procedimiento
 
-1. Lee `spec.md` y `docs/constitution.md`.
-2. **Primera pasada — SOLO enumerar.** Audita estos 12 puntos y registra cada hallazgo numerado (H-01, H-02…) en `specs/NNN-slug/clarify.md`:
-   1. Ambigüedades. 2. Contradicciones (internas y con la constitution). 3. Requisitos duplicados. 4. RF no verificables. 5. Casos límite ausentes. 6. Estados incompletos o sin transiciones. 7. Errores no definidos. 8. Suposiciones implícitas. 9. Comportamientos sin definir. 10. Huecos de seguridad funcional. 11. Conflictos con `docs/constitution.md`. 12. Mezcla accidental spec/implementación (tecnología o diseño interno colado).
-   - NO corrijas nada todavía.
-3. **Resolución UNO POR UNO.** Para cada hallazgo: preséntalo, propone opciones SOLO si el usuario las pide, y aplica la decisión del usuario editando `spec.md`. Si el usuario no decide, el marcador `[NECESITA ACLARACIÓN: ...]` permanece.
-4. **Re-auditoría.** Repite los pasos 2-3 hasta que la auditoría no produzca hallazgos nuevos.
-5. **Condición de éxito** (todas obligatorias):
-   - Cero `[NECESITA ACLARACIÓN` en spec.md.
-   - Cero contradicciones.
-   - Todos los RF verificables.
-   - `Fuera de alcance` explícito y no vacío.
-6. Si se cumple: escribe en `clarify.md` el veredicto `SPEC CLARIFICADA: SÍ`, actualiza la fila `Estado` a `CLARIFICADA` en spec.md y pasa al paso 7. Si no: escribe `SPEC CLARIFICADA: NO` con los hallazgos pendientes y DETENTE (plan bloqueado).
-7. **Gate de aprobación humana.** Pregunta literalmente: "¿Esta especificación representa realmente la funcionalidad que quieres construir? (sí/no)".
-   - CUENTA como aprobación: sí inequívoco referido a esta spec ("sí, apruebo esta spec", "aprobada", "es exactamente lo que quiero").
-   - NO CUENTA: "vale", "ok", "sigue", "suena bien", "parece bien", silencio, o aprobar otra cosa. Ante ambigüedad, repite la pregunta exacta.
-   - Si aprueba: actualiza en la tabla de cabecera las filas `Estado` a `APROBADA` y `Aprobación` a `APROBADA (YYYY-MM-DD, por el usuario)`. Informa: `Siguiente paso: sdd-plan`. DETENTE.
-   - Si rechaza o no aprueba explícitamente: deja la fila `Aprobación` en `PENDIENTE`, informa `PLAN BLOQUEADO — Spec sin aprobación humana explícita. Siguiente paso: repetir sdd-clarify o ajustar la spec con sdd-change`. DETENTE.
+1. Lee `spec.md` y `docs/constitution.md`. Si viene de `sdd-change`, audita solo las secciones tocadas según el último registro de cambios, más su coherencia con el resto.
+2. **Auditoría.** Registra hallazgos `H-NN` en `clarify.md` revisando: ambigüedades · contradicciones (internas y con la constitution) · duplicados · RF no verificables · casos límite ausentes · estados sin transiciones · errores sin definir · suposiciones implícitas · huecos de seguridad funcional · tecnología o diseño interno colado · Interfaz: UI-NNN que contradicen RF o decisiones visuales necesarias no declaradas · Tamaño mal clasificado.
+3. **Resolución por lote.** Presenta todos los hallazgos agrupados por tema. Para cada uno ofrece una opción recomendada y alternativas breves, para que el usuario pueda responder en un solo mensaje. Excepción: en hallazgos de Interfaz no propongas diseño, pide la decisión. Aplica a `spec.md` solo lo que el usuario decide; lo no decidido sigue `[NECESITA ACLARACIÓN]`.
+4. **Re-auditoría incremental** de las secciones editadas, hasta que no haya hallazgos nuevos.
+5. **Éxito:** cero `[NECESITA ACLARACIÓN`, cero contradicciones, todo RF/UI verificable, `Fuera de alcance` no vacío. Escribe `SPEC CLARIFICADA: SÍ` y pon `Estado` en `CLARIFICADA`. Si no se cumple: `SPEC CLARIFICADA: NO` con los pendientes, y DETENTE.
+6. **Gate de aprobación.** Pregunta literalmente: "¿Esta especificación representa realmente la funcionalidad que quieres construir? (sí/no)". Solo un sí inequívoco referido a esta spec cuenta; ante ambigüedad repite.
+   - Sí → `Estado: APROBADA`, `Aprobación: APROBADA (YYYY-MM-DD, por el usuario)`. `Siguiente paso: sdd-plan`.
+   - No → `Aprobación: PENDIENTE`. `Siguiente paso: ajustar con sdd-clarify o sdd-change`.
+7. DETENTE.
 
-### Plantilla de `specs/NNN-slug/clarify.md`
+## Plantilla de `clarify.md`
 
 ```markdown
-# Informe de clarificación — NNN-slug
+# Clarificación — NNN-slug
 
-> Fecha: YYYY-MM-DD · Ronda: N
+| Campo | Valor |
+|---|---|
+| Spec-Version | N |
+| Ronda | R |
 
-## Hallazgos (primera pasada: solo enumerar)
-| ID | Punto auditado | Hallazgo | RF/Sección afectada | Resolución decidida por el usuario |
-| H-01 | | | | |
+| ID | Tipo | Hallazgo | Sección/RF | Decisión del usuario |
+|---|---|---|---|---|
 
-## Auditorías de repetición
-<Rondas adicionales: hallazgos nuevos o "sin hallazgos nuevos">
-
-## Veredicto
 SPEC CLARIFICADA: SÍ | NO
 ```
 
-## Artefactos de salida
+## Prohibido
 
-- `specs/NNN-slug/clarify.md`
-- `specs/NNN-slug/spec.md` actualizada solo con decisiones aclaradas + veredicto de estado.
-
-## Validación
-
-- Cada edición de spec.md corresponde a un hallazgo con decisión explícita del usuario.
-- El veredicto final refleja la condición de éxito completa.
-- La fila `Estado` solo toma `APROBADA` tras el gate del paso 7.
-
-## Condiciones de parada
-
-- Tras `SPEC CLARIFICADA: NO`: DETENTE.
-- Tras el gate de aprobación (aprobada o rechazada): DETENTE. Nunca avances a planificación sin aprobación registrada.
-
-## Acciones prohibidas
-
-- Corregir hallazgos automáticamente sin decisión del usuario.
-- Inventar requisitos, estados o comportamientos para "cerrar" un hallazgo.
-- Diseñar arquitectura o implementar.
-- Interpretar respuestas ambiguas como aprobación.
-
-## Siguiente fase permitida
-
-`sdd-plan` (solo con spec `APROBADA` y veredicto `SPEC CLARIFICADA: SÍ`)
+Corregir sin decisión del usuario, inventar requisitos o diseño para cerrar hallazgos, interpretar respuestas ambiguas como aprobación, diseñar o implementar.

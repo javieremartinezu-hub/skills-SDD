@@ -1,31 +1,41 @@
 ---
 name: sdd-migration
-description: Evalúa compatibilidad y estrategia de transición para cambios de datos, APIs, eventos, formatos o configuración persistida. Persiste migration-review.md y enruta a plan/trace sin ejecutar migraciones ni editar código.
+description: Gate de migración y compatibilidad. Revisa que plan.md tenga una estrategia de transición suficiente para cambios de esquema, datos persistidos, APIs, eventos, formatos o configuración consumida por varias versiones. Persiste migration-review.md con veredicto SUFICIENTE o INCOMPLETA. No ejecuta migraciones ni edita código o plan. Úsala cuando el plan declare Migración requerida: SÍ.
 ---
 
-# sdd-migration — Migration & Compatibility Gate
+# sdd-migration — Gate de migración y compatibilidad
 
-## Cuándo usar
-
-- Cambios de esquema, datos persistidos, APIs, eventos, protocolos, formatos o configuración consumida por varias versiones/sistemas.
+Aplica las Convenciones SDD de `AGENTS.md`.
 
 ## Precondiciones
 
-- `spec.md` y `plan.md` vigentes.
-- El plan declara `Migration Required: YES` cuando corresponde.
+`spec.md` y `plan.md` vigentes, con `Migración requerida: SÍ` en el plan.
 
 ## Procedimiento
 
-1. Lee spec, plan y contratos/código relevantes.
-2. Identifica productores, consumidores, datos existentes y coexistencia de versiones.
-3. Clasifica `COMPATIBLE`, `POR FASES` o `BREAKING`.
-4. Verifica que el plan documente, cuando aplique: estado inicial/final, coexistencia, expand/contract, backfill, dual-read/write, versionado u offline migration, validación e idempotencia, rollback, fallo parcial y tests de compatibilidad/rollback.
-5. Escribe `specs/NNN-slug/migration-review.md` con evidencia.
-6. Si falta estrategia relevante: `MIGRATION PLAN: INCOMPLETE` → `sdd-plan`.
-7. Si es suficiente: `MIGRATION PLAN: SUFFICIENT` → `sdd-trace`.
+1. Lee la spec, la §10 del plan y los contratos o código afectados.
+2. Identifica productores, consumidores, datos existentes y coexistencia de versiones. Confirma la clasificación: `COMPATIBLE`, `POR FASES` o `BREAKING`.
+3. Comprueba que el plan cubra lo que aplique: estado inicial y final · coexistencia (expand/contract, dual-read/write, versionado) · backfill · validación e idempotencia · rollback y fallo parcial · tests de compatibilidad y rollback.
+4. Escribe `migration-review.md`.
+5. `MIGRACIÓN: INCOMPLETA` → `Siguiente paso: sdd-plan`. `MIGRACIÓN: SUFICIENTE` → `Siguiente paso: sdd-tasks`. DETENTE.
+
+## Plantilla
+
+```markdown
+# Revisión de migración — NNN-slug
+
+| Campo | Valor |
+|---|---|
+| Spec-Version | N |
+| Plan-Version | M |
+| Clasificación | COMPATIBLE / POR FASES / BREAKING |
+
+| Aspecto | Cubierto en el plan | Falta |
+|---|---|---|
+
+MIGRACIÓN: SUFICIENTE | INCOMPLETA
+```
 
 ## Prohibido
 
-- Ejecutar migraciones sobre datos reales.
-- Modificar `plan.md`, código o requisitos.
-- Ocultar breaking changes.
+Ejecutar migraciones sobre datos reales, modificar plan, código o requisitos, ocultar breaking changes.

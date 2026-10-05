@@ -1,42 +1,25 @@
 ---
 name: tdd
-description: Rigorous, pragmatic TDD workflow for software development. Use for new features by default, bug investigation/fixes when regression tests add value, and other code changes when TDD materially improves correctness, confidence, design, or regression prevention. Not needed for docs-only, generated/static assets, trivial config, mechanical no-behavior refactors, or tiny changes already well covered.
+description: Método TDD riguroso y pragmático (ENTENDER → RED → GREEN → REFACTOR → VERIFICAR; en bugs, REPRODUCIR y CAUSA RAÍZ). Úsala para escribir código con tests como evidencia, dentro o fuera del flujo SDD. Dentro de SDD, qué se testea lo decide la tarea (campo "Tests requeridos"); esta skill aporta el cómo.
 ---
 
-# TDD
+# tdd — Ciclo de desarrollo guiado por tests
 
-Use TDD where it creates engineering value, not mere process. Optimize for maximum confidence per token and tool call.
+Objetivo: máxima confianza por token y por ejecución, no ceremonia.
 
-## When Active
+## Ciclo
 
-- Feature work: default to `UNDERSTAND → RED → GREEN → REFACTOR → VERIFY`.
-- Bugs: prefer `UNDERSTAND → REPRODUCE → RED → ROOT CAUSE → GREEN → REFACTOR → VERIFY`.
-- Skip or keep lightweight when added workflow cost exceeds likely confidence/design benefit.
+- **ENTENDER.** Comportamiento observable, código y tests existentes, convenciones del proyecto. Contexto mínimo; nada de exploración amplia.
+- **RED.** El test significativo más pequeño para el comportamiento o la regresión. Confirma que falla por la razón esperada, no por imports o compilación.
+- **REPRODUCIR / CAUSA RAÍZ** (bugs). Reproduce antes de tocar producción; corrige la causa, no el síntoma.
+- **GREEN.** El cambio de producción mínimo y correcto. Sin refactors ajenos, abstracciones especulativas, dependencias nuevas ni requisitos futuros. Ejecuta solo los tests necesarios para estar en verde.
+- **REFACTOR.** Solo con verde y solo si mejora de verdad (duplicación, nombres, flujo, cohesión). Los tests siguen verdes.
+- **VERIFICAR.** Checks proporcionales al riesgo, con los comandos de `AGENTS.md` cuando existan. Revisa el diff final y elimina cambios ajenos. Nunca declares como pasado algo no ejecutado.
 
-## Workflow
+## Cuándo no aplicar el ciclo completo
 
-### UNDERSTAND
-Identify the observable behavior, relevant implementation, existing tests, dependencies, affected boundaries, and project test conventions. Use minimal context. Use Graphify for non-trivial structure, dependency, impact, call-flow, or test-location discovery. Avoid broad exploration.
+Docs, assets generados, configuración trivial o refactors mecánicos ya cubiertos: basta con verificar. En SDD esto debe constar en la tarea como `Tests requeridos: N/A — <motivo>`; no lo decidas tú.
 
-### RED
-Write the smallest meaningful failing test for the required behavior or regression. Prefer observable behavior over implementation details. Confirm it fails for the expected reason before production changes.
+## Calidad de tests
 
-### REPRODUCE / ROOT CAUSE
-For bugs, reproduce the failure whenever practical before editing production code. After reproduction, identify and fix the underlying cause; do not patch symptoms when the cause can reasonably be corrected.
-
-### GREEN
-Make the smallest correct production change to pass the test. Avoid unrelated refactors, speculative abstractions, new dependencies, architecture changes, or future requirements. Run the narrowest relevant tests needed to establish green.
-
-### REFACTOR
-Refactor only after green and only when it materially improves the code: meaningful deduplication, clearer names, simpler control flow, or better cohesion. Keep tests green.
-
-### VERIFY
-Run checks proportional to risk: relevant tests, typecheck, lint, build/compile when applicable. Inspect the final diff and detect unrelated changes. Prefer targeted verification; widen only when impact or project conventions justify it. Never claim unrun checks passed.
-
-## Test Quality
-
-Tests should be deterministic, behavior-focused, understandable, appropriately isolated, and resistant to irrelevant implementation changes. Use the lowest-cost test level that provides sufficient confidence. Avoid excessive mocking, implementation-detail assertions, duplicated production logic, and unnecessary integration scope.
-
-## Coordination
-
-This skill owns the TDD workflow. Do not duplicate codebase-discovery or frontend-design roles; invoke `frontend-design` only when UI design decisions are required. For UI implementation, use the current `ui-spec.md` as the behavioral/visual contract and rely on `sdd-browser-review` for rendered UI evidence.
+Deterministas, centrados en comportamiento, legibles y resistentes a cambios internos irrelevantes. Usa el nivel de test más barato que dé confianza suficiente; evita mocks excesivos y aserciones sobre detalles de implementación.

@@ -1,123 +1,66 @@
 ---
 name: sdd-implement
-description: Implementa EXACTAMENTE UNA tarea (T-XXX) de tasks.md aplicando TDD estricto (RED → GREEN → REFACTOR), tras verificar spec aprobada, cero [NECESITA ACLARACIÓN], trazabilidad PASS y dependencias completadas. Descubre las verificaciones reales del proyecto inspeccionándolo (tests, lint, type check, build, auditoría) sin inventar comandos. Registra evidencia, marca la tarea solo si todo pasa, informa y SE DETIENE. Es la skill para implementar tareas planificadas; `sdd-bug` puede escribir fixes y `sdd-refactor` puede modificar estructura sin cambiar comportamiento.
+description: Implementa las tareas de tasks.md con el ciclo TDD (RED → GREEN → REFACTOR). Por defecto encadena automáticamente todas las tareas pendientes de la spec en orden de dependencias, cerrando cada una con evidencia en tasks.md y un commit propio antes de pasar a la siguiente, y se detiene ante cualquier fallo, desvío o confirmación requerida. Con "sdd-implement T-XXX" implementa solo esa tarea. Implementa la interfaz exactamente como la declaró el usuario (UI-NNN). Úsala para implementar tareas planificadas o continuar una implementación en curso.
 ---
 
-# sdd-implement — Implementación de UNA tarea con TDD
+# sdd-implement — Implementación con TDD
 
-## Convenciones comunes del framework (léelas primero)
+Aplica las Convenciones SDD de `AGENTS.md`.
 
-- La fuente de verdad son los **artefactos en el repositorio**, nunca la conversación. Relee los archivos antes de decidir.
-- Artefactos: `docs/constitution.md` · `AGENTS.md` · `specs/NNN-slug/{spec,clarify,ui-design-brief,ui-spec,plan,migration-review,trace,tasks,ui-review,browser-review,validation,doc-sync,release}.md` según corresponda.
-- Si `ui-spec.md` aplica, lee `Spec-Version` y `UI-Spec-Version`; una versión incompatible está CADUCADA.
-- Estados de tarea: `- [ ]` pendiente · `- [x]` completada (solo con evidencia registrada).
-- La cabecera canónica de `spec.md` es la tabla `| Campo | Valor |`: consulta las filas `Estado`, `Aprobación` y `Versión`; nunca busques `Estado: …` como texto libre.
-- Formato de bloqueo: `<ACCIÓN> BLOQUEADA / Motivo / Falta / Siguiente paso: <skill>`
+## Modos
 
-## Propósito
+- **Continuo** (`sdd-implement`, por defecto): implementa todas las tareas pendientes, una detrás de otra, sin pedir permiso entre ellas.
+- **Tarea única** (`sdd-implement T-XXX`): implementa solo esa tarea y se detiene.
 
-Convertir UNA tarea en código + tests que la demuestren, con evidencia verificable.
+En ambos modos se trabaja **una tarea a la vez**: cada tarea se cierra por completo (tests, checks y evidencia en `tasks.md`) antes de empezar la siguiente. Nunca hay dos tareas abiertas a la vez.
 
-## Alcance
+## Precondiciones (lee solo cabeceras; se comprueban una vez al inicio)
 
-- Implementa código de producto asociado a tareas planificadas.
-- `sdd-bug` queda autorizado exclusivamente para fixes de defectos y `sdd-refactor` para cambios internos sin cambio funcional.
-- Trabaja sobre UNA sola tarea por ejecución. Jamás sobre dos.
+1. Constitution `APROBADA`, spec `APROBADA` sin `[NECESITA ACLARACIÓN`.
+2. `tasks.md` vigente (Spec-Version y Plan-Version actuales) con `TRAZABILIDAD: PASS`.
+3. Si el proyecto usa git: árbol de trabajo limpio. Si hay cambios sin commitear que no pertenecen a esta implementación, no los mezcles: pregunta al usuario qué hacer antes de empezar.
 
-## Cuándo usar
+Si falta algo: `IMPLEMENTACIÓN BLOQUEADA — … Siguiente paso: <skill>`.
 
-- Cuando el usuario lo solicita indicando explícitamente la tarea: `sdd-implement T-XXX`.
+## Bucle
 
-## Precondiciones (verifica TODAS leyendo los archivos, antes de tocar código)
+1. **Selecciona** la primera tarea `- [ ]` cuyas dependencias estén en `- [x]` (en modo tarea única, la indicada; si sus dependencias no están completas, bloquea).
+2. **Contexto mínimo de la tarea:** su entrada en `tasks.md`, los RF/RNF/UI que cubre, las secciones del plan citadas en la trazabilidad y el código afectado. No arrastres detalles de tareas anteriores: lo que importa de ellas ya está en el código y en su evidencia.
+3. **Comandos.** Usa la tabla de `AGENTS.md`. Si está vacía o un comando no existe, descúbrelos en los manifiestos una sola vez y actualiza esa tabla (única edición de `AGENTS.md` permitida aquí). Nunca inventes comandos.
+4. **RED.** Escribe los tests de `Tests requeridos` y confirma que fallan por la razón correcta.
+5. **GREEN.** El mínimo código que los hace pasar. Nada fuera de lo que cubre la tarea.
+6. **REFACTOR.** Solo con verde y sin cambiar comportamiento.
+7. **Verificación acotada.** Tests de la tarea y del módulo afectado, más lint/typecheck sobre lo modificado. Build solo si la tarea toca configuración de build o puntos de entrada. La suite completa la ejecuta `sdd-validate`.
+8. **Interfaz.** Implementa los UI-NNN tal como están declarados, reutilizando componentes y estilos existentes. Si hace falta una decisión visual no declarada, es una condición de parada.
+9. **Cierre.** Solo si todo pasa: marca `- [x]` y añade en `Evidencia` los comandos con su resultado y los archivos tocados.
+10. **Commit** (si el proyecto usa git). Añade solo los archivos de esta tarea más `tasks.md` (y `AGENTS.md` si actualizaste comandos), nunca `git add -A`. Mensaje según la sección Commits de `AGENTS.md`. Si un hook falla, es un check fallido: corrige dentro del alcance o detente. `tasks.md` + el commit son el punto de control: si la sesión se interrumpe, se reanuda desde ahí.
+11. **Reporta** una línea: `✓ T-XXX — <objetivo> · tests PASS · <n> archivos · <sha corto>`.
+12. **Continúa** con el paso 1. En modo tarea única, o cuando no queden tareas, ve al informe final.
 
-1. `docs/constitution.md` con `Estado: APROBADA`.
-2. `AGENTS.md` existe.
-3. `specs/NNN-slug/spec.md` con las filas `Estado` y `Aprobación` en `APROBADA`.
-4. Cero `[NECESITA ACLARACIÓN` en spec.md.
-5. `plan.md` y `trace.md` están vinculados a la `Versión` actual de spec.md; `trace.md` tiene `TRAZABILIDAD: PASS`.
-6. `tasks.md` está vinculado al `Spec-Version` y `Plan-Version` actuales y contiene la tarea `T-XXX`.
-7. Todas las dependencias de la tarea están `- [x]` con evidencia.
+## Condiciones de parada (en cualquier modo)
 
-Si falta cualquiera: `IMPLEMENTACIÓN BLOQUEADA — <precondición ausente>. Siguiente paso: <skill correcta>`.
-Si no se indica `T-XXX`: pide la tarea. Nunca elijas una por tu cuenta.
+Detén el bucle, deja la tarea actual en `- [ ]` y explica el motivo cuando:
 
-## Contexto requerido
+- Un test o check falla y no se resuelve dentro del alcance de la tarea.
+- Falta o está mal un requisito → `sdd-change`.
+- Hace falta una decisión técnica o dependencia no prevista en el plan → `sdd-plan`.
+- La tarea está mal descompuesta o su "Hecho cuando" es inalcanzable → `sdd-tasks`.
+- Hace falta una decisión visual no declarada → pregunta al usuario.
+- El "Hecho cuando" exige confirmación del usuario → muestra los pasos y espera su confirmación explícita. Con ella, cierra la tarea y retoma el bucle.
+- El commit falla y no se resuelve dentro del alcance de la tarea.
+- El usuario pide parar.
 
-Lee antes de modificar código: `docs/constitution.md` · `AGENTS.md` · `spec.md` · `plan.md` · `tasks.md` (y el código existente que toque la tarea).
+## Informe final
 
-## Entradas
-
-- `T-XXX` (obligatorio).
-
-## Procedimiento
-
-1. Verifica las precondiciones.
-2. **Inspecciona el proyecto** para descubrir stack, gestor de paquetes, runner de tests, linter, formateador, type checker, build y auditorías (manifiestos: `package.json`, `pyproject.toml`/`requirements*.txt`, `Cargo.toml`, `go.mod`, `pom.xml`/`build.gradle*`, `*.csproj`, `Makefile`, `justfile`, configuración de CI…). Usa SOLO comandos que existan en el proyecto. Si una categoría no existe, regístralo; no inventes comandos.
-3. **RED.** Escribe los tests que demuestren los RF de esta tarea según `Tests requeridos`. Ejecútalos y confirma que fallan por la razón correcta (no por errores de compilación/importación evitables).
-4. **GREEN.** Implementa el mínimo código necesario para que los tests pasen. Sin comportamiento extra: cualquier capacidad no pedida por los RF de esta tarea no se escribe.
-5. **REFACTOR.** Mejora estructura y claridad SIN cambiar comportamiento. Re-ejecuta los tests tras cada cambio.
-6. **Verificación.** Ejecuta todas las categorías aplicables descubiertas en el paso 2: suite de tests completa · lint · formateo · type checking · build · análisis estático · auditoría de dependencias · verificaciones de seguridad. Todo debe pasar.
-7. **Cierre.** Solo si TODO pasa: marca `- [x]` la tarea en tasks.md y añade bajo `Evidencia:` los comandos ejecutados con su resultado y los archivos creados/modificados. Si algo falla y no puedes resolverlo dentro del alcance de la tarea: deja `- [ ]`, informa el fallo y DETENTE.
-8. **Informe final** (formato obligatorio):
-
-```
-TAREA: T-XXX — <objetivo>
-RF IMPLEMENTADOS: RF-00X, RF-00Y
-ARCHIVOS CREADOS: …
-ARCHIVOS MODIFICADOS: …
-TESTS CREADOS: …
-TESTS EJECUTADOS: <suite> → resultado
-VERIFICACIONES: lint → …, typecheck → …, build → … (las no aplicables: motivo)
-RESULTADO: COMPLETADA | INCOMPLETA (motivo)
+```text
+IMPLEMENTACIÓN: <n> tareas completadas en esta sesión (T-00A … T-00B)
+PENDIENTES: <ninguna | T-XXX…>
+DETENIDO EN: <— | T-XXX: motivo>
+SIGUIENTE: sdd-validate | <skill según el motivo de parada>
 ```
 
-9. **DETENTE.**
+Al terminar todas las tareas, DETENTE: la validación la lanza el usuario o el orquestador.
 
-### Desvíos obligatorios durante la ejecución
+## Prohibido
 
-- Detectas que falta un requisito o la spec está mal → DETENTE, no "lo remiendas": `Siguiente paso: sdd-change`.
-- Necesitas una decisión técnica no prevista en plan.md → DETENTE: `Siguiente paso: sdd-plan` (y re-trazar).
-- La tarea está mal descompuesta o su "Hecho cuando" es inalcanzable → DETENTE: `Siguiente paso: sdd-tasks`.
-- Necesitas una dependencia nueva → detente y justifícala al usuario antes de instalarla; si el plan no la contempla → `sdd-plan`.
-
-## Artefactos de salida
-
-- Código y tests de la tarea.
-- `tasks.md` actualizado: `- [x]` + bloque `Evidencia:` (solo si todo pasó).
-
-## Validación
-
-- Los tests nuevos demostraban los RF y fallaban antes de la implementación.
-- Todas las verificaciones del paso 6 pasaron en esta ejecución (no "las pasaron la vez anterior").
-- tasks.md refleja el estado real; nunca `- [x]` sin evidencia.
-- No modificaste tareas distintas de T-XXX.
-
-## Condiciones de parada
-
-- Tras el informe final, en éxito o en fallo: DETENTE.
-- Está EXPLÍCITAMENTE PROHIBIDO comenzar automáticamente la siguiente tarea.
-
-## Acciones prohibidas
-
-- Implementar más de una tarea por ejecución.
-- Implementar comportamiento sin RF que lo respalde.
-- Marcar una tarea completada con verificaciones fallando o sin ejecutar.
-- Inventar comandos de verificación inexistentes.
-- Modificar spec.md, plan.md o trace.md directamente.
-- Introducir cambios arquitectónicos silenciosos.
-- Añadir dependencias sin justificación explícita y sin reflejo en plan.md.
-
-## Siguiente fase permitida
-
-`sdd-implement T-YYY` (siguiente tarea, SOLO si el usuario la solicita) · `sdd-validate` (cuando todas las tareas estén completadas y el usuario lo pida).
-
-## Gate de UI
-
-Si la tarea afecta UI:
-1. Lee `ui-spec.md` vigente.
-2. Respeta `design/` y tokens existentes.
-3. Implementa estados, responsive, accessibility y motion definidos.
-4. Ejecuta una **verificación browser de tarea** antes de marcar T-XXX completa; esa verificación debe limitarse al alcance implementado por T-XXX y registrarse en `browser-review.md` con `Scope: TASK`.
-5. Si el flujo completo todavía no puede probarse porque depende de tareas posteriores, no lo uses como motivo para bloquear T-XXX; el `browser-review` FINAL se ejecutará cuando todas las tareas estén completas.
-
-El browser check no se sustituye por tests unitarios.
+Tener más de una tarea abierta a la vez, avanzar con una tarea sin cerrar o con checks fallando, comportamiento o diseño sin requisito, marcar `- [x]` sin evidencia de esta ejecución, inventar comandos, editar spec o plan, cambios arquitectónicos silenciosos, continuar tras una condición de parada, hacer push, crear o cambiar de rama sin indicación, usar `--no-verify`, reescribir commits ya hechos (amend, rebase, reset) o incluir en un commit archivos ajenos a la tarea.

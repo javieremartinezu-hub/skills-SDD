@@ -1,6 +1,12 @@
 ---
 name: sdd-implement
-description: Implementa las tareas de tasks.md con el ciclo TDD (RED → GREEN → REFACTOR). Por defecto encadena automáticamente todas las tareas pendientes de la spec en orden de dependencias, cerrando cada una con evidencia en tasks.md y un commit propio antes de pasar a la siguiente, y se detiene ante cualquier fallo, desvío o confirmación requerida. Con "sdd-implement T-XXX" implementa solo esa tarea. Implementa la interfaz exactamente como la declaró el usuario (UI-NNN). Úsala para implementar tareas planificadas o continuar una implementación en curso.
+description: >-
+  Implementa las tareas de tasks.md con el ciclo TDD (RED → GREEN → REFACTOR). Por defecto encadena
+  automáticamente todas las tareas pendientes de la spec en orden de dependencias, cerrando cada una
+  con evidencia en tasks.md y un commit propio antes de pasar a la siguiente, y se detiene ante
+  cualquier fallo, desvío o confirmación requerida. Con "sdd-implement T-XXX" implementa solo esa
+  tarea. Implementa la interfaz exactamente como la declaró el usuario (UI-NNN). Úsala para
+  implementar tareas planificadas o continuar una implementación en curso.
 ---
 
 # sdd-implement — Implementación con TDD

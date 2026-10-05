@@ -1,6 +1,11 @@
 ---
 name: sdd-constitution
-description: Crea o enmienda docs/constitution.md, la constitución del proyecto con 8-12 principios innegociables, cortos y verificables (SDD, simplicidad, calidad, seguridad por diseño, tests, dependencias, errores, observabilidad, cambios controlados). Exige aprobación humana explícita antes de que entre en vigor. Úsala tras sdd-init o cuando el usuario pida crear, revisar o enmendar la constitución.
+description: >-
+  Crea o enmienda docs/constitution.md, la constitución del proyecto con 8-12 principios
+  innegociables, cortos y verificables (SDD, simplicidad, calidad, seguridad por diseño, tests,
+  dependencias, errores, observabilidad, cambios controlados). Exige aprobación humana explícita
+  antes de que entre en vigor. Úsala tras sdd-init o cuando el usuario pida crear, revisar o
+  enmendar la constitución.
 ---
 
 # sdd-constitution — Constitución del proyecto

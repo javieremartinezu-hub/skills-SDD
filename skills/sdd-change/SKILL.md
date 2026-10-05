@@ -1,6 +1,11 @@
 ---
 name: sdd-change
-description: Gestiona cambios funcionales o de interfaz declarada sobre una spec existente ("añade MFA", "cambia el comportamiento de X", "nueva regla", "cambia esta pantalla"). Modifica PRIMERO spec.md, clasifica el impacto como LOCAL o ESTRUCTURAL, versiona e invalida derivados, y reinicia el ciclo desde sdd-clarify con trabajo incremental. Prohibido tocar código antes de que la spec cambie y se re-apruebe.
+description: >-
+  Gestiona cambios funcionales o de interfaz declarada sobre una spec existente ("añade MFA",
+  "cambia el comportamiento de X", "nueva regla", "cambia esta pantalla"). Modifica PRIMERO spec.md,
+  clasifica el impacto como LOCAL o ESTRUCTURAL, versiona e invalida derivados, y reinicia el ciclo
+  desde sdd-clarify con trabajo incremental. Prohibido tocar código antes de que la spec cambie y se
+  re-apruebe.
 ---
 
 # sdd-change — Cambio desde la spec

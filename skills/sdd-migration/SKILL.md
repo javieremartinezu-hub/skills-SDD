@@ -1,6 +1,11 @@
 ---
 name: sdd-migration
-description: "Gate de migración y compatibilidad. Revisa que plan.md tenga una estrategia de transición suficiente para cambios de esquema, datos persistidos, APIs, eventos, formatos o configuración consumida por varias versiones. Persiste migration-review.md con veredicto SUFICIENTE o INCOMPLETA. No ejecuta migraciones ni edita código o plan. Úsala cuando el plan declare Migración requerida: SÍ."
+description: >-
+  Gate de migración y compatibilidad. Revisa que plan.md tenga una estrategia de transición
+  suficiente para cambios de esquema, datos persistidos, APIs, eventos, formatos o configuración
+  consumida por varias versiones. Persiste migration-review.md con veredicto SUFICIENTE o
+  INCOMPLETA. No ejecuta migraciones ni edita código o plan. Úsala cuando el plan declare Migración
+  requerida: SÍ.
 ---
 
 # sdd-migration — Gate de migración y compatibilidad

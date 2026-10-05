@@ -1,6 +1,11 @@
 ---
 name: sdd-review
-description: Auditoría de solo lectura con dos modos. quality revisa corrección, mantenibilidad, seguridad, tests y deuda técnica; implementation compara spec, plan y tareas contra código y tests para detectar faltantes, comportamiento sin requisito y drift. Entrega hallazgos priorizados con evidencia y la skill que debe resolverlos. Úsala cuando el usuario pida revisar, auditar o evaluar código o una implementación.
+description: >-
+  Auditoría de solo lectura con dos modos. quality revisa corrección, mantenibilidad, seguridad,
+  tests y deuda técnica; implementation compara spec, plan y tareas contra código y tests para
+  detectar faltantes, comportamiento sin requisito y drift. Entrega hallazgos priorizados con
+  evidencia y la skill que debe resolverlos. Úsala cuando el usuario pida revisar, auditar o evaluar
+  código o una implementación.
 ---
 
 # sdd-review — Auditoría

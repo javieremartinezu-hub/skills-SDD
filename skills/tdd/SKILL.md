@@ -1,6 +1,10 @@
 ---
 name: tdd
-description: Método TDD riguroso y pragmático (ENTENDER → RED → GREEN → REFACTOR → VERIFICAR; en bugs, REPRODUCIR y CAUSA RAÍZ). Úsala para escribir código con tests como evidencia, dentro o fuera del flujo SDD. Dentro de SDD, qué se testea lo decide la tarea (campo "Tests requeridos"); esta skill aporta el cómo.
+description: >-
+  Método TDD riguroso y pragmático (ENTENDER → RED → GREEN → REFACTOR → VERIFICAR; en bugs,
+  REPRODUCIR y CAUSA RAÍZ). Úsala para escribir código con tests como evidencia, dentro o fuera del
+  flujo SDD. Dentro de SDD, qué se testea lo decide la tarea (campo "Tests requeridos"); esta skill
+  aporta el cómo.
 ---
 
 # tdd — Ciclo de desarrollo guiado por tests

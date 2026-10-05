@@ -1,6 +1,11 @@
 ---
 name: sdd-bug
-description: Diagnostica y corrige defectos donde la implementación no cumple una spec aprobada. Si la causa es incierta, primero diagnostica por evidencia e hipótesis; luego reproduce, crea un test de regresión que falle, corrige la causa raíz con el cambio mínimo y verifica. Si el problema resulta ser un cambio de requisito, configuración o entorno, detiene y enruta. Úsala ante cualquier bug, error, fallo o comportamiento inesperado.
+description: >-
+  Diagnostica y corrige defectos donde la implementación no cumple una spec aprobada. Si la causa es
+  incierta, primero diagnostica por evidencia e hipótesis; luego reproduce, crea un test de
+  regresión que falle, corrige la causa raíz con el cambio mínimo y verifica. Si el problema resulta
+  ser un cambio de requisito, configuración o entorno, detiene y enruta. Úsala ante cualquier bug,
+  error, fallo o comportamiento inesperado.
 ---
 
 # sdd-bug — Diagnóstico y corrección de defectos

@@ -1,6 +1,11 @@
 ---
 name: sdd-clarify
-description: Audita specs/NNN-slug/spec.md como QA senior (ambigüedades, contradicciones, RF no verificables, casos límite, estados, errores, suposiciones, conflictos con la constitución, tecnología colada en la spec, huecos en la Interfaz declarada), resuelve los hallazgos con el usuario y conduce el gate de aprobación humana de la spec. Úsala con una spec en BORRADOR o recién modificada por sdd-change.
+description: >-
+  Audita specs/NNN-slug/spec.md como QA senior (ambigüedades, contradicciones, RF no verificables,
+  casos límite, estados, errores, suposiciones, conflictos con la constitución, tecnología colada en
+  la spec, huecos en la Interfaz declarada), resuelve los hallazgos con el usuario y conduce el gate
+  de aprobación humana de la spec. Úsala con una spec en BORRADOR o recién modificada por
+  sdd-change.
 ---
 
 # sdd-clarify — Clarificación y aprobación de la spec

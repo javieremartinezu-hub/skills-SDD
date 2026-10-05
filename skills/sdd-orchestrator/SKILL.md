@@ -1,6 +1,10 @@
 ---
 name: sdd-orchestrator
-description: Router determinista del flujo SDD. Diagnostica el estado real leyendo solo cabeceras y veredictos de los artefactos y devuelve el único siguiente paso permitido; también clasifica pedidos de mantenimiento (bug, cambio, refactor, auditoría, release). Úsala ante cualquier duda sobre en qué fase está una spec o qué hacer a continuación.
+description: >-
+  Router determinista del flujo SDD. Diagnostica el estado real leyendo solo cabeceras y veredictos
+  de los artefactos y devuelve el único siguiente paso permitido; también clasifica pedidos de
+  mantenimiento (bug, cambio, refactor, auditoría, release). Úsala ante cualquier duda sobre en qué
+  fase está una spec o qué hacer a continuación.
 ---
 
 # sdd-orchestrator — Router determinista

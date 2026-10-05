@@ -1,6 +1,11 @@
 ---
 name: sdd-spec
-description: Genera la especificación funcional specs/NNN-slug/spec.md (QUÉ y POR QUÉ, nunca CÓMO) entrevistando al usuario por bloques. Requisitos con IDs estables RF/RNF, formato EARS, marcador [NECESITA ACLARACIÓN], tamaño S/M/L y una sección Interfaz donde se registran, sin inventar nada, las decisiones visuales que declara el usuario (UI-NNN). Úsala para una funcionalidad nueva sin spec propia, tras sdd-agents o cuando sdd-orchestrator lo indique.
+description: >-
+  Genera la especificación funcional specs/NNN-slug/spec.md (QUÉ y POR QUÉ, nunca CÓMO)
+  entrevistando al usuario por bloques. Requisitos con IDs estables RF/RNF, formato EARS, marcador
+  [NECESITA ACLARACIÓN], tamaño S/M/L y una sección Interfaz donde se registran, sin inventar nada,
+  las decisiones visuales que declara el usuario (UI-NNN). Úsala para una funcionalidad nueva sin
+  spec propia, tras sdd-agents o cuando sdd-orchestrator lo indique.
 ---
 
 # sdd-spec — Especificación funcional

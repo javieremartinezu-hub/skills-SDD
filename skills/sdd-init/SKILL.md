@@ -1,6 +1,11 @@
 ---
 name: sdd-init
-description: Inicializa un proyecto bajo Spec-Driven Development, nuevo o ya existente. Entrevista al usuario por bloques cortos para entender problema, usuarios, objetivos, funcionalidades, restricciones y límites; en repos con código inspecciona primero lo existente. Persiste docs/brief.md. No elige stack, no escribe código ni specs. Úsala al arrancar SDD en un repositorio que aún no tiene docs/brief.md.
+description: >-
+  Inicializa un proyecto bajo Spec-Driven Development, nuevo o ya existente. Entrevista al usuario
+  por bloques cortos para entender problema, usuarios, objetivos, funcionalidades, restricciones y
+  límites; en repos con código inspecciona primero lo existente. Persiste docs/brief.md. No elige
+  stack, no escribe código ni specs. Úsala al arrancar SDD en un repositorio que aún no tiene
+  docs/brief.md.
 ---
 
 # sdd-init — Inicialización del proyecto

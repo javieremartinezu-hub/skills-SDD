@@ -1,6 +1,11 @@
 ---
 name: sdd-agents
-description: Genera o actualiza AGENTS.md en la raíz del repositorio, el manual operativo permanente para agentes de IA en un proyecto SDD. Contiene las reglas de trabajo, las Convenciones SDD compartidas por todas las skills (cabeceras, versiones, veredictos, formato de bloqueo) y los comandos de verificación reales del proyecto. Úsala tras aprobar docs/constitution.md, o cuando el usuario pida crear o actualizar las reglas para agentes.
+description: >-
+  Genera o actualiza AGENTS.md en la raíz del repositorio, el manual operativo permanente para
+  agentes de IA en un proyecto SDD. Contiene las reglas de trabajo, las Convenciones SDD compartidas
+  por todas las skills (cabeceras, versiones, veredictos, formato de bloqueo) y los comandos de
+  verificación reales del proyecto. Úsala tras aprobar docs/constitution.md, o cuando el usuario
+  pida crear o actualizar las reglas para agentes.
 ---
 
 # sdd-agents — Manual operativo para agentes

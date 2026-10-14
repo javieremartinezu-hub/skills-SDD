@@ -1,11 +1,8 @@
 ---
 name: sdd-bug
 description: >-
-  Diagnostica y corrige defectos donde la implementación no cumple una spec aprobada. Si la causa es
-  incierta, primero diagnostica por evidencia e hipótesis; luego reproduce, crea un test de
-  regresión que falle, corrige la causa raíz con el cambio mínimo y verifica. Si el problema resulta
-  ser un cambio de requisito, configuración o entorno, detiene y enruta. Úsala ante cualquier bug,
-  error, fallo o comportamiento inesperado.
+  Diagnostica y corrige defectos (código ≠ spec) por causa raíz con test de regresión. Úsala ante
+  bugs o fallos de causa incierta.
 ---
 
 # sdd-bug — Diagnóstico y corrección de defectos
@@ -29,11 +26,11 @@ Aplica las Convenciones SDD de `AGENTS.md`.
 
 ## Fase 1 — Corrección
 
-1. Identifica spec y RF/UI afectados. Si no se puede saber qué se esperaba: `BUG BLOQUEADO — Siguiente paso: sdd-change`.
+1. Identifica spec y RF/UI afectados. Si ninguna spec cubre el código: `BUG BLOQUEADO — Siguiente paso: sdd-retro`. Si no se puede saber qué se esperaba: `… sdd-change`.
 2. **RED:** test de regresión mínimo que falla por el bug (en fallos visuales, con la herramienta de tests de UI que tenga el proyecto; si no hay, registra los pasos de reproducción y pide confirmación al usuario).
 3. Corrige la causa raíz, no el síntoma, con el cambio mínimo (**GREEN**). **REFACTOR** solo si mejora claramente.
 4. Verifica con los comandos de `AGENTS.md`, proporcional al riesgo; amplía si el cambio toca código compartido.
-5. Registra `specs/NNN-slug/bugs/BUG-NNN.md` y ciérralo solo con evidencia.
+5. Registra `specs/NNN-slug/bugs/BUG-NNN.md` y ciérralo solo con evidencia. Si el RF estaba marcado `(defecto)`, cámbialo por `(BUG-NNN)`: única edición permitida de la spec, sin cambiar su Versión.
 6. Si el proyecto usa git, haz un commit con el fix, el test y `BUG-NNN.md`, según la sección Commits de `AGENTS.md`.
 
 ```markdown

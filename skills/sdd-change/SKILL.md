@@ -1,11 +1,8 @@
 ---
 name: sdd-change
 description: >-
-  Gestiona cambios funcionales o de interfaz declarada sobre una spec existente ("añade MFA",
-  "cambia el comportamiento de X", "nueva regla", "cambia esta pantalla"). Modifica PRIMERO spec.md,
-  clasifica el impacto como LOCAL o ESTRUCTURAL, versiona e invalida derivados, y reinicia el ciclo
-  desde sdd-clarify con trabajo incremental. Prohibido tocar código antes de que la spec cambie y se
-  re-apruebe.
+  Cambia comportamiento o interfaz de una spec existente: edita y versiona la spec
+  (LOCAL/ESTRUCTURAL) antes de tocar código. Úsala para cualquier cambio funcional.
 ---
 
 # sdd-change — Cambio desde la spec
@@ -18,7 +15,7 @@ Ningún cambio funcional empieza por el código. Si el usuario insiste: `CAMBIO 
 
 ## Precondiciones
 
-Existe la spec afectada. Si el pedido es una funcionalidad genuinamente nueva: `CAMBIO BLOQUEADO — requiere spec nueva. Siguiente paso: sdd-spec`.
+Existe la spec afectada; si el código existe pero ninguna spec lo cubre: `CAMBIO BLOQUEADO — Siguiente paso: sdd-retro`. Si el pedido es una funcionalidad genuinamente nueva: `CAMBIO BLOQUEADO — requiere spec nueva. Siguiente paso: sdd-spec`.
 
 ## Procedimiento
 

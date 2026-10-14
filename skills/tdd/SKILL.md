@@ -1,10 +1,8 @@
 ---
 name: tdd
 description: >-
-  Método TDD riguroso y pragmático (ENTENDER → RED → GREEN → REFACTOR → VERIFICAR; en bugs,
-  REPRODUCIR y CAUSA RAÍZ). Úsala para escribir código con tests como evidencia, dentro o fuera del
-  flujo SDD. Dentro de SDD, qué se testea lo decide la tarea (campo "Tests requeridos"); esta skill
-  aporta el cómo.
+  Ciclo RED → GREEN → REFACTOR → VERIFICAR con el mínimo coste. Úsala al escribir o corregir código
+  con tests, dentro o fuera de SDD.
 ---
 
 # tdd — Ciclo de desarrollo guiado por tests
@@ -18,7 +16,7 @@ Objetivo: máxima confianza por token y por ejecución, no ceremonia.
 - **REPRODUCIR / CAUSA RAÍZ** (bugs). Reproduce antes de tocar producción; corrige la causa, no el síntoma.
 - **GREEN.** El cambio de producción mínimo y correcto. Sin refactors ajenos, abstracciones especulativas, dependencias nuevas ni requisitos futuros. Ejecuta solo los tests necesarios para estar en verde.
 - **REFACTOR.** Solo con verde y solo si mejora de verdad (duplicación, nombres, flujo, cohesión). Los tests siguen verdes.
-- **VERIFICAR.** Checks proporcionales al riesgo, con los comandos de `AGENTS.md` cuando existan. Revisa el diff final y elimina cambios ajenos. Nunca declares como pasado algo no ejecutado.
+- **VERIFICAR.** Checks proporcionales al riesgo, con los comandos de `AGENTS.md` cuando existan. Revisa el diff final: toda línea se traza a la tarea; revierte el resto. Nunca declares como pasado algo no ejecutado.
 
 ## Cuándo no aplicar el ciclo completo
 

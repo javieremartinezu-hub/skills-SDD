@@ -1,11 +1,8 @@
 ---
 name: sdd-spec
 description: >-
-  Genera la especificación funcional specs/NNN-slug/spec.md (QUÉ y POR QUÉ, nunca CÓMO)
-  entrevistando al usuario por bloques. Requisitos con IDs estables RF/RNF, formato EARS, marcador
-  [NECESITA ACLARACIÓN], tamaño S/M/L y una sección Interfaz donde se registran, sin inventar nada,
-  las decisiones visuales que declara el usuario (UI-NNN). Úsala para una funcionalidad nueva sin
-  spec propia, tras sdd-agents o cuando sdd-orchestrator lo indique.
+  Escribe specs/NNN-slug/spec.md (QUÉ y POR QUÉ en EARS, interfaz declarada por el usuario) por
+  entrevista, sin tecnología. Úsala para una funcionalidad nueva.
 ---
 
 # sdd-spec — Especificación funcional
@@ -19,7 +16,7 @@ Aplica las Convenciones SDD de `AGENTS.md`.
 
 ## Procedimiento
 
-1. Lee constitution, brief y las specs relacionadas (para no duplicar requisitos). Número = máximo `NNN` existente + 1; slug kebab-case corto. Nunca reutilices números.
+1. Lee constitution, brief y las specs relacionadas (para no duplicar requisitos). Número = máximo `NNN` existente + 1 (con ramas por spec, incluye las ramas `spec/*` locales y remotas conocidas); slug kebab-case corto. Nunca reutilices números.
 2. **Entrevista por bloques** de 3-5 preguntas sobre: problema · actores · comportamiento · permisos · estados · datos (semántica, no modelo físico) · límites y volúmenes · errores · seguridad funcional · casos límite · fuera de alcance · criterios de aceptación. Puedes proponer un valor sugerido; solo se registra si el usuario lo confirma. Lo no decidido queda como `[NECESITA ACLARACIÓN: …]`.
 3. **Interfaz.** Pregunta si la funcionalidad tiene interfaz. Si sí, pide al usuario sus decisiones (vistas, componentes, estados visibles, textos, responsive, referencias) y regístralas tal cual con IDs `UI-NNN`. No propongas ni completes diseño: lo que falte y sea necesario queda como `[NECESITA ACLARACIÓN]`.
 4. Aplica a cada RF/UI el test de verificabilidad: "¿puedo escribir un test o una comprobación objetiva que lo demuestre?". Si no, reescríbelo o márcalo.
@@ -43,6 +40,7 @@ Aplica las Convenciones SDD de `AGENTS.md`.
 | Aprobación | PENDIENTE |
 | Tamaño | S / M / L |
 | Interfaz | SÍ / NO |
+| Origen | NUEVA / RETRO |
 
 ## Contexto y problema
 ## Objetivo

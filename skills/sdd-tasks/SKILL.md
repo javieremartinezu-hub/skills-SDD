@@ -1,11 +1,8 @@
 ---
 name: sdd-tasks
 description: >-
-  Verifica la trazabilidad spec → plan (cada RF/RNF/UI cubierto, sin contradicciones ni componentes
-  injustificados) y, si pasa, descompone el plan en tareas pequeñas y verificables en
-  specs/NNN-slug/tasks.md (T-NNN con requisitos cubiertos, dependencias, tests y criterio "Hecho
-  cuando"). Emite TRAZABILIDAD: PASS o FAIL. No implementa. Úsala tras sdd-plan (o sdd-migration), o
-  cuando tasks.md esté caducado.
+  Verifica la trazabilidad spec↔plan y descompone el plan en tareas pequeñas con tests y criterio
+  objetivo (tasks.md). Úsala tras sdd-plan o sdd-migration.
 ---
 
 # sdd-tasks — Trazabilidad + descomposición
@@ -14,7 +11,7 @@ Aplica las Convenciones SDD de `AGENTS.md`.
 
 ## Precondiciones
 
-spec `APROBADA`; `plan.md` con `Spec-Version` actual; si el plan exige migración, `MIGRACIÓN: SUFICIENTE`. Si falta algo, bloquea hacia `sdd-plan` o `sdd-migration`.
+spec `APROBADA`; `plan.md` con `Spec-Version` actual y `Aprobación` ≠ `PENDIENTE`; si el plan exige migración, `MIGRACIÓN: SUFICIENTE`. Si falta algo, bloquea hacia `sdd-plan` o `sdd-migration`.
 
 ## Procedimiento
 
@@ -22,7 +19,7 @@ spec `APROBADA`; `plan.md` con `Spec-Version` actual; si el plan exige migració
    - Algún requisito sin cobertura real o alguna contradicción → escribe `tasks.md` solo con la cabecera, la sección de trazabilidad y `TRAZABILIDAD: FAIL`. `Siguiente paso: sdd-plan` (o `sdd-change` si el requisito está mal planteado). DETENTE.
 2. **Descomposición.** Una tarea = un cambio pequeño + sus tests + un resultado verificable en una sola ejecución. Divide las tareas que agrupen varios comportamientos ("implementar backend", "todo el login").
 3. Numera `T-001…`; una tarea solo depende de tareas anteriores.
-4. Comprueba que cada RF/RNF/UI aparece en al menos una tarea.
+4. Comprueba que cada RF/RNF/UI aparece en al menos una tarea y que cada fila de Permisos con `Permitido: NO` tiene un test negativo.
 5. **Re-edición tras `sdd-change`.** Actualiza la cabecera, reabre (`- [ ]`, borrando su evidencia) solo las tareas afectadas, añade las nuevas al final sin renumerar y re-sella el resto.
 6. Escribe `tasks.md` con `TRAZABILIDAD: PASS`. `Siguiente paso: sdd-implement` (encadena todas las tareas). DETENTE.
 

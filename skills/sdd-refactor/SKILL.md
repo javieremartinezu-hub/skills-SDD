@@ -1,10 +1,8 @@
 ---
 name: sdd-refactor
 description: >-
-  Mejora la calidad interna sin cambiar el comportamiento observable (simplificación, duplicación,
-  nombres, cohesión, separación de responsabilidades, deuda técnica). Protege el comportamiento con
-  tests existentes o de caracterización, aplica cambios pequeños y verifica regresión. Si requiere
-  cambiar comportamiento o contratos, detiene y enruta. Úsala para refactors y limpieza de código.
+  Mejora interna sin cambio observable, protegida por tests. Úsala para deuda técnica, limpieza o
+  reestructuración.
 ---
 
 # sdd-refactor — Mejora interna sin cambio funcional
@@ -17,7 +15,7 @@ Un refactor cambia **cómo** está construido el código, no **qué** hace, ni c
 
 ## Procedimiento
 
-1. Define el objetivo y el alcance mínimo.
+1. Define el objetivo y el alcance mínimo (los `Observado:` de `tasks.md` son candidatos).
 2. Ejecuta los tests actuales: baseline en verde.
 3. Si falta protección relevante, añade primero tests de caracterización mínimos.
 4. Aplica cambios pequeños sin capacidades nuevas; ejecuta tests tras cada cambio relevante.

@@ -18,7 +18,7 @@ Crear `AGENTS.md`: reglas de trabajo + **Convenciones SDD** + **Commits** + **Co
 ## Procedimiento
 
 1. Lee `docs/constitution.md` y, si existe, el `AGENTS.md` actual. Conserva su contenido propio del proyecto que no contradiga SDD; ante conflicto prevalece SDD e informa al usuario.
-2. Inspecciona los manifiestos del repositorio (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`/`build.gradle*`, `*.csproj`, `Makefile`, `justfile`, CI…) y rellena la tabla de comandos solo con comandos que existan. Si el proyecto aún no tiene código, deja la tabla vacía: la primera ejecución de `sdd-implement` la completará.
+2. Inspecciona los manifiestos del repositorio (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`/`build.gradle*`, `*.csproj`, `Makefile`, `justfile`, CI…) y rellena la tabla de comandos solo con comandos que existan (incluidos los nativos del gestor de paquetes, aunque no sean scripts del proyecto). La fila Seguridad/dependencias es obligatoria: auditor nativo o estándar del ecosistema (p. ej. `npm audit`, `pip-audit`, `cargo audit`, `govulncheck`, `dotnet list package --vulnerable`), limitado a runtime y al umbral de las Convenciones; si no existe ninguno: `no disponible: <motivo>`. Si el repositorio tiene CI, propone (sin crearlo) un job programado que lo ejecute. Si el proyecto aún no tiene código, deja la tabla vacía: la primera ejecución de `sdd-implement` la completará.
 3. Redacta `AGENTS.md` con la plantilla (máx. ~100 líneas). Si el proyecto ya tiene convención de commits (commitlint, CONTRIBUTING), adapta el formato a ella. Pregunta la política de ramas (una por spec o sin ramas). No copies la constitution ni incluyas requisitos de producto o decisiones técnicas.
 4. Muestra el contenido, pide confirmación y escríbelo.
 5. `Siguiente paso: sdd-spec` (o `sdd-orchestrator` si ya existen specs). DETENTE.
@@ -58,6 +58,7 @@ Fase dudosa → sdd-orchestrator · bug o fallo de causa incierta → sdd-bug ·
 - Artefactos: docs/brief.md · docs/constitution.md · AGENTS.md · specs/NNN-slug/{spec, clarify, plan, migration-review, tasks, validation, release}.md · specs/NNN-slug/bugs/BUG-NNN.md
 - Cabecera: tabla `| Campo | Valor |` al inicio. spec.md: Spec-ID, Versión, Estado (BORRADOR → CLARIFICADA → APROBADA), Aprobación, Tamaño (S|M|L), Interfaz (SÍ|NO), Origen (NUEVA|RETRO). plan.md: Aprobación (PENDIENTE|APROBADO|NO REQUERIDA). Derivados: Spec-Version y, si aplica, Plan-Version.
 - Spec RETRO: los RF no tocados por un cambio se dan por cubiertos por su test de caracterización (citado en el RF) en plan, tasks y validate.
+- Vulnerabilidades: el check de seguridad falla con severidad alta o crítica en dependencias de runtime. Desarrollo o severidad menor → Riesgos de release.md con su ID. Una alta/crítica sin parche solo deja de bloquear si el usuario la acepta explícitamente: se lista en "Excepciones aceptadas" (ID, fecha, motivo) bajo la tabla de comandos y se revisa en cada release.
 - Caducidad: un derivado cuya Spec-Version o Plan-Version no coincide con la actual está CADUCADO y no supera ningún gate.
 - Re-sellado: si un cambio LOCAL no afecta a un derivado, la skill dueña solo actualiza su cabecera y añade al registro "Re-sellado vN: sin cambios".
 - Veredicto: una línea al final del artefacto. clarify: SPEC CLARIFICADA: SÍ|NO · migration-review: MIGRACIÓN: SUFICIENTE|INCOMPLETA · tasks: TRAZABILIDAD: PASS|FAIL · validation: SPEC CUMPLIDA: SÍ|NO · release: RELEASE: READY|BLOCKED
@@ -81,8 +82,9 @@ Fase dudosa → sdd-orchestrator · bug o fallo de causa incierta → sdd-bug ·
 | Lint | | |
 | Typecheck | | |
 | Build | | |
-| Seguridad/dependencias | | |
+| Seguridad/dependencias (obligatoria) | | runtime, umbral alto |
 (Solo comandos existentes. Si uno deja de funcionar, se corrige aquí, no se improvisa.)
+Excepciones aceptadas: ninguna
 ```
 
 ## Validación

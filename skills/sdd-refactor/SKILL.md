@@ -25,7 +25,7 @@ Un refactor cambia **cómo** está construido el código, no **qué** hace, ni c
 
 ## Desvíos
 
-Cambia comportamiento o interfaz → `sdd-change` · descubre un defecto → `sdd-bug` · requiere decisión arquitectónica o contrato nuevo → `sdd-change`.
+Cambia comportamiento o interfaz → `sdd-change` · descubre un defecto → `sdd-bug` · requiere decisión arquitectónica o contrato nuevo → `sdd-plan` o `sdd-change`. En actualizaciones de dependencias, ejecuta también el check de seguridad; un salto mayor solo con aprobación explícita del usuario.
 
 ## Salida
 

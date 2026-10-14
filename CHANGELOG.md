@@ -1,3 +1,22 @@
+# Cambios v11 → v11.1 (revisión de flujo)
+
+- Orquestador: una spec solo está completada con `release.md` **vigente** en READY. Antes, un `sdd-change` sobre una spec ya liberada no la reactivaba y el flujo se quedaba sin spec activa (fallo heredado de v8).
+- `sdd-validate`: un fallo del check de seguridad envía a la ruta de dependencias.
+- `sdd-plan`: el modo delta cubre las actualizaciones mayores de dependencias (antes ningún modo las admitía).
+- Vulnerabilidades altas/críticas sin parche: aceptación explícita registrada de forma duradera en "Excepciones aceptadas" de `AGENTS.md` (antes, no estaba definido dónde ni cuándo se aceptaban). Una excepción con parche ya disponible vuelve a bloquear.
+
+# Cambios v10 → v11
+
+## Cadena de suministro
+- `sdd-agents`: fila Seguridad/dependencias obligatoria con el auditor nativo o estándar del ecosistema (los comandos nativos del gestor cuentan como existentes); `no disponible: <motivo>` explícito si no hay ninguno. Con CI, propone un job programado de auditoría.
+- Convención de umbral: alta/crítica en runtime falla; desarrollo, severidad menor o sin parche aceptado por el usuario → Riesgos con su ID.
+- `sdd-constitution`: el principio de dependencias cubre también su mantenimiento.
+- `sdd-plan`: dependencias nuevas en versión estable actual.
+- `sdd-orchestrator`: ruta de dependencias (patch/minor → refactor; mayor → plan delta con D-NNN; cambio de comportamiento → change) y check de seguridad antes de abrir una spec nueva.
+- `sdd-refactor`: check de seguridad en actualizaciones; salto mayor solo con aprobación.
+- `sdd-release`: el check de seguridad bloquea según el umbral.
+- Agnóstico de modelo, stack y plataforma: sin dependencias de GitHub ni herramientas obligatorias.
+
 # Cambios v9 → v10
 
 ## Correcciones de flujo

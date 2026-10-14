@@ -21,7 +21,7 @@ Formato de bloqueo: `<ACCIÓN> BLOQUEADA — Motivo — Falta — Siguiente paso
 3. Cubre como mínimo: SDD · simplicidad y mantenibilidad · seguridad por diseño · tests · dependencias · errores y observabilidad · compatibilidad · cambios controlados. Incluye en esencia:
    - La spec manda sobre el código; ningún comportamiento existe sin requisito.
    - No se integra trabajo con tests fallando.
-   - Dependencias mínimas y justificadas.
+   - Dependencias mínimas, justificadas y mantenidas: sin vulnerabilidades altas o críticas de runtime sin tratar.
    - Seguridad por defecto; errores explícitos y observables.
    - Cambios pequeños y verificables; spec, plan, código y tests sincronizados.
 4. Escribe con `Estado: PROPUESTA` (en enmienda, fila `PENDIENTE` en el registro). Muestra el documento o el diff.

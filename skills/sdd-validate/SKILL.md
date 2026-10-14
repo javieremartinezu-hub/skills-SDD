@@ -22,7 +22,7 @@ spec `APROBADA`; `tasks.md` vigente con `TRAZABILIDAD: PASS` y todas las tareas 
 5. Comprueba permisos denegados (test negativo en verde), casos límite, criterios de finalización y principios de la constitution (una línea cada uno).
 6. Escribe `validation.md` y emite el veredicto:
    - Todo con evidencia → `SPEC CUMPLIDA: SÍ` → `Siguiente paso: sdd-release`.
-   - Cualquier hueco → `SPEC CUMPLIDA: NO` con el siguiente paso concreto (`sdd-implement T-XXX` o `sdd-change`).
+   - Cualquier hueco → `SPEC CUMPLIDA: NO` con el siguiente paso concreto (`sdd-implement T-XXX` o `sdd-change`; fallo del check de seguridad → ruta de dependencias de `sdd-orchestrator`).
 7. DETENTE. No arregles nada.
 
 ## Plantilla de `validation.md`

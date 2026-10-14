@@ -16,6 +16,7 @@ spec `APROBADA` con aprobación registrada, `clarify.md` vigente con `SPEC CLARI
 ## Modo
 
 - **Delta**: existe plan previo y la última fila del registro de cambios de la spec es `[LOCAL]` sin decisiones técnicas nuevas → conserva el diseño, edita solo lo afectado, actualiza `Spec-Version`, incrementa `Plan-Version` y añade una nota con los RF afectados.
+  También para una actualización mayor de dependencia (nueva D-NNN, misma `Spec-Version`).
   Spec `Origen: RETRO` sin plan previo: delta sobre lo existente (lo existente es restricción).
 - **Breve**: `Tamaño = S` → solo las secciones que aplican; registros D-NNN solo para dependencias nuevas o decisiones difíciles de revertir.
 - **Completo**: el resto.
@@ -24,7 +25,7 @@ spec `APROBADA` con aprobación registrada, `clarify.md` vigente con `SPEC CLARI
 
 1. Verifica precondiciones e inspecciona el repositorio (stack, estructura, convenciones) para diseñar dentro de lo existente o justificar la desviación.
 2. Redacta `plan.md`. Cada sección: contenido o `No aplica (motivo)`.
-3. **Decisiones importantes** (difíciles de revertir, afectan a varios RF o añaden dependencia) → registro D-NNN. Elige por requisitos, simplicidad, mantenibilidad, seguridad, madurez, operación y facilidad de trabajo con agentes; nunca por moda. En dependencias, revisa vulnerabilidades conocidas, licencia y mantenimiento. Respeta las restricciones de la spec.
+3. **Decisiones importantes** (difíciles de revertir, afectan a varios RF o añaden dependencia) → registro D-NNN. Elige por requisitos, simplicidad, mantenibilidad, seguridad, madurez, operación y facilidad de trabajo con agentes; nunca por moda. En dependencias: versión estable actual, sin vulnerabilidades conocidas, licencia y mantenimiento revisados. Respeta las restricciones de la spec.
 4. **Interfaz**: si la spec tiene `UI-NNN`, describe cómo se implementan técnicamente (componentes, librería o design system ya existente, rutas). No añadas decisiones visuales: si falta una, DETENTE → `sdd-change`.
 5. Completa la **tabla de cobertura**: cada RF, RNF y UI con las secciones o D-NNN que lo cubren.
 6. Muestra el plan.

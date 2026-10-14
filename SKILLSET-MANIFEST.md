@@ -1,4 +1,4 @@
-# Skillset Manifest — SDD v10
+# Skillset Manifest — SDD v11.1
 
 ## Núcleo
 `sdd-orchestrator`, `sdd-init`, `sdd-constitution`, `sdd-agents`, `sdd-spec`, `sdd-clarify`, `sdd-plan`, `sdd-tasks`, `tdd`, `sdd-implement`, `sdd-validate`, `sdd-release`

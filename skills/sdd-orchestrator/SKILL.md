@@ -28,6 +28,7 @@ Para diagnosticar, lee de cada artefacto **solo la tabla de cabecera y la línea
 | Pedido | Skill |
 |---|---|
 | Bug o cambio en código que ninguna spec cubre | `sdd-retro` (después, `sdd-bug` / `sdd-change`) |
+| Alerta o actualización de dependencias | patch/minor sin cambio observable → `sdd-refactor`; mayor → `sdd-plan` delta de la spec que la usa (nueva D-NNN; si ninguna spec la cubre, `sdd-refactor` con aprobación explícita); con cambio de comportamiento → `sdd-change` |
 | Defecto o fallo de causa incierta | `sdd-bug` |
 | Comportamiento nuevo o distinto en una spec existente | `sdd-change` |
 | Mejora interna sin cambio observable | `sdd-refactor` |
@@ -41,7 +42,7 @@ Funcionalidad nueva sin spec → flujo lineal desde `sdd-spec`.
 1. Falta `docs/brief.md` → `sdd-init`.
 2. Constitution ausente o no `APROBADA` → `sdd-constitution`.
 3. Falta `AGENTS.md` → `sdd-agents`.
-4. Spec activa: con ramas por spec, la de la rama actual; si no, la única no completada. Completada = `RELEASE: READY`, o `Origen: RETRO` v1 `APROBADA`. Si hay varias, pide elegir. RETRO completada con RF `(defecto)` → `sdd-bug`. Sin spec activa: funcionalidad nueva descrita por el usuario → `sdd-spec`; si no, pregunta qué hacer y DETENTE.
+4. Spec activa: con ramas por spec, la de la rama actual; si no, la única no completada. Completada = `release.md` vigente con `RELEASE: READY`, o `Origen: RETRO` v1 `APROBADA` (un release caducado por `sdd-change` o un plan nuevo reactiva la spec). Si hay varias, pide elegir. RETRO completada con RF `(defecto)` → `sdd-bug`. Sin spec activa: funcionalidad nueva descrita por el usuario → ejecuta antes el check de seguridad de `AGENTS.md` (si falla, ruta de dependencias) y después `sdd-spec`; si no, pregunta qué hacer y DETENTE.
 5. spec `Estado` ≠ `APROBADA`, `Aprobación` pendiente, o `clarify.md` ausente/caducado/`NO` → `sdd-clarify`.
 6. `plan.md` ausente, caducado o con `Aprobación: PENDIENTE` → `sdd-plan`.
 7. Plan con `Migración requerida: SÍ` y `migration-review.md` ausente/caducado/`INCOMPLETA` → `sdd-migration`.
